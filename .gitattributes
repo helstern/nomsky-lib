@@ -1,0 +1,52 @@
+# References (comments):
+# - https://github.com/helstern/dotfiles/blob/develop/.gitattributes
+
+# Default settings
+# Handle line endings automatically for files detected as text and leave all files detected as binary untouched.
+# Convert to OS-dependent EOL (LF for UNIX, CRLF for Windows), !eol means Git will use core.eol setting of .git/config
+*   text=auto   !eol
+
+# Override settings
+# The default settings will handle all file patterns NOT found below
+
+# Explicitly declare text files you always want normalized and converted to native line endings on checkout.
+.gitattributes text
+.gitignore      text
+vagrantfile     text
+
+# Explicitly declare files that will always have LF line endings on checkout.
+# Example: *.sh text eol=lf
+*.bash   eol=lf
+
+# Explicitly declare files that will always have CRLF line endings on checkout.
+# Example: *.sln text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Explicitly denote all files that are truly binary and should not be modified.
+# Example: *.png binary
+*.bmp       -text   binary
+*.jpg       -text   binary
+*.gif       -text   binary
+*.png       -text   binary
+
+*.doc       -text   binary
+*.rtf       -text   binary
+
+*.class     -text   binary
+
+*.zip       -text   binary
+*.jar       -text   binary
+*.war       -text   binary
+
+*.phar      -text   binary
+
+# After editting this .gitattributes file, you need to re-normalize all files that have the wrong line-endings:
+# $ rm .git/index
+# $ git reset
+# $ git status                 # This lists all files that will be normalized
+# $ git add -u
+# $ git add .gitattributes
+# $ git commit
+# $ rm -rf *                   # Force Git to rewrite the working directory with correct line endings
+# $ git reset --hard
