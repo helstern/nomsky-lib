@@ -16,8 +16,14 @@ vagrantfile     text
 
 # Explicitly declare files that will always have LF line endings on checkout.
 # Example: *.sh text eol=lf
-*.bash   eol=lf
-*.php   eol=lf
+*.bash  text    eol=lf
+*.sh    text    eol=lf
+*.shar  text    eol=lf
+*.php   text    eol=lf
+# grammar files
+*.gr    text    eol=lf
+*.ebnf  text    eol=lf
+
 
 # Explicitly declare files that will always have CRLF line endings on checkout.
 # Example: *.sln text eol=crlf
@@ -42,6 +48,13 @@ vagrantfile     text
 *.war       -text   binary
 
 *.phar      -text   binary
+bin/gcopy           -text   binary
+bin/gdeebnf         -text   binary
+bin/gdempty         -text   binary
+bin/gsqueeze        -text   binary
+bin/gstartfollow    -text   binary
+bin/gstats          -text   binary
+
 
 # After editting this .gitattributes file, you need to re-normalize all files that have the wrong line-endings:
 # $ rm .git/index

@@ -3,3 +3,6 @@
 # Composer files
 composer.phar
 vendor/
+
+#IDE files
+*.iml
