@@ -6,3 +6,6 @@ vendor/
 
 #IDE files
 *.iml
+
+# phpunit files
+phpunit.local.xml
