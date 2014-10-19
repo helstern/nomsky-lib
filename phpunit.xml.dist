@@ -8,11 +8,11 @@
   <testsuites>
 
       <testsuite name="large">
-          <directory suffix=".phpt">tests/integration</directory>
+          <directory suffix=".phpt">test/integration</directory>
       </testsuite>
 
     <testsuite name="small">
-      <directory suffix="Test.php">tests/unit-tests</directory>
+      <directory suffix="Test.php">test/unit-tests</directory>
     </testsuite>
 
   </testsuites>
