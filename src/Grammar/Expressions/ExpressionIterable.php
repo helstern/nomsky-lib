@@ -1,0 +1,9 @@
+<?php namespace Helstern\Nomsky\Grammar\Expressions;
+
+interface ExpressionIterable extends \IteratorAggregate, \Countable
+{
+    /**
+     * @return  \Iterator|Expression[]
+     */
+    public function getIterator();
+}
