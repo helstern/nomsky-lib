@@ -161,6 +161,8 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
      */
     public function testAlternationWithNestedAlternationAsSibling()
     {
+//        $this->markTestSkipped('s');
+
         $listOfSymbols = $this->createListOfSymbols(array('b', 'c', '1'));
         $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
         $group       = new Group($alternation);
@@ -179,6 +181,57 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
         $actualExpressionWithoutGroups = $visitor->getRoot();
         $expectedExpressionWithoutGroups = $this->createAlternationFromListOfStringSymbols(
             array('a', 'b', 'c', '1', '2', '3')
+        );
+
+        $this->assertInstanceOf(
+            get_class($expectedExpressionWithoutGroups),
+            $actualExpressionWithoutGroups,
+            'there should have been some expressions'
+        );
+
+        $actualListOfSymbols = $actualExpressionWithoutGroups->toArray();
+        $expectedListOfSymbols = $expectedExpressionWithoutGroups->toArray();
+
+        $assertFailMsgTpl = 'Expected the following alternation: %s';
+        $this->assertEquals(
+            $expectedListOfSymbols,
+            $actualListOfSymbols,
+            sprintf($assertFailMsgTpl, $this->serializeExpressionIterable($expectedExpressionWithoutGroups))
+        );
+    }
+
+    /**
+     * (a | (b | c | (x | y | z) | 1) | 2 | 3) => (a | b | c | x | y | z | 1 | 2 | 3)
+     */
+    public function testAlternationWithMultipleNestedAlternationAsSibling()
+    {
+        $listOfSymbols = $this->createListOfSymbols(array('x', 'y', 'z'));
+        $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
+        $group       = new Group($alternation);
+
+        $listOfSymbols = array_merge(
+            $this->createListOfSymbols(array('b', 'c')),
+            array($group, SymbolAdapter::createTerminal('1'))
+        );
+        $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
+        $group       = new Group($alternation);
+
+        $listOfSymbols = array_merge(
+            array(SymbolAdapter::createTerminal('a'), $group),
+            $this->createListOfSymbols(array('2', '3'))
+        );
+        $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
+
+        $visitor                    = new Converters\EliminateGroupsVisitor();
+        $hierarchicVisitDispatcher  = new CompleteVisitDispatcher($visitor);
+
+        $walker = new DepthFirstStackBasedWalker();
+        $walker->walk($alternation, $hierarchicVisitDispatcher);
+
+        /** @var Alternation $actualExpressionWithoutGroups */
+        $actualExpressionWithoutGroups = $visitor->getRoot();
+        $expectedExpressionWithoutGroups = $this->createAlternationFromListOfStringSymbols(
+            array('a', 'b', 'c', 'x', 'y', 'z', '1', '2', '3')
         );
 
         $this->assertInstanceOf(
