@@ -4,6 +4,12 @@ use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 
+/**
+ * This class adapts an instance of SymbolPredicate to match an expression
+ *
+ * Class ExpressionAdapter
+ * @package Helstern\Nomsky\Grammar\Rule\SymbolPredicate
+ */
 class ExpressionAdapter implements SymbolPredicate
 {
     /** @var SymbolPredicate */
