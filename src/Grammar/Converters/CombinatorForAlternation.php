@@ -40,9 +40,6 @@ class CombinatorForAlternation implements Combinator
         $items = array_merge($alternationItems, $ownAlternationItems);
 
         return $items;
-//        $result = new Alternation(array_shift($items), $items);
-//
-//        return $result;
     }
 
     /**

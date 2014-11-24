@@ -137,7 +137,6 @@ class EliminateGroupsVisitor extends AbstractErrorTriggeringVisitor implements H
     public function endVisitGroup(Group $expression)
     {
         //transfer the children of the group to the group's parent
-
         return true;
     }
 

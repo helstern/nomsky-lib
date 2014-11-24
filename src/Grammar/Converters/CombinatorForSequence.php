@@ -70,8 +70,5 @@ class CombinatorForSequence  implements Combinator
         $items   = array_merge($sequenceItems, $ownSequenceItems);
 
         return $items;
-//        $result = new Sequence(array_shift($items), $items);
-//
-//        return $result;
     }
 }

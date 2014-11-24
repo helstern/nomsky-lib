@@ -8,9 +8,9 @@ interface Combination
     public function getCombinator();
 
     /**
-     * @param array $rightGroup
      * @param array $leftGroup
+     * @param array $rightGroup
      * @return array
      */
-    public function combine(array $rightGroup, array $leftGroup);
+    public function combine(array $leftGroup, array $rightGroup);
 }

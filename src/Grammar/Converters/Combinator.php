@@ -24,11 +24,11 @@ interface Combinator
     public function transformsWhenCombinedWithAlternation();
 
     /**
-     * @param array $ownItems
      * @param array $alternationItems
+     * @param array $ownItems
      * @return array
      */
-    public function combineWithAlternation(array $ownItems, array $alternationItems);
+    public function combineWithAlternation(array $alternationItems, array $ownItems);
 
     /**
      * @return boolean
@@ -36,9 +36,9 @@ interface Combinator
     public function transformsWhenCombinedWithSequence();
 
     /**
-     * @param array $ownItems
      * @param array $sequenceItems
+     * @param array $ownItems
      * @return array
      */
-    public function combineWithSequence(array $ownItems, array $sequenceItems);
+    public function combineWithSequence(array $sequenceItems, array $ownItems);
 }
