@@ -37,7 +37,7 @@ class GroupsElimination
     /**
      * @param Expression[]|\SplStack $childrenStack
      * @param NormalizeOperand[]|\SplStack $normalizeOperands
-     * @internal param array $expressionChildren
+     * @return ResultInterface
      */
     public function eliminateGroups(\SplStack $childrenStack, \SplStack $normalizeOperands)
     {
@@ -90,6 +90,8 @@ class GroupsElimination
                 $this->pushResultToStacks($result, $childrenStack, $normalizeOperands);
             }
         } while (! $childrenStack->isEmpty());
+
+        return $result;
     }
 
     /**
@@ -99,6 +101,10 @@ class GroupsElimination
      */
     protected function pushResultToStacks(ResultInterface $result, \SplStack $childrenStack, \SplStack $operandsStack)
     {
+        if ($childrenStack->isEmpty() || $operandsStack->isEmpty()) {
+            return;
+        }
+
         $newGroup = new Group($result->toExpression());
         $childrenStack->push($newGroup); //array_push($childrenStack, $newGroup);
 
