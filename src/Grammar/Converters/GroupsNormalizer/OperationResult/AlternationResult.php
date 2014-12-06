@@ -4,6 +4,7 @@ use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 
 use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\AlternationGroup\Operand;
+use Helstern\Nomsky\Grammar\Expressions\Group;
 
 class AlternationResult implements ResultInterface
 {
@@ -16,6 +17,15 @@ class AlternationResult implements ResultInterface
     public function __construct(array $alternationItems)
     {
         $this->alternationItems = $alternationItems;
+    }
+
+    /**
+     * @return Group
+     */
+    public function toGroup()
+    {
+        $expression = $this->toExpression();
+        return new Group($expression);
     }
 
     /**
