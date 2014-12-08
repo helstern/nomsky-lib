@@ -75,13 +75,13 @@ class CompleteVisitDispatcher extends AbstractDispatcher implements VisitDispatc
 
     /**
      * @param Sequence $expression
-     * @return EndGroupAction
+     * @return EndSequenceAction
      */
     public function dispatchVisitSequence(Sequence $expression)
     {
         $this->visitor->startVisitSequence($expression);
 
-        $nextVisitAction = new EndGroupAction($expression, $this->visitor);
+        $nextVisitAction = new EndSequenceAction($expression, $this->visitor);
         return $nextVisitAction;
     }
 

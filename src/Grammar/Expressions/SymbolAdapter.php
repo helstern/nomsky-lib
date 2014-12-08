@@ -33,10 +33,14 @@ class SymbolAdapter implements Expression, Symbol
 
     /**
      * @param string $symbol
+     * @throws \InvalidArgumentException
      * @return SymbolAdapter
      */
     static public function createTerminal($symbol)
     {
+        if (! is_string($symbol)) {
+            throw new \InvalidArgumentException(sprintf('%s requires a string', __METHOD__));
+        }
         return new self(Symbol::TYPE_TERMINAL, $symbol);
     }
 
