@@ -50,15 +50,15 @@ class GroupsElimination
             $head = array();
 
             $child = $childrenStack->pop(); //array_shift($childrenStack);
-            while (false == $child instanceof Group) {
+            while (false == is_null($child) && false == $child instanceof Group) {
                 $head[] = $child;
 
-                $child = $childrenStack->pop(); //array_shift($expressionChildren);
+                $child = $childrenStack->isEmpty() ? null : $childrenStack->pop(); //array_shift($expressionChildren);
             }
 
             if (!empty($head)) {
                 $leftOperand          = $this->createOperand($head);
-                $rightOperand         = array_pop($normalizeOperands);
+                $rightOperand         = $normalizeOperands->pop(); //array_pop($normalizeOperands);
                 $result = $this->performOperation($leftOperand, $rightOperand);
 
                 $this->pushResultToStacks($result, $childrenStack, $normalizeOperands);
@@ -70,20 +70,20 @@ class GroupsElimination
 
             $tail = array();
             $child = $childrenStack->pop(); //array_shift($childrenStack);
-            while (false == $child instanceof Group) {
+            while (false === is_null($child) && false == $child instanceof Group) {
                 $tail[] = $child;
 
-                $child = $childrenStack->pop(); //array_shift($expressionChildren);
+                $child = $childrenStack->isEmpty() ? null : $childrenStack->pop(); //array_shift($expressionChildren);
             }
 
             if (empty($tail)) {
-                $leftOperand    = array_pop($normalizeOperands);
-                $rightOperand   = array_pop($normalizeOperands);
+                $leftOperand    = $normalizeOperands->pop(); //array_pop($normalizeOperands);
+                $rightOperand   = $normalizeOperands->pop(); //array_pop($normalizeOperands);
                 $result = $this->performOperation($leftOperand, $rightOperand);
 
                 $this->pushResultToStacks($result, $childrenStack, $normalizeOperands);
             } else {
-                $leftOperand    = array_pop($normalizeOperands);
+                $leftOperand    = $normalizeOperands->pop(); //array_pop($normalizeOperands);
                 $rightOperand   = $this->createOperand($tail);
                 $result = $this->performOperation($leftOperand, $rightOperand);
 
@@ -101,7 +101,7 @@ class GroupsElimination
      */
     protected function pushResultToStacks(ResultInterface $result, \SplStack $childrenStack, \SplStack $operandsStack)
     {
-        if ($childrenStack->isEmpty() || $operandsStack->isEmpty()) {
+        if ($childrenStack->isEmpty()) {
             return;
         }
 
