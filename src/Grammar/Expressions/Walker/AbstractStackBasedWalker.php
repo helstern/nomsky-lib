@@ -7,15 +7,15 @@ use Helstern\Nomsky\Grammar\Expressions\Walker\WalkState\WalkStateMachine;
 
 abstract class AbstractStackBasedWalker implements Walker
 {
-    public function walk(Expression $expression, VisitDispatcher $visitActionDispatcher)
+    public function walk(Expression $initialExpression, VisitDispatcher $visitActionDispatcher)
     {
         $walkState = $this->getWalkStateMachine();
-        if (! $walkState->startWalking($expression)) {
+        if (! $walkState->startWalking($initialExpression)) {
             return false;
         }
 
         /** @var Expression[] $stackOfExpressions */
-        $stackOfExpressions = array($expression);
+        $stackOfExpressions = array($initialExpression);
 
         do {
             $expression = array_pop($stackOfExpressions);
