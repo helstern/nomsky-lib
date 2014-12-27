@@ -23,7 +23,7 @@ class GenericSymbol implements Symbol
      */
     public function getType()
     {
-        return Symbol::TYPE_TERMINAL;
+        return $this->type;
     }
 
     /**

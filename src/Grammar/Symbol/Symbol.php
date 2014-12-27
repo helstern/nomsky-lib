@@ -2,9 +2,9 @@
 
 interface Symbol
 {
-    const TYPE_TERMINAL = 0;
+    const TYPE_TERMINAL = 1;
 
-    const TYPE_NON_TERMINAL = 0;
+    const TYPE_NON_TERMINAL = 2;
 
     /**
      * @return int

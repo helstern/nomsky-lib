@@ -26,9 +26,22 @@ class SymbolAdapter implements Expression, Symbol
      */
     static public function createAdapterForSymbol(Symbol $symbol)
     {
-        $expression = new self($symbol->getType(), $symbol->getType());
+        $expression = new self($symbol->getType(), $symbol->hashCode());
 
         return $expression;
+    }
+
+    /**
+     * @param $identifier
+     * @throws \InvalidArgumentException
+     * @return SymbolAdapter
+     */
+    static public function createAdapterForNonTerminal($identifier)
+    {
+        if (! is_string($identifier)) {
+            throw new \InvalidArgumentException(sprintf('%s requires a string', __METHOD__));
+        }
+        return new self(Symbol::TYPE_NON_TERMINAL, $identifier);
     }
 
     /**

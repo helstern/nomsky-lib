@@ -67,7 +67,7 @@ class EliminateOptionsAndRepetitionsVisitor implements HierarchyVisitor
             array_push($alternatives, $epsilonSymbol);
             $alternation = new Alternation(array_shift($alternatives), $alternatives);
         } else {
-            $alternation = new Alternation($expression, $epsilonSymbol);
+            $alternation = new Alternation($expression, array($epsilonSymbol));
         }
 
         $production = new Production($nonTerminal, $alternation);
@@ -241,7 +241,7 @@ class EliminateOptionsAndRepetitionsVisitor implements HierarchyVisitor
     {
         /** @var Expression[]|array $parentChildren */
         $parentChildren = array_pop($this->stackOfChildren);
-        array_push($parentChildren, $e);
+        array_push($parentChildren, $expression);
         array_push($this->stackOfChildren, $parentChildren);
     }
 }

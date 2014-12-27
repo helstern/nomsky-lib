@@ -81,6 +81,15 @@ class ExpressionTestUtils
     }
 
     /**
+     * @param string $identifier
+     * @return SymbolAdapter
+     */
+    public function createNonTerminal($identifier)
+    {
+        return SymbolAdapter::createAdapterForNonTerminal($identifier);
+    }
+
+    /**
      * @param string $stringSymbol
      * @return SymbolAdapter
      */
