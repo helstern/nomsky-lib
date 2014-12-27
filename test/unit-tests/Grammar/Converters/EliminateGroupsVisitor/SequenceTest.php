@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\ExpandVisitor;
+<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateGroupsVisitor;
 
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;

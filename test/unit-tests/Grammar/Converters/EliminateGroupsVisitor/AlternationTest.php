@@ -1,8 +1,8 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\ExpandVisitor;
+<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateGroupsVisitor;
 
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
 use Helstern\Nomsky\Grammar\Converters;
