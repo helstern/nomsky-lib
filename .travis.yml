@@ -1,0 +1,16 @@
+# see http://docs.travis-ci.com/user/languages/php/ for more hints
+language: php
+
+php:
+ - 5.4
+ - 5.5
+
+before_script:
+ - composer install
+
+script:
+ - mkdir -p build/code-coverage
+ - vendor/bin/phpunit --configuration==./phpunit.xml.travis
+
+after_script:
+ - php bin/code-coverage-checker.clover.php build/code-coverage/clover-coverage.xml 80
