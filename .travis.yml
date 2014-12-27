@@ -10,7 +10,7 @@ before_script:
 
 script:
  - mkdir -p build/code-coverage
- - vendor/bin/phpunit --configuration==./phpunit.xml.travis
+ - vendor/bin/phpunit --configuration=./phpunit.xml.travis
 
 after_script:
  - php bin/code-coverage-checker.clover.php build/code-coverage/clover-coverage.xml 80
