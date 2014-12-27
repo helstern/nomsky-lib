@@ -24,8 +24,8 @@ class Operator implements NormalizeOperator
     /**
      * (x | y) | (a b) => x | y | a b
      *
-     * @param array|Expression[] $leftGroupItems
-     * @param array|Expression[] $rightGroupItems
+     * @param array|Expression[] $leftGroupItems alternation items
+     * @param array|Expression[] $rightGroupItems sequence items
      * @return AlternationResult
      */
     public function operateOnAlternationAndSequence(array $leftGroupItems, array $rightGroupItems)
@@ -39,8 +39,8 @@ class Operator implements NormalizeOperator
     /**
      * (x y) | (a | b) => x y | a | b
      *
-     * @param array $leftGroupItems
-     * @param array $rightGroupItems
+     * @param array $leftGroupItems sequence items
+     * @param array $rightGroupItems alternation items
      * @return AlternationResult
      */
     public function operateOnSequenceAndAlternation(array $leftGroupItems, array $rightGroupItems)
@@ -54,8 +54,8 @@ class Operator implements NormalizeOperator
     /**
      * (x y) | (a b) => x y | a b
      *
-     * @param array $leftGroupItems
-     * @param array $rightGroupItems
+     * @param array $leftGroupItems sequence items
+     * @param array $rightGroupItems sequence items
      * @return AlternationResult
      */
     public function operateOnSequenceAndSequence(array $leftGroupItems, array $rightGroupItems)

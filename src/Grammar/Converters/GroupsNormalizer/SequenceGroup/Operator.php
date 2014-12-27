@@ -20,7 +20,26 @@ class Operator implements NormalizeOperator
         $normalized = array();
         foreach($leftGroupItems as $headItem) {
             foreach ($rightGroupItems as $tailItem) {
-                $normalized[] = new Sequence($headItem, array($tailItem));
+
+                /** @var Expression $head */
+                $head = null;
+                /** @var array|Expression[] $tail */
+                $tail = null;
+
+                if ($tailItem instanceof Sequence) {//make sure sequence does not contain another sequence
+                    $tail = $tailItem->toArray();
+                } else {
+                    $tail = array($tailItem);
+                }
+
+                if ($headItem instanceof Sequence) {
+                    $tail = array_merge($headItem->toArray(), $tail);
+                    $head = array_shift($tail);
+                } else {
+                    $head = $headItem;
+                }
+
+                $normalized[] = new Sequence($head, array($tail));
             }
         }
 
@@ -30,15 +49,27 @@ class Operator implements NormalizeOperator
     /**
      * (x | y) (a b) => x a b | y a b
      *
-     * @param array|Expression[] $leftGroupItems$leftGroupItems
-     * @param array|Expression[] $rightGroupItems
+     * @param array|Expression[] $leftGroupItems alternation items
+     * @param array|Expression[] $rightGroupItems sequence items
      * @return AlternationResult
      */
     public function operateOnAlternationAndSequence(array $leftGroupItems, array $rightGroupItems)
     {
         $normalized = array();
         foreach($leftGroupItems as $headItem) {
-            $normalized[] = new Sequence($headItem, array($rightGroupItems));
+            /** @var Expression $head */
+            $head = null;
+            /** @var array|Expression[] $tail */
+            $tail = $rightGroupItems;
+
+            if ($headItem instanceof Sequence) {//make sure sequence does not contain another sequence
+                $tail = array_merge($headItem->toArray(), $rightGroupItems);
+                $head = array_shift($tail);
+            } else {
+                $head = $headItem;
+            }
+
+            $normalized[] = new Sequence($head, $tail);
         }
 
         return new AlternationResult($normalized);
@@ -56,7 +87,15 @@ class Operator implements NormalizeOperator
         $normalized = array();
         $head       = array_shift($leftGroupItems);
         foreach($rightGroupItems as $tailItem) {
-            $normalized[] = new Sequence($head, array_merge($leftGroupItems, array($tailItem)));
+            /** @var array $tail */
+            $tail = null;
+            if ($tailItem instanceof Sequence) { //make sure sequence does not contain another sequence
+                $tail = array_merge($leftGroupItems, $tailItem->toArray());
+            } else {
+                $tail = array_merge($leftGroupItems, array($tailItem));
+            }
+
+            $normalized[] = new Sequence($head, $tail);
         }
 
         return new AlternationResult($normalized);
@@ -65,14 +104,13 @@ class Operator implements NormalizeOperator
     /**
      * (x y) (a b) => x y a b
      *
-     * @param array $leftGroupItems
-     * @param array $rightGroupItems
+     * @param array $leftGroupItems sequence items
+     * @param array $rightGroupItems sequence items
      * @return SequenceResult
      */
     public function operateOnSequenceAndSequence(array $leftGroupItems, array $rightGroupItems)
     {
         $normalized = array_merge($leftGroupItems, $rightGroupItems);
-
         return new SequenceResult($normalized);
     }
 }
