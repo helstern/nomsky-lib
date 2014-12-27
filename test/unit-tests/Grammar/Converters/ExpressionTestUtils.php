@@ -69,7 +69,7 @@ class ExpressionTestUtils
         $listOfSymbolObjects = array();
         foreach($listOfSymbols as $stringSymbol) {
             if (is_string($stringSymbol)) {
-                $listOfSymbolObjects[] = SymbolAdapter::createTerminal($stringSymbol);
+                $listOfSymbolObjects[] = SymbolAdapter::createAdapterForTerminal($stringSymbol);
             } elseif ($stringSymbol instanceof Expression) {
                 $listOfSymbolObjects[] = $stringSymbol;
             } else {
@@ -86,7 +86,7 @@ class ExpressionTestUtils
      */
     public function createTerminal($stringSymbol)
     {
-        return SymbolAdapter::createTerminal($stringSymbol);
+        return SymbolAdapter::createAdapterForTerminal($stringSymbol);
     }
 
     /**

@@ -136,7 +136,7 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
         $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
         $group       = new Group($alternation);
 
-        $listOfSymbols = array(SymbolAdapter::createTerminal('a'), $group);
+        $listOfSymbols = array(SymbolAdapter::createAdapterForTerminal('a'), $group);
         $listOfSymbols = array_merge($listOfSymbols, $exprTestUtils->createListOfExpressions(array('2', '3')));
         $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
 
@@ -176,13 +176,13 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
 
         $listOfSymbols = array_merge(
             $exprTestUtils->createListOfExpressions(array('b', 'c')),
-            array($group, SymbolAdapter::createTerminal('1'))
+            array($group, SymbolAdapter::createAdapterForTerminal('1'))
         );
         $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
         $group       = new Group($alternation);
 
         $listOfSymbols = array_merge(
-            array(SymbolAdapter::createTerminal('a'), $group),
+            array(SymbolAdapter::createAdapterForTerminal('a'), $group),
             $exprTestUtils->createListOfExpressions(array('2', '3'))
         );
         $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);

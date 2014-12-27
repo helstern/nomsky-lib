@@ -60,7 +60,7 @@ class EliminateOptionsAndRepetitionsVisitor implements HierarchyVisitor
     {
         /** @var Alternation $alternation */
         $alternation = null;
-        $epsilonSymbol = SymbolAdapter::createEpsilonAdapter();
+        $epsilonSymbol = SymbolAdapter::createAdapterForEpsilon();
 
         if ($expression instanceof Alternation) {
             $alternatives = $expression->toArray();
@@ -200,7 +200,7 @@ class EliminateOptionsAndRepetitionsVisitor implements HierarchyVisitor
 
         $this->addEpsilonAlternative($nonTerminalSymbol, $expression);
 
-        $expression = SymbolAdapter::adapt($nonTerminalSymbol);
+        $expression = SymbolAdapter::createAdapterForSymbol($nonTerminalSymbol);
         $this->setAsRootOrAddToStackOfChildren($expression);
     }
 
@@ -229,7 +229,7 @@ class EliminateOptionsAndRepetitionsVisitor implements HierarchyVisitor
 
         $this->addEpsilonAlternative($newNonTerminal, $expression);
 
-        $expression = SymbolAdapter::adapt($newNonTerminal);
+        $expression = SymbolAdapter::createAdapterForSymbol($newNonTerminal);
         $this->setAsRootOrAddToStackOfChildren($expression);
     }
 

@@ -12,10 +12,19 @@ class SymbolAdapter implements Expression, Symbol
     protected $symbol;
 
     /**
+     * @return SymbolAdapter
+     */
+    static public function createAdapterForEpsilon()
+    {
+        $epsilon = new EpsilonSymbol;
+        return new self($epsilon->getType(), $epsilon->hashCode());
+    }
+
+    /**
      * @param Symbol $symbol
      * @return SymbolAdapter
      */
-    static public function adapt(Symbol $symbol)
+    static public function createAdapterForSymbol(Symbol $symbol)
     {
         $expression = new self($symbol->getType(), $symbol->getType());
 
@@ -23,20 +32,11 @@ class SymbolAdapter implements Expression, Symbol
     }
 
     /**
-     * @return SymbolAdapter
-     */
-    static public function createEpsilonAdapter()
-    {
-        $epsilon = new EpsilonSymbol;
-        return new self($epsilon->getType(), $epsilon->hashCode());
-    }
-
-    /**
      * @param string $symbol
      * @throws \InvalidArgumentException
      * @return SymbolAdapter
      */
-    static public function createTerminal($symbol)
+    static public function createAdapterForTerminal($symbol)
     {
         if (! is_string($symbol)) {
             throw new \InvalidArgumentException(sprintf('%s requires a string', __METHOD__));
