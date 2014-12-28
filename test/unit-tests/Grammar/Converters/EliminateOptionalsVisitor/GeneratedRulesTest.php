@@ -11,7 +11,7 @@ use Helstern\Nomsky\Grammar\Expressions\Sequence;
 use Helstern\Nomsky\Grammar\Converters;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
-use Helstern\Nomsky\Grammar\Production\Production;
+use Helstern\Nomsky\Grammar\Production\DefaultProduction;
 
 class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
 {
@@ -69,7 +69,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $assertFailMsgTpl = 'Expected 1 rules to be generated for a repetion. Instead %s were generated';
         $this->assertEquals(1, count($epsilonAlternatives), sprintf($assertFailMsgTpl, count($epsilonAlternatives)));
 
-        /** @var Production $production */
+        /** @var DefaultProduction $production */
         $production = array_pop($epsilonAlternatives);
         /** @var Alternation $actualExpression */
         $actualExpression = $production->getExpression();
@@ -126,7 +126,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $assertFailMsgTpl = 'Expected 1 rules to be generated for a repetion. Instead %s were generated';
         $this->assertEquals(1, count($epsilonAlternatives), sprintf($assertFailMsgTpl, count($epsilonAlternatives)));
 
-        /** @var Production $production */
+        /** @var DefaultProduction $production */
         $production = array_pop($epsilonAlternatives);
         /** @var Alternation $actualExpression */
         $actualExpression = $production->getExpression();

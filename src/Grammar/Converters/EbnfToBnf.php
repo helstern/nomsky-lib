@@ -6,7 +6,7 @@ use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
 use Helstern\Nomsky\Grammar\Grammar;
-use Helstern\Nomsky\Grammar\Production\ProductionInterface;
+use Helstern\Nomsky\Grammar\Production\Production;
 use Helstern\Nomsky\Grammar\Symbol\EpsilonSymbol;
 
 class EbnfToBnf
@@ -16,7 +16,7 @@ class EbnfToBnf
 
     public function convert(Grammar $grammar)
     {
-        $ebnfRules = $grammar->getRules();
+        $ebnfRules = $grammar->getProductions();
         $bnfRules  = array();
         do {
             $ebnfRule   = array_shift($ebnfRules);
@@ -35,10 +35,10 @@ class EbnfToBnf
     /**
      * Removes all the alternation and groups from a rule
      *
-     * @param ProductionInterface $ebnfRule
+     * @param Production $ebnfRule
      * @return \Helstern\Nomsky\Grammar\Expressions\Expression[]|null
      */
-    public function eliminateGroups(ProductionInterface $ebnfRule)
+    public function eliminateGroups(Production $ebnfRule)
     {
         /** @var Alternation $expression */
         $expression = $ebnfRule->getExpression();
@@ -53,7 +53,7 @@ class EbnfToBnf
         return array($rootExpression);
     }
 
-    public function eliminateOptionsAndRepetitions(ProductionInterface $ebnfRule)
+    public function eliminateOptionsAndRepetitions(Production $ebnfRule)
     {
         /** @var Expression $expression */
         $expression = $ebnfRule->getExpression();

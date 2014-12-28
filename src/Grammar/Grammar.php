@@ -1,7 +1,7 @@
 <?php namespace Helstern\Nomsky\Grammar;
 
+use Helstern\Nomsky\Grammar\Production\DefaultProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
-use Helstern\Nomsky\Grammar\Production\ProductionInterface;
 
 interface Grammar
 {
@@ -11,7 +11,7 @@ interface Grammar
     public function getName();
 
     /**
-     * @return Production
+     * @return DefaultProduction
      */
     public function getStartProduction();
 
@@ -21,12 +21,7 @@ interface Grammar
     public function getProductions();
 
     /**
-     * @return ProductionInterface[]
-     */
-    public function getRules();
-
-    /**
      * @return boolean
      */
-    public function hasEpsilonRules();
+    public function hasEpsilonProductions();
 }

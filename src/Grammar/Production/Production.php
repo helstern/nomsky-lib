@@ -1,131 +1,76 @@
 <?php namespace Helstern\Nomsky\Grammar\Production;
 
 use Helstern\Nomsky\Grammar\Expressions\Expression;
-use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
-use Helstern\Nomsky\Grammar\Expressions\Walker\Visit\NoDispatchDispatcher;
-use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\CountAllStateMachine;
-use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\CountMaxStateMachine;
-use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\FindFirstStateMachine;
-use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\FindMaxStateMachine;
-use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
-use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolTypeEquals;
-use Helstern\Nomsky\Grammar\Symbol\Predicate\AnySymbolPredicate;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
+use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
 
-class Production implements ProductionInterface
+interface Production extends \Countable
 {
-    /** @var \Helstern\Nomsky\Grammar\Symbol\Symbol  */
-    protected $nonTerminal;
+    /**
+     * @return Expression
+     */
+    public function getExpression();
 
-    /** @var \Helstern\Nomsky\Grammar\Expressions\Expression  */
-    protected $expression;
+    /**
+     * @return Symbol
+     */
+    public function getNonTerminal();
 
-    public function __construct(Symbol $nonTerminal, Expression $expression)
-    {
-        $this->nonTerminal = $nonTerminal;
-        $this->expression = $expression;
-    }
+    /**
+     * @param $nonTerminal
+     * @return boolean
+     */
+    public function startsWith($nonTerminal);
 
-    public function getNonTerminal()
-    {
-        return $this->nonTerminal;
-    }
+    /**
+     * @param \Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate $predicate
+     * @param int $max
+     * @return int
+     */
+    public function countMax(SymbolPredicate $predicate, $max);
 
-    public function getExpression()
-    {
-        return $this->expression;
-    }
+    /**
+     * @param SymbolPredicate $predicate
+     * @return int
+     */
+    public function countAll(SymbolPredicate $predicate);
 
-    public function startsWith($nonTerminal)
-    {
-        // TODO: Implement startsWith() method.
-    }
+    /**
+     * @param \Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate $predicate
+     * @param int $max
+     * @return Symbol[]
+     */
+    public function findMax(SymbolPredicate $predicate, $max);
 
-    public function count()
-    {
-        $count = $this->countAll(AnySymbolPredicate::singletonInstance());
-        return $count;
-    }
+    /**
+     * @param \Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate $predicate
+     * @return Symbol|null
+     */
+    public function findFirst(SymbolPredicate $predicate);
 
-    public function countMax(SymbolPredicate $predicate, $max)
-    {
-        $findFirstStateMachine  = new CountMaxStateMachine($predicate, $max);
-        $walker                 = new DepthFirstStackBasedWalker($findFirstStateMachine);
+    /**
+     * @param \Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate $predicate
+     * @return Symbol[]
+     */
+    public function findAll(SymbolPredicate $predicate);
 
-        $expression             = $this->getExpression();
-        $walker->walk($expression, NoDispatchDispatcher::singletonInstance());
+    /**
+     * @return Symbol[]
+     */
+    public function findAllTerminals();
 
-        $count = $findFirstStateMachine->getCount();
-        return $count;
-    }
+    /**
+     * @return Symbol[]
+     */
+    public function findAllNonTerminals();
 
-    public function countAll(SymbolPredicate $predicate)
-    {
-        $findFirstStateMachine  = new CountAllStateMachine($predicate);
-        $walker                 = new DepthFirstStackBasedWalker($findFirstStateMachine);
+    /**
+     * @return Symbol
+     */
+    public function getFirstSymbol();
 
-        $expression             = $this->getExpression();
-        $walker->walk($expression, NoDispatchDispatcher::singletonInstance());
-
-        $count = $findFirstStateMachine->getCount();
-        return $count;
-    }
-
-    public function findMax(SymbolPredicate $predicate, $max)
-    {
-        $findFirstStateMachine  = new FindMaxStateMachine($predicate, $max);
-        $walker                 = new DepthFirstStackBasedWalker($findFirstStateMachine);
-
-        $expression             = $this->getExpression();
-        $walker->walk($expression, NoDispatchDispatcher::singletonInstance());
-
-        $found = $findFirstStateMachine->getExpressions();
-        return $found;
-    }
-
-    public function findFirst(SymbolPredicate $predicate)
-    {
-        $findFirstStateMachine  = new FindFirstStateMachine($predicate);
-        $walker                 = new DepthFirstStackBasedWalker($findFirstStateMachine);
-
-        $expression             = $this->getExpression();
-        $walker->walk($expression, NoDispatchDispatcher::singletonInstance());
-
-        $found = $findFirstStateMachine->getExpression();
-        return $found;
-    }
-
-    public function findAll(SymbolPredicate $predicate)
-    {
-        return $this->findMax($predicate, PHP_INT_MAX);
-    }
-
-    public function findAllTerminals()
-    {
-        $predicate = SymbolTypeEquals::newInstance(Symbol::TYPE_TERMINAL);
-        return $this->findMax($predicate, PHP_INT_MAX);
-    }
-
-    public function findAllNonTerminals()
-    {
-        $predicate = SymbolTypeEquals::newInstance(Symbol::TYPE_NON_TERMINAL);
-        return $this->findMax($predicate, PHP_INT_MAX);
-    }
-
-    public function getFirstSymbol()
-    {
-        $symbols = $this->getSymbols();
-        if (count($symbols)) {
-            return array_shift($symbols);
-        }
-        return null;
-    }
-
-    public function getSymbols()
-    {
-        $predicate = AnySymbolPredicate::singletonInstance();
-        $symbols = $this->findMax($predicate, PHP_INT_MAX);
-
-        return $symbols;
-    }
+    /**
+     * @return Symbol[]
+     */
+    public function getSymbols();
 }
