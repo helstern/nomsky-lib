@@ -11,7 +11,7 @@ interface Grammar
     public function getName();
 
     /**
-     * @return DefaultProduction
+     * @return Production
      */
     public function getStartProduction();
 
