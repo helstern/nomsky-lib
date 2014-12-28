@@ -36,7 +36,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
      * @param \Helstern\Nomsky\Grammar\Converters\EliminateOptionsAndRepetitionsVisitor $visitor
      * @return ExpressionIterable|null
      */
-    public function getDepthFirstWalkResult(Expression $e, Converters\EliminateOptionsAndRepetitionsVisitor $visitor)
+    public function walkAndVisitExpression(Expression $e, Converters\EliminateOptionsAndRepetitionsVisitor $visitor)
     {
         $hierarchicVisitDispatcher  = new CompleteVisitDispatcher($visitor);
 
@@ -52,7 +52,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
      *  a b generatedNonTerminal1 d
      *  epsilon | c generatedNonTerminal1
      */
-    public function testGeneratedForRepetition()
+    public function testGeneratedRulesForOptionalList()
     {
 //      $this->markTestSkipped('s');
 
@@ -64,7 +64,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $initialExpression = new Sequence(array_shift($initialList), $initialList);
 
         $visitor = new Converters\EliminateOptionsAndRepetitionsVisitor();
-        $this->getDepthFirstWalkResult($initialExpression, $visitor);
+        $this->walkAndVisitExpression($initialExpression, $visitor);
 
         $epsilonAlternatives = $visitor->getEpsilonAlternatives();
         $assertFailMsgTpl = 'Expected 1 rules to be generated for a repetion. Instead %s were generated';
@@ -78,10 +78,10 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         /** @var \Exception $castAlternationException */
         $castAlternationException = null;
         try {
-            $cast = function (Alternation $alternation) { return $alternation; };
-            $cast($actualExpression);
+            $castToAlternation = function (Alternation $alternation) { return $alternation; };
+            $castToAlternation($actualExpression);
         } catch (\Exception $castAlternationException) {
-
+            /** on purpose left */
         }
         $this->assertNull($castAlternationException, 'Expected an alternation');
 
@@ -93,6 +93,58 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
                     $exprTestUtils->createNonTerminal('generatedNonTerminal1')
                 )
             )
+        );
+        $actualItems = $actualExpression->toArray();
+
+        $assertFailMsgTpl = 'Expected the following sequence: %s';
+        $assertFailMsg = sprintf(
+            $assertFailMsgTpl,
+            $exprTestUtils->serializeExpressionIterable($exprTestUtils->createAlternationFromSymbols($actualItems))
+        );
+        $this->assertEquals($expectedItems, $actualItems, $assertFailMsg);
+    }
+
+    /**
+     * a b [ c ] d =>
+     *  a b generatedNonTerminal1 d
+     *  epsilon | c
+     */
+    public function testGeneratedRulesForOptionalItems()
+    {
+//      $this->markTestSkipped('s');
+
+        $exprTestUtils = $this->getExpressionTestUtils();
+
+        $initialList      = $exprTestUtils->createListOfExpressions(array('a', 'b'));
+        $initialList[]    = new Option($exprTestUtils->createTerminal('c'));
+        $initialList[]    = $exprTestUtils->createTerminal('d');
+        $initialExpression = new Sequence(array_shift($initialList), $initialList);
+
+        $visitor = new Converters\EliminateOptionsAndRepetitionsVisitor();
+        $this->walkAndVisitExpression($initialExpression, $visitor);
+
+        $epsilonAlternatives = $visitor->getEpsilonAlternatives();
+        $assertFailMsgTpl = 'Expected 1 rules to be generated for a repetion. Instead %s were generated';
+        $this->assertEquals(1, count($epsilonAlternatives), sprintf($assertFailMsgTpl, count($epsilonAlternatives)));
+
+        /** @var Production $production */
+        $production = array_pop($epsilonAlternatives);
+        /** @var Alternation $actualExpression */
+        $actualExpression = $production->getExpression();
+
+        /** @var \Exception $castAlternationException */
+        $castAlternationException = null;
+        try {
+            $castToAlternation = function (Alternation $alternation) { return $alternation; };
+            $castToAlternation($actualExpression);
+        } catch (\Exception $castAlternationException) {
+            /** on purpose left */
+        }
+        $this->assertNull($castAlternationException, 'Expected an alternation');
+
+        $expectedItems = array(
+            $exprTestUtils->createTerminal(''), //epsilon
+            $exprTestUtils->createTerminal('c')
         );
         $actualItems = $actualExpression->toArray();
 

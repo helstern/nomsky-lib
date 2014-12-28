@@ -260,6 +260,8 @@ class EliminateOptionsAndRepetitionsVisitor implements HierarchyVisitor
             $alternationItems[] = $optionalExpression;
         } elseif ($optionalExpression instanceof Alternation) {
             $alternationItems[] = new Group($optionalExpression);
+        } else {
+            $alternationItems[] = $optionalExpression;
         }
 
         $alternation = new Alternation(array_shift($alternationItems), $alternationItems);
