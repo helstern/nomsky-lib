@@ -3,8 +3,8 @@
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\Option;
-use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
+use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 
 interface VisitDispatcherListener
@@ -49,18 +49,18 @@ interface VisitDispatcherListener
     public function afterDispatchVisitGroup(Group $expression, VisitAction $dispatchVisitResult = null);
 
     /**
-     * @param Option $expression
+     * @param OptionalItem $expression
      * @param VisitAction $dispatchVisitResult
      * @return boolean
      */
-    public function beforeDispatchVisitOption(Option $expression, VisitAction $dispatchVisitResult = null);
+    public function beforeDispatchVisitOption(OptionalItem $expression, VisitAction $dispatchVisitResult = null);
 
     /**
-     * @param Option $expression
+     * @param OptionalItem $expression
      * @param VisitAction $dispatchVisitResult
      * @return boolean
      */
-    public function afterDispatchVisitOption(Option $expression, VisitAction $dispatchVisitResult = null);
+    public function afterDispatchVisitOption(OptionalItem $expression, VisitAction $dispatchVisitResult = null);
 
     /**
      * @param Sequence $expression
@@ -76,15 +76,15 @@ interface VisitDispatcherListener
     public function afterDispatchVisitSequence(Sequence $expression, VisitAction $dispatchVisitResult = null);
 
     /**
-     * @param Repetition $expression
+     * @param OptionalList $expression
      * @return VisitAction|null
      */
-    public function beforeDispatchVisitRepetition(Repetition $expression);
+    public function beforeDispatchVisitRepetition(OptionalList $expression);
 
     /**
-     * @param Repetition $expression
+     * @param OptionalList $expression
      * @param VisitAction $dispatchVisitResult
      * @return boolean
      */
-    public function afterDispatchVisitRepetition(Repetition $expression, VisitAction $dispatchVisitResult = null);
+    public function afterDispatchVisitRepetition(OptionalList $expression, VisitAction $dispatchVisitResult = null);
 }

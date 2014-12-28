@@ -4,8 +4,8 @@ use Helstern\Nomsky\Grammar\Converters\ExpressionTestUtils;
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
-use Helstern\Nomsky\Grammar\Expressions\Option;
-use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
+use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 
 use Helstern\Nomsky\Grammar\Converters;
@@ -59,7 +59,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $exprTestUtils = $this->getExpressionTestUtils();
 
         $initialList      = $exprTestUtils->createListOfExpressions(array('a', 'b'));
-        $initialList[]    = new Repetition($exprTestUtils->createTerminal('c'));
+        $initialList[]    = new OptionalList($exprTestUtils->createTerminal('c'));
         $initialList[]    = $exprTestUtils->createTerminal('d');
         $initialExpression = new Sequence(array_shift($initialList), $initialList);
 
@@ -116,7 +116,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $exprTestUtils = $this->getExpressionTestUtils();
 
         $initialList      = $exprTestUtils->createListOfExpressions(array('a', 'b'));
-        $initialList[]    = new Option($exprTestUtils->createTerminal('c'));
+        $initialList[]    = new OptionalItem($exprTestUtils->createTerminal('c'));
         $initialList[]    = $exprTestUtils->createTerminal('d');
         $initialExpression = new Sequence(array_shift($initialList), $initialList);
 

@@ -3,8 +3,8 @@
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\Option;
-use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
+use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 
 /**
@@ -42,10 +42,10 @@ abstract class AbstractDispatcher implements VisitDispatcher
     }
 
     /**
-     * @param Option $expression
+     * @param OptionalItem $expression
      * @return null
      */
-    public function dispatchVisitOption(Option $expression)
+    public function dispatchVisitOptionalItem(OptionalItem $expression)
     {
         return null;
     }
@@ -60,10 +60,10 @@ abstract class AbstractDispatcher implements VisitDispatcher
     }
 
     /**
-     * @param Repetition $expression
+     * @param OptionalList $expression
      * @return null
      */
-    public function dispatchVisitRepetition(Repetition $expression)
+    public function dispatchVisitOptionalList(OptionalList $expression)
     {
         return null;
     }

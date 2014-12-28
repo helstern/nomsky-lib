@@ -3,8 +3,8 @@
 use Helstern\Nomsky\Grammar\Converters\ExpressionTestUtils;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
-use Helstern\Nomsky\Grammar\Expressions\Option;
-use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
+use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 
 use Helstern\Nomsky\Grammar\Converters;
@@ -57,7 +57,7 @@ class GroupsTest extends \PHPUnit_Framework_TestCase
         $initialList[]    = $exprTestUtils->getGroupUtils()->createAlternationFromSymbols(
             array(
                 $exprTestUtils->createTerminal('1'),
-                new Option($exprTestUtils->createTerminal('2')),
+                new OptionalItem($exprTestUtils->createTerminal('2')),
                 $exprTestUtils->createTerminal('3')
             )
         );
@@ -101,7 +101,7 @@ class GroupsTest extends \PHPUnit_Framework_TestCase
         $initialList[]    = $exprTestUtils->getGroupUtils()->createAlternationFromSymbols(
             array(
                 $exprTestUtils->createTerminal('1'),
-                new Repetition($exprTestUtils->createTerminal('2')),
+                new OptionalList($exprTestUtils->createTerminal('2')),
                 $exprTestUtils->createTerminal('3')
             )
         );

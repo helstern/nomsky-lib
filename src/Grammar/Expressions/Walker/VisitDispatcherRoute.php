@@ -3,8 +3,8 @@
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\Option;
-use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
+use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 use Helstern\Nomsky\Grammar\Expressions\Walker\Visit\VisitDispatcher;
 
@@ -35,10 +35,10 @@ class VisitDispatcherRoute
             $futureVisitAction = $actionDispatcher->dispatchVisitAlternation($expression);
         } else if ($expression instanceof Group) {
             $futureVisitAction = $actionDispatcher->dispatchVisitGroup($expression);
-        } else if ($expression instanceof Option) {
-            $futureVisitAction = $actionDispatcher->dispatchVisitOption($expression);
-        } else if ($expression instanceof Repetition) {
-            $futureVisitAction = $actionDispatcher->dispatchVisitRepetition($expression);
+        } else if ($expression instanceof OptionalItem) {
+            $futureVisitAction = $actionDispatcher->dispatchVisitOptionalItem($expression);
+        } else if ($expression instanceof OptionalList) {
+            $futureVisitAction = $actionDispatcher->dispatchVisitOptionalList($expression);
         } else if ($expression instanceof Sequence) {
             $futureVisitAction = $actionDispatcher->dispatchVisitSequence($expression);
         } else {

@@ -4,8 +4,8 @@ use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\Option;
-use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
+use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 use Helstern\Nomsky\Grammar\Expressions\SymbolAdapter;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisitor;
@@ -157,10 +157,10 @@ class EliminateOptionsAndRepetitionsVisitor implements HierarchyVisitor
     }
 
     /**
-     * @param Repetition $expression
+     * @param OptionalList $expression
      * @return boolean
      */
-    public function startVisitRepetition(Repetition $expression)
+    public function startVisitOptionalList(OptionalList $expression)
     {
         $this->stackOfChildren[] = array();
 
@@ -168,10 +168,10 @@ class EliminateOptionsAndRepetitionsVisitor implements HierarchyVisitor
     }
 
     /**
-     * @param Repetition $expression
+     * @param OptionalList $expression
      * @return boolean
      */
-    public function endVisitRepetition(Repetition $expression)
+    public function endVisitOptionalList(OptionalList $expression)
     {
         /** @var Expression[]|array $children */
         $children            = array_pop($this->stackOfChildren);
@@ -223,10 +223,10 @@ class EliminateOptionsAndRepetitionsVisitor implements HierarchyVisitor
 
 
     /**
-     * @param Option $expression
+     * @param OptionalItem $expression
      * @return boolean
      */
-    public function startVisitOption(Option $expression)
+    public function startVisitOptionalItem(OptionalItem $expression)
     {
         $this->stackOfChildren[] = array();
 
@@ -234,10 +234,10 @@ class EliminateOptionsAndRepetitionsVisitor implements HierarchyVisitor
     }
 
     /**
-     * @param Option $expression
+     * @param OptionalItem $expression
      * @return boolean
      */
-    public function endVisitOption(Option $expression)
+    public function endVisitOptionalItem(OptionalItem $expression)
     {
         /** @var Expression[]|array $children */
         $children           = array_pop($this->stackOfChildren);

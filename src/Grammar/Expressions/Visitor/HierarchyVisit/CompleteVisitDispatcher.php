@@ -4,8 +4,8 @@ use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 
-use Helstern\Nomsky\Grammar\Expressions\Option;
-use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
+use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 
 
@@ -62,14 +62,14 @@ class CompleteVisitDispatcher extends AbstractDispatcher implements VisitDispatc
     }
 
     /**
-     * @param Option $expression
-     * @return EndOptionAction
+     * @param OptionalItem $expression
+     * @return EndOptionalItemAction
      */
-    public function dispatchVisitOption(Option $expression)
+    public function dispatchVisitOptionalItem(OptionalItem $expression)
     {
-        $this->visitor->startVisitOption($expression);
+        $this->visitor->startVisitOptionalItem($expression);
 
-        $nextVisitAction = new EndOptionAction($expression, $this->visitor);
+        $nextVisitAction = new EndOptionalItemAction($expression, $this->visitor);
         return $nextVisitAction;
     }
 
@@ -86,14 +86,14 @@ class CompleteVisitDispatcher extends AbstractDispatcher implements VisitDispatc
     }
 
     /**
-     * @param Repetition $expression
-     * @return EndRepetitionAction
+     * @param OptionalList $expression
+     * @return EndOptionalListAction
      */
-    public function dispatchVisitRepetition(Repetition $expression)
+    public function dispatchVisitOptionalList(OptionalList $expression)
     {
-        $this->visitor->startVisitRepetition($expression);
+        $this->visitor->startVisitOptionalList($expression);
 
-        $nextVisitAction = new EndRepetitionAction($expression, $this->visitor);
+        $nextVisitAction = new EndOptionalListAction($expression, $this->visitor);
         return $nextVisitAction;
     }
 }

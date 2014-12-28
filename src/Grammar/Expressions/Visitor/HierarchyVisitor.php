@@ -3,8 +3,8 @@
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\Option;
-use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
+use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 
 interface HierarchyVisitor
@@ -46,28 +46,28 @@ interface HierarchyVisitor
     public function endVisitGroup(Group $expression);
 
     /**
-     * @param Repetition $expression
+     * @param OptionalList $expression
      * @return boolean
      */
-    public function startVisitRepetition(Repetition $expression);
+    public function startVisitOptionalList(OptionalList $expression);
 
     /**
-     * @param Repetition $expression
+     * @param OptionalList $expression
      * @return boolean
      */
-    public function endVisitRepetition(Repetition $expression);
+    public function endVisitOptionalList(OptionalList $expression);
 
     /**
-     * @param Option $expression
+     * @param OptionalItem $expression
      * @return boolean
      */
-    public function startVisitOption(Option $expression);
+    public function startVisitOptionalItem(OptionalItem $expression);
 
     /**
-     * @param Option $expression
+     * @param OptionalItem $expression
      * @return boolean
      */
-    public function endVisitOption(Option $expression);
+    public function endVisitOptionalItem(OptionalItem $expression);
 
     /**
      * @param Expression $expression

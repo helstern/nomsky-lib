@@ -1,12 +1,17 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions;
 
-class Repetition implements Expression, ExpressionAggregate
+/**
+ * Representation of an optional repetition of an expression
+ *
+ * @package Helstern\Nomsky\Grammar\Expressions
+ */
+class OptionalList implements Expression, ExpressionAggregate
 {
     /** @var Expression */
     protected $expression;
 
     /**
-     * @param Expression $expression
+     * @param Expression $expression the optional repeated expression
      */
     public function __construct(Expression $expression)
     {

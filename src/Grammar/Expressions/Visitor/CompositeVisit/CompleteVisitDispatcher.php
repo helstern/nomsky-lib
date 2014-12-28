@@ -4,8 +4,8 @@ use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 
-use Helstern\Nomsky\Grammar\Expressions\Option;
-use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
+use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 
 use Helstern\Nomsky\Grammar\Expressions\Visitor\CompositeVisitor;
@@ -54,10 +54,10 @@ class CompleteVisitDispatcher extends AbstractDispatcher implements VisitDispatc
     }
 
     /**
-     * @param Option $expression
+     * @param OptionalItem $expression
      * @return null
      */
-    public function dispatchVisitOption(Option $expression)
+    public function dispatchVisitOptionalItem(OptionalItem $expression)
     {
         $this->visitor->visitOption($expression);
         return null;
@@ -74,10 +74,10 @@ class CompleteVisitDispatcher extends AbstractDispatcher implements VisitDispatc
     }
 
     /**
-     * @param Repetition $expression
+     * @param OptionalList $expression
      * @return null
      */
-    public function dispatchVisitRepetition(Repetition $expression)
+    public function dispatchVisitOptionalList(OptionalList $expression)
     {
         $this->visitor->visitRepetition($expression);
         return null;
