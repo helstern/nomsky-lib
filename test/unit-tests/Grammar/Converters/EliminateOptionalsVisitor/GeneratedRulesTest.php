@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateOptionsAndRepetitionsVisitor;
+<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateOptionalsVisitor;
 
 use Helstern\Nomsky\Grammar\Converters\ExpressionTestUtils;
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
@@ -12,7 +12,6 @@ use Helstern\Nomsky\Grammar\Converters;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
 use Helstern\Nomsky\Grammar\Rule\Production;
-use SebastianBergmann\Exporter\Exception;
 
 class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,10 +32,10 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param Expression $e
-     * @param \Helstern\Nomsky\Grammar\Converters\EliminateOptionsAndRepetitionsVisitor $visitor
+     * @param \Helstern\Nomsky\Grammar\Converters\EliminateOptionalsVisitor $visitor
      * @return ExpressionIterable|null
      */
-    public function walkAndVisitExpression(Expression $e, Converters\EliminateOptionsAndRepetitionsVisitor $visitor)
+    public function walkAndVisitExpression(Expression $e, Converters\EliminateOptionalsVisitor $visitor)
     {
         $hierarchicVisitDispatcher  = new CompleteVisitDispatcher($visitor);
 
@@ -63,7 +62,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $initialList[]    = $exprTestUtils->createTerminal('d');
         $initialExpression = new Sequence(array_shift($initialList), $initialList);
 
-        $visitor = new Converters\EliminateOptionsAndRepetitionsVisitor();
+        $visitor = new Converters\EliminateOptionalsVisitor();
         $this->walkAndVisitExpression($initialExpression, $visitor);
 
         $epsilonAlternatives = $visitor->getEpsilonAlternatives();
@@ -120,7 +119,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $initialList[]    = $exprTestUtils->createTerminal('d');
         $initialExpression = new Sequence(array_shift($initialList), $initialList);
 
-        $visitor = new Converters\EliminateOptionsAndRepetitionsVisitor();
+        $visitor = new Converters\EliminateOptionalsVisitor();
         $this->walkAndVisitExpression($initialExpression, $visitor);
 
         $epsilonAlternatives = $visitor->getEpsilonAlternatives();

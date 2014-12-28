@@ -58,7 +58,7 @@ class EbnfToBnf
         /** @var Expression $expression */
         $expression = $ebnfRule->getExpression();
 
-        $visitor                    = new EliminateOptionsAndRepetitionsVisitor();
+        $visitor                    = new EliminateOptionalsVisitor();
         $hierarchicVisitDispatcher  = new CompleteVisitDispatcher($visitor);
 
         $walker                     = new DepthFirstStackBasedWalker();

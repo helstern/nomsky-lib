@@ -14,7 +14,7 @@ use Helstern\Nomsky\Grammar\Rule\Rule;
 use Helstern\Nomsky\Grammar\Symbol\GenericSymbol;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 
-class EliminateOptionsAndRepetitionsVisitor implements HierarchyVisitor
+class EliminateOptionalsVisitor implements HierarchyVisitor
 {
     /** @var int */
     protected $nrOfNewNonTerminals = 0;
