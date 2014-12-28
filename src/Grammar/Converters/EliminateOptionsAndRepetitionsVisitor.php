@@ -2,6 +2,7 @@
 
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
+use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammar\Expressions\Option;
 use Helstern\Nomsky\Grammar\Expressions\Repetition;
@@ -54,26 +55,6 @@ class EliminateOptionsAndRepetitionsVisitor implements HierarchyVisitor
 
         $newNonTerminal = new GenericSymbol(Symbol::TYPE_NON_TERMINAL, $nonTerminalName);
         return $newNonTerminal;
-    }
-
-    protected function addEpsilonAlternative(Symbol $nonTerminal, Expression $expression)
-    {
-        /** @var Alternation $alternation */
-        $alternation = null;
-        $epsilonSymbol = SymbolAdapter::createAdapterForEpsilon();
-
-        if ($expression instanceof Alternation) {
-            $alternatives = $expression->toArray();
-            array_push($alternatives, $epsilonSymbol);
-            $alternation = new Alternation(array_shift($alternatives), $alternatives);
-        } else {
-            $alternation = new Alternation($expression, array($epsilonSymbol));
-        }
-
-        $production = new Production($nonTerminal, $alternation);
-        $this->epsilonAlternatives[] = $production;
-
-        return $production;
     }
 
     /**
@@ -193,16 +174,53 @@ class EliminateOptionsAndRepetitionsVisitor implements HierarchyVisitor
     public function endVisitRepetition(Repetition $expression)
     {
         /** @var Expression[]|array $children */
-        $children = array_pop($this->stackOfChildren);
-        $expression = array_pop($children);
+        $children            = array_pop($this->stackOfChildren);
+        $repeatedExpression  = array_pop($children);
 
         $nonTerminalSymbol = $this->createNewNonTerminal();
-
-        $this->addEpsilonAlternative($nonTerminalSymbol, $expression);
-
         $expression = SymbolAdapter::createAdapterForSymbol($nonTerminalSymbol);
         $this->setAsRootOrAddToStackOfChildren($expression);
+
+        $this->addEpsilonAlternativeForList($nonTerminalSymbol, $repeatedExpression);
     }
+
+    /**
+     * this assumes a top down parsing method is going to be employed later on
+     *
+     * @param Symbol $nonTerminal
+     * @param Expression $optionalExpression
+     * @return Production
+     */
+    protected function addEpsilonAlternativeForList(Symbol $nonTerminal, Expression $optionalExpression)
+    {
+        $alternationItems = array(
+            SymbolAdapter::createAdapterForEpsilon()
+        );
+
+        if ($optionalExpression instanceof ExpressionIterable) {
+            /** @var $optionalExpression Expression */
+            $items = array(
+                new Group($optionalExpression),
+                SymbolAdapter::createAdapterForSymbol($nonTerminal)
+            );
+            $alternationItems[] = new Sequence(array_shift($items), $items);
+        } else {
+            /** @var $optionalExpression Expression */
+            $items = array(
+                $optionalExpression,
+                SymbolAdapter::createAdapterForSymbol($nonTerminal)
+            );
+            $alternationItems[] = new Sequence(array_shift($items), $items);
+        }
+
+        $alternation = new Alternation(array_shift($alternationItems), $alternationItems);
+
+        $production = new Production($nonTerminal, $alternation);
+        $this->epsilonAlternatives[] = $production;
+
+        return $production;
+    }
+
 
     /**
      * @param Option $expression
@@ -222,16 +240,35 @@ class EliminateOptionsAndRepetitionsVisitor implements HierarchyVisitor
     public function endVisitOption(Option $expression)
     {
         /** @var Expression[]|array $children */
-        $children = array_pop($this->stackOfChildren);
-        $expression = array_pop($children);
+        $children           = array_pop($this->stackOfChildren);
+        $optionalExpression = array_pop($children);
 
         $newNonTerminal = $this->createNewNonTerminal();
-
-        $this->addEpsilonAlternative($newNonTerminal, $expression);
-
         $expression = SymbolAdapter::createAdapterForSymbol($newNonTerminal);
         $this->setAsRootOrAddToStackOfChildren($expression);
+
+        $this->addEpsilonAlternativeForItem($newNonTerminal, $optionalExpression);
     }
+
+    protected function addEpsilonAlternativeForItem(Symbol $nonTerminal, Expression $optionalExpression)
+    {
+        $alternationItems = array(
+            SymbolAdapter::createAdapterForEpsilon()
+        );
+
+        if ($optionalExpression instanceof Sequence) {
+            $alternationItems[] = $optionalExpression;
+        } elseif ($optionalExpression instanceof Alternation) {
+            $alternationItems[] = new Group($optionalExpression);
+        }
+
+        $alternation = new Alternation(array_shift($alternationItems), $alternationItems);
+        $production = new Production($nonTerminal, $alternation);
+        $this->epsilonAlternatives[] = $production;
+
+        return $production;
+    }
+
 
     /**
      * @param Expression $expression

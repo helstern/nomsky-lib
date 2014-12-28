@@ -95,6 +95,9 @@ class ExpressionTestUtils
      */
     public function createTerminal($stringSymbol)
     {
+        if ($stringSymbol === '') {
+            return SymbolAdapter::createAdapterForEpsilon();
+        }
         return SymbolAdapter::createAdapterForTerminal($stringSymbol);
     }
 
