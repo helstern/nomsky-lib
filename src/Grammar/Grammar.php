@@ -1,7 +1,7 @@
 <?php namespace Helstern\Nomsky\Grammar;
 
-use Helstern\Nomsky\Grammar\Rule\Production;
-use Helstern\Nomsky\Grammar\Rule\Rule;
+use Helstern\Nomsky\Grammar\Production\Production;
+use Helstern\Nomsky\Grammar\Production\ProductionInterface;
 
 interface Grammar
 {
@@ -21,7 +21,7 @@ interface Grammar
     public function getProductions();
 
     /**
-     * @return Rule[]
+     * @return ProductionInterface[]
      */
     public function getRules();
 

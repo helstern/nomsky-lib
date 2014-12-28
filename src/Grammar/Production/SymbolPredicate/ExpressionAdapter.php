@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Grammar\Rule\SymbolPredicate;
+<?php namespace Helstern\Nomsky\Grammar\Production\SymbolPredicate;
 
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;

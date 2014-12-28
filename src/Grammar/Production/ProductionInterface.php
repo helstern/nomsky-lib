@@ -1,10 +1,10 @@
-<?php namespace Helstern\Nomsky\Grammar\Rule;
+<?php namespace Helstern\Nomsky\Grammar\Production;
 
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
 
-interface Rule extends \Countable
+interface ProductionInterface extends \Countable
 {
     /**
      * @return Expression

@@ -9,8 +9,8 @@ use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 use Helstern\Nomsky\Grammar\Expressions\SymbolAdapter;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisitor;
-use Helstern\Nomsky\Grammar\Rule\Production;
-use Helstern\Nomsky\Grammar\Rule\Rule;
+use Helstern\Nomsky\Grammar\Production\Production;
+use Helstern\Nomsky\Grammar\Production\ProductionInterface;
 use Helstern\Nomsky\Grammar\Symbol\GenericSymbol;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 
@@ -66,7 +66,7 @@ class EliminateOptionalsVisitor implements HierarchyVisitor
     }
 
     /**
-     * @return Rule[]
+     * @return ProductionInterface[]
      */
     public function getEpsilonAlternatives()
     {

@@ -1,18 +1,18 @@
-<?php namespace Helstern\Nomsky\Grammar\Rule;
+<?php namespace Helstern\Nomsky\Grammar\Production;
 
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
 use Helstern\Nomsky\Grammar\Expressions\Walker\Visit\NoDispatchDispatcher;
-use Helstern\Nomsky\Grammar\Rule\ExpressionWalkState\CountAllStateMachine;
-use Helstern\Nomsky\Grammar\Rule\ExpressionWalkState\CountMaxStateMachine;
-use Helstern\Nomsky\Grammar\Rule\ExpressionWalkState\FindFirstStateMachine;
-use Helstern\Nomsky\Grammar\Rule\ExpressionWalkState\FindMaxStateMachine;
+use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\CountAllStateMachine;
+use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\CountMaxStateMachine;
+use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\FindFirstStateMachine;
+use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\FindMaxStateMachine;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolTypeEquals;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\AnySymbolPredicate;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 
-class Production implements Rule
+class Production implements ProductionInterface
 {
     /** @var \Helstern\Nomsky\Grammar\Symbol\Symbol  */
     protected $nonTerminal;

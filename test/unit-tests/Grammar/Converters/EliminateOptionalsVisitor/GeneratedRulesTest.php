@@ -11,7 +11,7 @@ use Helstern\Nomsky\Grammar\Expressions\Sequence;
 use Helstern\Nomsky\Grammar\Converters;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
-use Helstern\Nomsky\Grammar\Rule\Production;
+use Helstern\Nomsky\Grammar\Production\Production;
 
 class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
 {
