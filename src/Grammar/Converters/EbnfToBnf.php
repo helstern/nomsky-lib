@@ -43,7 +43,7 @@ class EbnfToBnf
         /** @var Alternation $expression */
         $expression = $ebnfRule->getExpression();
 
-        $visitor                    = new EliminateGroupsVisitor();
+        $visitor                    = new GroupsEliminator();
         $hierarchicVisitDispatcher  = new CompleteVisitDispatcher($visitor);
 
         $walker                     = new DepthFirstStackBasedWalker();
@@ -58,7 +58,7 @@ class EbnfToBnf
         /** @var Expression $expression */
         $expression = $ebnfRule->getExpression();
 
-        $visitor                    = new EliminateOptionalsVisitor();
+        $visitor                    = new OptionalsEliminator();
         $hierarchicVisitDispatcher  = new CompleteVisitDispatcher($visitor);
 
         $walker                     = new DepthFirstStackBasedWalker();

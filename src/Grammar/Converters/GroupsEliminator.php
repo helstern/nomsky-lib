@@ -12,7 +12,7 @@ use Helstern\Nomsky\Grammar\Expressions\Sequence;
 
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisitor;
 
-class EliminateGroupsVisitor extends AbstractErrorTriggeringVisitor implements HierarchyVisitor
+class GroupsEliminator extends AbstractErrorTriggeringVisitor implements HierarchyVisitor
 {
     /** @var Expression */
     protected $root;

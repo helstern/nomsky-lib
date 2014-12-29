@@ -59,7 +59,7 @@ class CompleteVisitDispatcher extends AbstractDispatcher implements VisitDispatc
      */
     public function dispatchVisitOptionalItem(OptionalItem $expression)
     {
-        $this->visitor->visitOption($expression);
+        $this->visitor->visitOptionalItem($expression);
         return null;
     }
 
@@ -79,7 +79,7 @@ class CompleteVisitDispatcher extends AbstractDispatcher implements VisitDispatc
      */
     public function dispatchVisitOptionalList(OptionalList $expression)
     {
-        $this->visitor->visitRepetition($expression);
+        $this->visitor->visitOptionalList($expression);
         return null;
     }
 }

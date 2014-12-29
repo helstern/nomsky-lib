@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateGroupsVisitor;
+<?php namespace Helstern\Nomsky\Grammar\Converters\GroupsEliminator;
 
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
@@ -36,7 +36,7 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
      */
     public function getDepthFirstWalkResult(Expression $e)
     {
-        $visitor                    = new Converters\EliminateGroupsVisitor();
+        $visitor                    = new Converters\GroupsEliminator();
         $hierarchicVisitDispatcher  = new CompleteVisitDispatcher($visitor);
 
         $walker = new DepthFirstStackBasedWalker();

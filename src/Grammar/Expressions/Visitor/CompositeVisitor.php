@@ -31,13 +31,13 @@ interface CompositeVisitor
      * @param OptionalList $expression
      * @return boolean
      */
-    public function visitRepetition(OptionalList $expression);
+    public function visitOptionalList(OptionalList $expression);
 
     /**
      * @param OptionalItem $expression
      * @return boolean
      */
-    public function visitOption(OptionalItem $expression);
+    public function visitOptionalItem(OptionalItem $expression);
 
     /**
      * @param Expression $expression

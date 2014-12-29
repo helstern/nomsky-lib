@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateOptionalsVisitor;
+<?php namespace Helstern\Nomsky\Grammar\Converters\OptionalsEliminator;
 
 use Helstern\Nomsky\Grammar\Converters\ExpressionTestUtils;
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
@@ -32,10 +32,10 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param Expression $e
-     * @param \Helstern\Nomsky\Grammar\Converters\EliminateOptionalsVisitor $visitor
+     * @param \Helstern\Nomsky\Grammar\Converters\OptionalsEliminator $visitor
      * @return ExpressionIterable|null
      */
-    public function walkAndVisitExpression(Expression $e, Converters\EliminateOptionalsVisitor $visitor)
+    public function walkAndVisitExpression(Expression $e, Converters\OptionalsEliminator $visitor)
     {
         $hierarchicVisitDispatcher  = new CompleteVisitDispatcher($visitor);
 
@@ -62,7 +62,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $initialList[]    = $exprTestUtils->createTerminal('d');
         $initialExpression = new Sequence(array_shift($initialList), $initialList);
 
-        $visitor = new Converters\EliminateOptionalsVisitor();
+        $visitor = new Converters\OptionalsEliminator();
         $this->walkAndVisitExpression($initialExpression, $visitor);
 
         $epsilonAlternatives = $visitor->getEpsilonAlternatives();
@@ -119,7 +119,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $initialList[]    = $exprTestUtils->createTerminal('d');
         $initialExpression = new Sequence(array_shift($initialList), $initialList);
 
-        $visitor = new Converters\EliminateOptionalsVisitor();
+        $visitor = new Converters\OptionalsEliminator();
         $this->walkAndVisitExpression($initialExpression, $visitor);
 
         $epsilonAlternatives = $visitor->getEpsilonAlternatives();
