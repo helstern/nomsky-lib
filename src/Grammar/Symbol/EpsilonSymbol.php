@@ -15,6 +15,6 @@ class EpsilonSymbol implements Symbol
      */
     public function hashCode()
     {
-        return '0';
+        return 'ε';
     }
 }
