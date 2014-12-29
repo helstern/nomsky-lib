@@ -11,20 +11,20 @@ use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammar\Expressions\SymbolAdapter;
 
-use Helstern\Nomsky\Grammar\Converters\ExpressionTestUtils;
+use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
 
 class AlternationTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var ExpressionTestUtils */
+    /** @var ExpressionUtils */
     protected $expressionTestUtils;
 
     /**
-     * @return ExpressionTestUtils
+     * @return ExpressionUtils
      */
     public function getExpressionTestUtils()
     {
         if (is_null($this->expressionTestUtils)) {
-            $this->expressionTestUtils = new ExpressionTestUtils();
+            $this->expressionTestUtils = new ExpressionUtils();
         }
 
         return $this->expressionTestUtils;

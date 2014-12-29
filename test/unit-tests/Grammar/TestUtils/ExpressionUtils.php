@@ -1,20 +1,19 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters;
+<?php namespace Helstern\Nomsky\Grammar\TestUtils;
 
-use Guzzle\Common\Exception\InvalidArgumentException;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 use Helstern\Nomsky\Grammar\Expressions\SymbolAdapter;
 
-class ExpressionTestUtils
+class ExpressionUtils
 {
     /**
-     * @return ExpressionGroupTestUtils
+     * @return ExpressionGroupUtils
      */
     public function getGroupUtils()
     {
-        return new ExpressionGroupTestUtils($this);
+        return new ExpressionGroupUtils($this);
     }
 
     /**
@@ -114,6 +113,7 @@ class ExpressionTestUtils
             if ($symbolObject instanceof SymbolAdapter) {
                 $listOfSerializedObjects[] = $symbolObject->hashCode();
             } elseif($symbolObject instanceof ExpressionIterable) {
+                /** @var $symbolObject ExpressionIterable */
                 $listOfSerializedObjects[] = $this->serializeExpressionIterable($symbolObject);
             } else {
                 return null;

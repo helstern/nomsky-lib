@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\Converters\OptionalsEliminator;
 
-use Helstern\Nomsky\Grammar\Converters\ExpressionTestUtils;
+use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
@@ -15,16 +15,16 @@ use Helstern\Nomsky\Grammar\Production\DefaultProduction;
 
 class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var ExpressionTestUtils */
+    /** @var ExpressionUtils */
     protected $expressionTestUtils;
 
     /**
-     * @return ExpressionTestUtils
+     * @return ExpressionUtils
      */
     public function getExpressionTestUtils()
     {
         if (is_null($this->expressionTestUtils)) {
-            $this->expressionTestUtils = new ExpressionTestUtils();
+            $this->expressionTestUtils = new ExpressionUtils();
         }
 
         return $this->expressionTestUtils;

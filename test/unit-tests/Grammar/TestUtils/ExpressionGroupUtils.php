@@ -1,13 +1,13 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters;
+<?php namespace Helstern\Nomsky\Grammar\TestUtils;
 
 use Helstern\Nomsky\Grammar\Expressions\Group;
 
-class ExpressionGroupTestUtils
+class ExpressionGroupUtils
 {
-    /** @var ExpressionTestUtils  */
+    /** @var ExpressionUtils  */
     protected $expressionTestUtils;
 
-    public function __construct(ExpressionTestUtils $expressioTestUtils)
+    public function __construct(ExpressionUtils $expressioTestUtils)
     {
         $this->expressionTestUtils = $expressioTestUtils;
     }
