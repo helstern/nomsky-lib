@@ -1,4 +1,6 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\OptionalsEliminator;
+<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateOptionals\OptionalsEliminator;
+
+use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\OptionalsEliminator;
 
 use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
@@ -32,10 +34,10 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param Expression $e
-     * @param \Helstern\Nomsky\Grammar\Converters\OptionalsEliminator $visitor
+     * @param \Helstern\Nomsky\Grammar\Converters\EliminateOptionals\OptionalsEliminator $visitor
      * @return ExpressionIterable|null
      */
-    public function walkAndVisitExpression(Expression $e, Converters\OptionalsEliminator $visitor)
+    public function walkAndVisitExpression(Expression $e, OptionalsEliminator $visitor)
     {
         $hierarchicVisitDispatcher  = new CompleteVisitDispatcher($visitor);
 
@@ -62,7 +64,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $initialList[]    = $exprTestUtils->createTerminal('d');
         $initialExpression = new Sequence(array_shift($initialList), $initialList);
 
-        $visitor = new Converters\OptionalsEliminator();
+        $visitor = new OptionalsEliminator($exprTestUtils->createNonTerminalNamingStrategy());
         $this->walkAndVisitExpression($initialExpression, $visitor);
 
         $epsilonAlternatives = $visitor->getEpsilonAlternatives();
@@ -84,12 +86,13 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         }
         $this->assertNull($castAlternationException, 'Expected an alternation');
 
+        $namingStrategy = $exprTestUtils->createNonTerminalNamingStrategy();
         $expectedItems = array(
             $exprTestUtils->createTerminal(''), //epsilon
             $exprTestUtils->createSequenceFromListOfStringSymbols(
                 array(
                     $exprTestUtils->createTerminal('c'),
-                    $exprTestUtils->createNonTerminal('generatedNonTerminal1')
+                    $exprTestUtils->createNonTerminal($namingStrategy->getName())
                 )
             )
         );
@@ -119,7 +122,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $initialList[]    = $exprTestUtils->createTerminal('d');
         $initialExpression = new Sequence(array_shift($initialList), $initialList);
 
-        $visitor = new Converters\OptionalsEliminator();
+        $visitor = new OptionalsEliminator($exprTestUtils->createNonTerminalNamingStrategy());
         $this->walkAndVisitExpression($initialExpression, $visitor);
 
         $epsilonAlternatives = $visitor->getEpsilonAlternatives();

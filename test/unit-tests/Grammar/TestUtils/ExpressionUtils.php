@@ -1,5 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\TestUtils;
 
+use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\IncrementalNamingStrategy;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
@@ -8,6 +9,14 @@ use Helstern\Nomsky\Grammar\Expressions\SymbolAdapter;
 
 class ExpressionUtils
 {
+    /**
+     * @return IncrementalNamingStrategy
+     */
+    public function createNonTerminalNamingStrategy()
+    {
+        return new IncrementalNamingStrategy();
+    }
+
     /**
      * @return ExpressionGroupUtils
      */

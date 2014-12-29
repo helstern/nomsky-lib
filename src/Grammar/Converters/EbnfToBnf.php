@@ -1,22 +1,31 @@
 <?php namespace Helstern\Nomsky\Grammar\Converters;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternation;
+use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\IncrementalNamingStrategy;
+use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\OptionalsEliminator;
+
 
 use Helstern\Nomsky\Grammar\Expressions\Expression;
+use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
+
 use Helstern\Nomsky\Grammar\Grammar;
 use Helstern\Nomsky\Grammar\Production\DefaultProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
 
 class EbnfToBnf
 {
+    /** @var IncrementalNamingStrategy */
+    protected $nonTerminalNamingStrategy;
+
     /**
      * @param Grammar $grammar
      * @return array|Production[]
      */
     public function convert(Grammar $grammar)
     {
+        $this->nonTerminalNamingStrategy = $this->createNonTerminalNamingStrategy();
+
         $ebnfProductionsList = $grammar->getProductions();
         $bnfProductionsList  = array();
         do {
@@ -60,7 +69,7 @@ class EbnfToBnf
         /** @var Expression $expression */
         $expression = $ebnfRule->getExpression();
 
-        $visitor                    = new OptionalsEliminator();
+        $visitor                    = new OptionalsEliminator($this->nonTerminalNamingStrategy);
         $hierarchicVisitDispatcher  = new CompleteVisitDispatcher($visitor);
 
         $walker                     = new DepthFirstStackBasedWalker();
@@ -71,5 +80,10 @@ class EbnfToBnf
         $cleanedProductionsList = array_merge($cleanedProductionsList, $visitor->getEpsilonAlternatives());
 
         return $cleanedProductionsList;
+    }
+
+    protected function createNonTerminalNamingStrategy()
+    {
+        return new IncrementalNamingStrategy();
     }
 }

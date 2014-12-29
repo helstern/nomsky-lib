@@ -1,5 +1,6 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters;
+<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateOptionals;
 
+use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\NonTerminalNamingStrategy;
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
@@ -16,6 +17,9 @@ use Helstern\Nomsky\Grammar\Symbol\Symbol;
 
 class OptionalsEliminator implements HierarchyVisitor
 {
+    /** @var NonTerminalNamingStrategy */
+    protected $nonTerminalNamingStrategy;
+
     /** @var int */
     protected $nrOfNewNonTerminals = 0;
 
@@ -27,6 +31,14 @@ class OptionalsEliminator implements HierarchyVisitor
 
     /** @var Expression */
     protected $root;
+
+    /**
+     * @param NonTerminalNamingStrategy $nonTerminalNamingStrategy
+     */
+    public function __construct(NonTerminalNamingStrategy $nonTerminalNamingStrategy)
+    {
+        $this->nonTerminalNamingStrategy = $nonTerminalNamingStrategy;
+    }
 
     protected function setAsRootOrAddToStackOfChildren(Expression $e)
     {
@@ -52,6 +64,8 @@ class OptionalsEliminator implements HierarchyVisitor
     {
         $this->nrOfNewNonTerminals++;
         $nonTerminalName = 'generatedNonTerminal' . $this->nrOfNewNonTerminals;
+
+        $nonTerminalName = $this->nonTerminalNamingStrategy->getName();
 
         $newNonTerminal = new GenericSymbol(Symbol::TYPE_NON_TERMINAL, $nonTerminalName);
         return $newNonTerminal;

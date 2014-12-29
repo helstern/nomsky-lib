@@ -1,5 +1,7 @@
 <?php namespace Helstern\Nomsky\Grammar\Converters\OptionalsEliminator;
 
+use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\NonTerminalNamingStrategy;
+use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\OptionalsEliminator;
 use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
@@ -30,11 +32,12 @@ class GroupsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param Expression $e
+     * @param NonTerminalNamingStrategy $namingStrategy
      * @return ExpressionIterable|null
      */
-    public function getDepthFirstWalkResult(Expression $e)
+    public function getDepthFirstWalkResult(Expression $e, NonTerminalNamingStrategy $namingStrategy)
     {
-        $visitor                    = new Converters\OptionalsEliminator();
+        $visitor                    = new OptionalsEliminator($namingStrategy);
         $hierarchicVisitDispatcher  = new CompleteVisitDispatcher($visitor);
 
         $walker = new DepthFirstStackBasedWalker();
@@ -62,7 +65,9 @@ class GroupsTest extends \PHPUnit_Framework_TestCase
             )
         );
         $initialExpression = new Sequence(array_shift($initialList), $initialList);
-        $actualExpression = $this->getDepthFirstWalkResult($initialExpression);
+
+        $namingStrategy = $exprTestUtils->createNonTerminalNamingStrategy();
+        $actualExpression = $this->getDepthFirstWalkResult($initialExpression, $namingStrategy);
 
         $this->assertInstanceOf(
             get_class($initialExpression),
@@ -71,10 +76,11 @@ class GroupsTest extends \PHPUnit_Framework_TestCase
         );
 
         $expectedList   = $exprTestUtils->createListOfExpressions(array('a', 'b'));
+        $namingStrategy = $exprTestUtils->createNonTerminalNamingStrategy();
         $expectedList[] = $exprTestUtils->getGroupUtils()->createAlternationFromSymbols(
             array(
                 $exprTestUtils->createTerminal('1'),
-                $exprTestUtils->createNonTerminal('generatedNonTerminal1'),
+                $exprTestUtils->createNonTerminal($namingStrategy->getName()),
                 $exprTestUtils->createTerminal('3')
             )
         );
@@ -106,7 +112,8 @@ class GroupsTest extends \PHPUnit_Framework_TestCase
             )
         );
         $initialExpression = new Sequence(array_shift($initialList), $initialList);
-        $actualExpression = $this->getDepthFirstWalkResult($initialExpression);
+        $namingStrategy = $exprTestUtils->createNonTerminalNamingStrategy();
+        $actualExpression = $this->getDepthFirstWalkResult($initialExpression, $namingStrategy);
 
         $this->assertInstanceOf(
             get_class($initialExpression),
@@ -115,10 +122,11 @@ class GroupsTest extends \PHPUnit_Framework_TestCase
         );
 
         $expectedList   = $exprTestUtils->createListOfExpressions(array('a', 'b'));
+        $namingStrategy = $exprTestUtils->createNonTerminalNamingStrategy();
         $expectedList[] = $exprTestUtils->getGroupUtils()->createAlternationFromSymbols(
             array(
                 $exprTestUtils->createTerminal('1'),
-                $exprTestUtils->createNonTerminal('generatedNonTerminal1'),
+                $exprTestUtils->createNonTerminal($namingStrategy->getName()),
                 $exprTestUtils->createTerminal('3')
             )
         );
