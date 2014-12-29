@@ -20,7 +20,7 @@ class EbnfToBnf
         $bnfRules  = array();
         do {
             $ebnfRule   = array_shift($ebnfRules);
-            $toConvert  = $this->eliminateOptionsAndRepetitions($ebnfRule);
+            $toConvert  = $this->eliminateOptionals($ebnfRule);
             do {
                 $rule          = array_pop($toConvert); //todo define where the originating rule is found
                 $withoutGroups = $this->eliminateGroups($rule);
@@ -53,7 +53,7 @@ class EbnfToBnf
         return array($rootExpression);
     }
 
-    public function eliminateOptionsAndRepetitions(Production $ebnfRule)
+    public function eliminateOptionals(Production $ebnfRule)
     {
         /** @var Expression $expression */
         $expression = $ebnfRule->getExpression();
