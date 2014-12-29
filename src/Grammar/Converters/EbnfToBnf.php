@@ -6,30 +6,31 @@ use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
 use Helstern\Nomsky\Grammar\Grammar;
+use Helstern\Nomsky\Grammar\Production\DefaultProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
-use Helstern\Nomsky\Grammar\Symbol\EpsilonSymbol;
 
 class EbnfToBnf
 {
-    /** @var  EpsilonSymbol */
-    protected $epsilonSymbol;
-
+    /**
+     * @param Grammar $grammar
+     * @return array|Production[]
+     */
     public function convert(Grammar $grammar)
     {
-        $ebnfRules = $grammar->getProductions();
-        $bnfRules  = array();
+        $ebnfProductionsList = $grammar->getProductions();
+        $bnfProductionsList  = array();
         do {
-            $ebnfRule   = array_shift($ebnfRules);
-            $toConvert  = $this->eliminateOptionals($ebnfRule);
+            $ebnfProduction   = array_shift($ebnfProductionsList);
+            $intermediateBnfProductionsList = $this->eliminateOptionals($ebnfProduction);
             do {
-                $rule          = array_pop($toConvert); //todo define where the originating rule is found
-                $withoutGroups = $this->eliminateGroups($rule);
+                $intermediateProduction = array_pop($intermediateBnfProductionsList); //todo define where the originating rule is found
+                $finalBnfProductionsList = $this->eliminateGroups($intermediateProduction);
 
-                $bnfRules = array_merge($bnfRules, $withoutGroups);
-            } while (count($toConvert) > 0);
-        } while (!is_null(key($ebnfRules)));
+                $bnfProductionsList = array_merge($bnfProductionsList, $finalBnfProductionsList);
+            } while (count($intermediateBnfProductionsList) > 0);
+        } while (!is_null(key($ebnfProductionsList)));
 
-        return $bnfRules;
+        return $bnfProductionsList;
     }
 
     /**
@@ -50,7 +51,8 @@ class EbnfToBnf
         $walker->walk($expression, $hierarchicVisitDispatcher);
         $rootExpression             = $visitor->getRoot();
 
-        return array($rootExpression);
+        $production = new DefaultProduction($ebnfRule->getNonTerminal(), $rootExpression);
+        return array($production);
     }
 
     public function eliminateOptionals(Production $ebnfRule)
@@ -64,9 +66,10 @@ class EbnfToBnf
         $walker                     = new DepthFirstStackBasedWalker();
         $walker->walk($expression, $hierarchicVisitDispatcher);
 
-        $expressions = array($visitor->getRoot());
-        $expressions = array_merge($expressions, $visitor->getEpsilonAlternatives());
+        $cleanProduction = new DefaultProduction($ebnfRule->getNonTerminal(), $visitor->getRoot());
+        $cleanProductionsList = array($cleanProduction);
+        $cleanProductionsList = array_merge($cleanProductionsList, $visitor->getEpsilonAlternatives());
 
-        return $expressions;
+        return $cleanProductionsList;
     }
 }
