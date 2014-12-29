@@ -66,10 +66,10 @@ class EbnfToBnf
         $walker                     = new DepthFirstStackBasedWalker();
         $walker->walk($expression, $hierarchicVisitDispatcher);
 
-        $cleanProduction = new DefaultProduction($ebnfRule->getNonTerminal(), $visitor->getRoot());
-        $cleanProductionsList = array($cleanProduction);
-        $cleanProductionsList = array_merge($cleanProductionsList, $visitor->getEpsilonAlternatives());
+        $cleanedProduction = new DefaultProduction($ebnfRule->getNonTerminal(), $visitor->getRoot());
+        $cleanedProductionsList = array($cleanedProduction);
+        $cleanedProductionsList = array_merge($cleanedProductionsList, $visitor->getEpsilonAlternatives());
 
-        return $cleanProductionsList;
+        return $cleanedProductionsList;
     }
 }
