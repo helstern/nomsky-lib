@@ -1,6 +1,5 @@
 <?php namespace Helstern\Nomsky\Grammar\Converters\EliminateOptionals;
 
-use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\NonTerminalNamingStrategy;
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;

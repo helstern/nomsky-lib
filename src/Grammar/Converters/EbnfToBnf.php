@@ -1,8 +1,8 @@
 <?php namespace Helstern\Nomsky\Grammar\Converters;
 
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsEliminator;
 use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\IncrementalNamingStrategy;
 use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\OptionalsEliminator;
-
 
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Alternation;

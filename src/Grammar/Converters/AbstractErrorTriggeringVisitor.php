@@ -148,4 +148,3 @@ abstract class AbstractErrorTriggeringVisitor implements HierarchyVisitor
         return false;
     }
 }
-

@@ -1,5 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\Converters\GroupsEliminator;
 
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsEliminator;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
@@ -36,7 +37,7 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
      */
     public function getDepthFirstWalkResult(Expression $e)
     {
-        $visitor                    = new Converters\GroupsEliminator();
+        $visitor                    = new GroupsEliminator();
         $hierarchicVisitDispatcher  = new CompleteVisitDispatcher($visitor);
 
         $walker = new DepthFirstStackBasedWalker();

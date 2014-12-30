@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters;
+<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateGroups;
 
 use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\GroupsElimination;
 use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\NormalizeOperationFactory;
@@ -11,6 +11,8 @@ use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisitor;
+
+use Helstern\Nomsky\Grammar\Converters\AbstractErrorTriggeringVisitor;
 
 class GroupsEliminator extends AbstractErrorTriggeringVisitor implements HierarchyVisitor
 {
@@ -28,9 +30,6 @@ class GroupsEliminator extends AbstractErrorTriggeringVisitor implements Hierarc
 
     /** @var array[] */
     protected $stackOfChildren = array();
-
-//    /** @var array|ExpressionStackPushStrategy  */
-//    protected $stackPushStrategiesStack = array();
 
     /**
      * @return Expression|null
