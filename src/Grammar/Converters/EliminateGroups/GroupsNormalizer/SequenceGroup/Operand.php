@@ -1,10 +1,10 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\SequenceGroup;
+<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\SequenceGroup;
 
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\NormalizeOperand;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\NormalizeOperand;
 
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\NormalizeOperator;
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\OperationResult\ResultInterface;
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\PerformNormalizeOperationStrategy;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\NormalizeOperator;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\OperationResult\ResultInterface;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\PerformNormalizeOperationStrategy;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 
 class Operand implements NormalizeOperand
@@ -32,7 +32,7 @@ class Operand implements NormalizeOperand
      * @param NormalizeOperand $rightOperand
      * @return PerformOperationStrategy
      */
-    public function createOperation(NormalizeOperand $rightOperand)
+    public function createOperationStrategy(NormalizeOperand $rightOperand)
     {
         return new PerformOperationStrategy($this->getItems(), $rightOperand->getItems());
     }

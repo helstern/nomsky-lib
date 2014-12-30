@@ -1,9 +1,8 @@
 <?php namespace Helstern\Nomsky\Grammar\Converters\EliminateGroups;
 
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\GroupsElimination;
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\NormalizeOperationFactory;
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\SequenceGroup\OperationFactory as SequenceGroupOperationFactory;
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\AlternationGroup\OperationFactory as AlternationGroupOperationFactory;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\NormalizeOperationFactory;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\SequenceGroup\OperationFactory as SequenceGroupOperationFactory;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\AlternationGroup\OperationFactory as AlternationGroupOperationFactory;
 
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
@@ -98,7 +97,7 @@ class GroupsEliminator extends AbstractErrorTriggeringVisitor implements Hierarc
                 $operandsStack->push(array_pop($normalizeOperands));
             }
 
-            $groupsElimination = new GroupsElimination($normalizeOperationFactory);
+            $groupsElimination = new GroupsNormalizer($normalizeOperationFactory);
             $eliminationResult = $groupsElimination->eliminateGroups($childrenStack, $operandsStack);
 
             if ($parent instanceof Group) {

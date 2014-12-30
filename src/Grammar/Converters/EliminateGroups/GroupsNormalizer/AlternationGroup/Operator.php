@@ -1,7 +1,7 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\AlternationGroup;
+<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\AlternationGroup;
 
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\NormalizeOperator;
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\OperationResult\AlternationResult;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\NormalizeOperator;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\OperationResult\AlternationResult;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 

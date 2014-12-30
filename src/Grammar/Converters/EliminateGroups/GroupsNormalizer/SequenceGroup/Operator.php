@@ -1,8 +1,8 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\SequenceGroup;
+<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\SequenceGroup;
 
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\NormalizeOperator;
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\OperationResult\AlternationResult;
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\OperationResult\SequenceResult;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\NormalizeOperator;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\OperationResult\AlternationResult;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\OperationResult\SequenceResult;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 

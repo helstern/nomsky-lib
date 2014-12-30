@@ -1,8 +1,8 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\AlternationGroup;
+<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\AlternationGroup;
 
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\NormalizeOperationFactory;
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\NormalizeOperand;
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\OperationResult\AlternationResult;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\NormalizeOperationFactory;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\NormalizeOperand;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\OperationResult\AlternationResult;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 
 class OperationFactory implements NormalizeOperationFactory

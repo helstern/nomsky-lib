@@ -1,10 +1,13 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\GroupsNormalizer;
+<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateGroups;
 
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\OperationResult\ResultInterface;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\NormalizeOperand;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\NormalizeOperationFactory;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\NormalizeOperator;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\OperationResult\ResultInterface;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 
-class GroupsElimination
+class GroupsNormalizer
 {
     /** @var NormalizeOperationFactory */
     protected $operationFactory;
@@ -120,7 +123,7 @@ class GroupsElimination
     {
         $operator = $this->createNormalizeOperator();
 
-        $performOperationStrategy = $leftOperand->createOperation($rightOperand);
+        $performOperationStrategy = $leftOperand->createOperationStrategy($rightOperand);
         $result = $rightOperand->performOperation($performOperationStrategy, $operator);
 
         return $result;

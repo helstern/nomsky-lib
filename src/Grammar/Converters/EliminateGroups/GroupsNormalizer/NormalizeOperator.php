@@ -1,6 +1,6 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\GroupsNormalizer;
+<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer;
 
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\OperationResult\ResultInterface;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\OperationResult\ResultInterface;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 
 interface NormalizeOperator

@@ -1,8 +1,8 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\AlternationGroup;
+<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\AlternationGroup;
 
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\NormalizeOperand;
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\NormalizeOperator;
-use Helstern\Nomsky\Grammar\Converters\GroupsNormalizer\PerformNormalizeOperationStrategy;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\NormalizeOperand;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\NormalizeOperator;
+use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\PerformNormalizeOperationStrategy;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 
 class PerformOperationStrategy implements PerformNormalizeOperationStrategy
