@@ -31,6 +31,8 @@ class EbnfToBnf
         do {
             $ebnfProduction   = array_shift($ebnfProductionsList);
             $intermediateBnfProductionsList = $this->eliminateOptionals($ebnfProduction);
+
+            $intermediateBnfProductionsList = array_reverse($intermediateBnfProductionsList);
             do {
                 $intermediateProduction = array_pop($intermediateBnfProductionsList); //todo define where the originating rule is found
                 $finalBnfProductionsList = $this->eliminateGroups($intermediateProduction);
