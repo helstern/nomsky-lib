@@ -36,7 +36,9 @@ class EbnfToBnfTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     *
      * Expression      := [ "!" ] <Boolean> { BooleanOperator Boolean }
+     * generates the 3 new productions in the following order:
      *
      * Expression      := <GeneratedSymbol-1> <Boolean> <GeneratedSymbol-2>
      * GeneratedSymbol-1 := lambda | "!"
