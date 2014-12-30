@@ -41,8 +41,10 @@ class EbnfToBnfTest extends \PHPUnit_Framework_TestCase
      * generates the 3 new productions in the following order:
      *
      * Expression      := <GeneratedSymbol-1> <Boolean> <GeneratedSymbol-2>
-     * GeneratedSymbol-1 := lambda | "!"
-     * GeneratedSymbol-2 := lambda | BooleanOperator Boolean GeneratedSymbol-2
+     * GeneratedSymbol-1 := lambda
+     * GeneratedSymbol-1 := "!"
+     * GeneratedSymbol-2 := lambda
+     * GeneratedSymbol-2 := BooleanOperator Boolean GeneratedSymbol-2
      */
     public function testOrderOfConvertedBnfProductions()
     {
@@ -90,26 +92,24 @@ class EbnfToBnfTest extends \PHPUnit_Framework_TestCase
             ),
             new DefaultProduction(
                 $expressionUtils->createNonTerminal($generatedNames[0]),
-                $expressionUtils->createAlternationFromSymbols(
-                    [
-                        $expressionUtils->createTerminal(''),
-                        $expressionUtils->createTerminal('!')
-                    ]
-                )
+                $expressionUtils->createTerminal('')
+            ),
+            new DefaultProduction(
+                $expressionUtils->createNonTerminal($generatedNames[0]),
+                $expressionUtils->createTerminal('!')
             ),
             new DefaultProduction(
                 $expressionUtils->createNonTerminal($generatedNames[1]),
-                $expressionUtils->createAlternationFromSymbols(
-                    [
-                        $expressionUtils->createTerminal(''),
-                        $expressionUtils->createSequenceFromSymbols(
-                            array(
-                                $expressionUtils->createNonTerminal('BooleanOperator'),
-                                $expressionUtils->createNonTerminal('Boolean'),
-                                $expressionUtils->createNonTerminal($generatedNames[1])
-                            )
-                        )
-                    ]
+                $expressionUtils->createTerminal('')
+            ),
+            new DefaultProduction(
+                $expressionUtils->createNonTerminal($generatedNames[1]),
+                $expressionUtils->createSequenceFromSymbols(
+                    array(
+                        $expressionUtils->createNonTerminal('BooleanOperator'),
+                        $expressionUtils->createNonTerminal('Boolean'),
+                        $expressionUtils->createNonTerminal($generatedNames[1])
+                    )
                 )
             )
         ];
