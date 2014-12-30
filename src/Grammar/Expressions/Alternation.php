@@ -23,7 +23,7 @@ class Alternation implements Expression, ExpressionIterable
     }
 
     /**
-     * @return Expression[]
+     * @return \ArrayIterator|Expression[]
      */
     public function getIterator()
     {
