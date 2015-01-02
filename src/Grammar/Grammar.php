@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar;
 
-use Helstern\Nomsky\Grammar\Production\DefaultProduction;
+use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammar\Production\Production;
 
 interface Grammar
@@ -21,7 +21,12 @@ interface Grammar
     public function getProductions();
 
     /**
-     * @return boolean
+     * @return Symbol[]
      */
-    public function hasEpsilonProductions();
+    public function getTerminals();
+
+    /**
+     * @return Symbol[]
+     */
+    public function getNonTerminals();
 }

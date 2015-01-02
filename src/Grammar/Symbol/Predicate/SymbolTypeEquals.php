@@ -8,6 +8,24 @@ class SymbolTypeEquals implements SymbolPredicate
     protected $type;
 
     /**
+     * @return SymbolTypeEquals
+     */
+    static public function newInstanceMatchingNonTerminals()
+    {
+        $instance = self::newInstance(Symbol::TYPE_TERMINAL);
+        return $instance;
+    }
+
+    /**
+     * @return SymbolTypeEquals
+     */
+    static public function newInstanceMatchingTerminals()
+    {
+        $instance = self::newInstance(Symbol::TYPE_TERMINAL);
+        return $instance;
+    }
+
+    /**
      * @param $symbolType
      * @return SymbolTypeEquals
      */

@@ -1,6 +1,10 @@
 <?php namespace Helstern\Nomsky\Grammar;
 
+use Helstern\Nomsky\Grammar\Expressions\Walker\Walks;
 use Helstern\Nomsky\Grammar\Production\Production;
+use Helstern\Nomsky\Grammar\Symbol\Comparator\HashCodeComparator;
+use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolTypeEquals;
+use Helstern\Nomsky\Grammar\Symbol\Symbol;
 
 class DefaultGrammar implements Grammar
 {
@@ -45,10 +49,35 @@ class DefaultGrammar implements Grammar
     }
 
     /**
-     * @return boolean
+     * @return Symbol[]
      */
-    public function hasEpsilonProductions()
+    public function getTerminals()
     {
-        return false;
+        $visitor        = new SymbolCollectorVisitor(SymbolTypeEquals::newInstanceMatchingTerminals());
+        $walks          = Walks::singletonInstance();
+
+        $productions    = $this->getProductions();
+        foreach ($productions as $production) {
+            $expression = $production->getExpression();
+            $walks->depthFirstWalk($expression, $visitor);
+        }
+
+        $terminals = $visitor->getCollected();
+        return $terminals;
+    }
+
+    /**
+     * @return Symbol[]
+     */
+    public function getNonTerminals()
+    {
+        $productions    = $this->getProductions();
+        $collected   = array();
+        foreach ($productions as $production) {
+            $collected[] = $production->getNonTerminal();
+        }
+
+        $nonTerminals = HashCodeComparator::singletonInstance()->unique($collected);
+        return $nonTerminals;
     }
 }
