@@ -2,6 +2,21 @@
 
 class EpsilonSymbol implements Symbol
 {
+    /** @var EpsilonSymbol */
+    private static $singletonInstance;
+
+    /**
+     * @return EpsilonSymbol
+     */
+    public static function singletonInstance()
+    {
+        if (is_null(self::$singletonInstance)) {
+            self::$singletonInstance = new self;
+        }
+
+        return self::$singletonInstance;
+    }
+
     /**
      * @return int
      */
