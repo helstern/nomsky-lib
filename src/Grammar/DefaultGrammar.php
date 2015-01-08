@@ -33,11 +33,14 @@ class DefaultGrammar implements Grammar
     }
 
     /**
-     * @return Production
+     * @return Symbol
      */
-    public function getStartProduction()
+    public function getStartSymbol()
     {
-        return $this->productions[0];
+        $firstProduction = $this->productions[0];
+        $startSymbol = $firstProduction->getFirstSymbol();
+
+        return $startSymbol;
     }
 
     /**

@@ -11,9 +11,9 @@ interface Grammar
     public function getName();
 
     /**
-     * @return Production
+     * @return Symbol
      */
-    public function getStartProduction();
+    public function getStartSymbol();
 
     /**
      * @return Production[]
