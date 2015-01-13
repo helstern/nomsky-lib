@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\Symbol;
 
-interface Set extends \Countable, \IteratorAggregate
+interface SymbolSet extends \Countable, \IteratorAggregate
 {
     /**
      * @return \ArrayIterator|Symbol[]
@@ -11,7 +11,7 @@ interface Set extends \Countable, \IteratorAggregate
 
     public function add(Symbol $symbol);
 
-    public function addAll(Set $all);
+    public function addAll(SymbolSet $all);
 
     public function contains(Symbol $symbol);
 }

@@ -2,7 +2,7 @@
 
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
 
-class ArraySet implements Set
+class ArraySet implements SymbolSet
 {
     protected $terminals = array();
 
@@ -34,7 +34,7 @@ class ArraySet implements Set
         return true;
     }
 
-    public function addAll(Set $otherSet)
+    public function addAll(SymbolSet $otherSet)
     {
         $newSymbolsAdded = false;
         /** @var Symbol $otherSymbol */
@@ -47,11 +47,11 @@ class ArraySet implements Set
     }
 
     /**
-     * @param Set $otherSet
+     * @param SymbolSet $otherSet
      * @param SymbolPredicate $acceptPredicate
      * @return bool
      */
-    public function addSome(Set $otherSet, SymbolPredicate $acceptPredicate)
+    public function addSome(SymbolSet $otherSet, SymbolPredicate $acceptPredicate)
     {
         $newSymbolsAdded = false;
 
