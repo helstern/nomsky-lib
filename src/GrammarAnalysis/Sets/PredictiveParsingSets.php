@@ -27,7 +27,7 @@ class PredictiveParsingSets
     {
         $this->terminalSets = array();
         foreach ($this->nonTerminals as $symbol) {
-            $this->terminalSets[$symbol->hashCode()] = new ArraySet();
+            $this->terminalSets[$symbol->toString()] = new ArraySet();
         }
     }
 
@@ -45,7 +45,7 @@ class PredictiveParsingSets
      */
     public function getTerminalSet(Symbol $nonTerminal)
     {
-        $key = $nonTerminal->hashCode();
+        $key = $nonTerminal->toString();
         if (array_key_exists($key, $this->terminalSets)) {
             return $this->terminalSets[$key];
         }

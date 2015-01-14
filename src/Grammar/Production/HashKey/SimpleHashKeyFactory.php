@@ -16,7 +16,7 @@ class SimpleHashKeyFactory implements HashKeyFactory
 
         $hash = '';
         foreach ($symbols as $symbol) {
-            $hash .= $symbol->getType() . $symbol->hashCode();
+            $hash .= $symbol->getType() . $symbol->toString();
         }
 
         $hash = md5($hash);

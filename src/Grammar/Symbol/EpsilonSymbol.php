@@ -28,7 +28,7 @@ class EpsilonSymbol implements Symbol
     /**
      * @return string
      */
-    public function hashCode()
+    public function toString()
     {
         return 'ε';
     }

@@ -127,8 +127,8 @@ class EbnfToBnfTest extends \PHPUnit_Framework_TestCase
             $actualBnfProduction = current($actualBnfProductions); next($actualBnfProductions);
 
             $this->assertEquals(
-                array($expectedBnfProduction->getNonTerminal()->getType(), $expectedBnfProduction->getNonTerminal()->hashCode()),
-                array($actualBnfProduction->getNonTerminal()->getType(), $actualBnfProduction->getNonTerminal()->hashCode()),
+                array($expectedBnfProduction->getNonTerminal()->getType(), $expectedBnfProduction->getNonTerminal()->toString()),
+                array($actualBnfProduction->getNonTerminal()->getType(), $actualBnfProduction->getNonTerminal()->toString()),
                 $assertFailMessage
             );
 

@@ -21,16 +21,16 @@ class ArraySet implements SymbolSet
 
     public function contains(Symbol $terminal)
     {
-        return array_key_exists($terminal->hashCode(), $this->terminals);
+        return array_key_exists($terminal->toString(), $this->terminals);
     }
 
     public function add(Symbol $terminal)
     {
-        if (array_key_exists($terminal->hashCode(), $this->terminals)) {
+        if (array_key_exists($terminal->toString(), $this->terminals)) {
             return false;
         }
 
-        $this->terminals[$terminal->hashCode()] = $this->terminals;
+        $this->terminals[$terminal->toString()] = $this->terminals;
         return true;
     }
 
@@ -67,7 +67,7 @@ class ArraySet implements SymbolSet
     public function remove(Symbol $symbol)
     {
         if ($this->contains($symbol)) {
-            unset($this->terminals[$symbol->hashCode()]);
+            unset($this->terminals[$symbol->toString()]);
             return true;
         }
 

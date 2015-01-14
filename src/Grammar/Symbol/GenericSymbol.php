@@ -29,7 +29,7 @@ class GenericSymbol implements Symbol
     /**
      * @return string
      */
-    public function hashCode()
+    public function toString()
     {
         return $this->characters;
     }

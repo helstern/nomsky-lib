@@ -21,8 +21,8 @@ class HashCodeComparator
 
     public function compare(Symbol $leftSymbol, Symbol $rightSymbol)
     {
-        $leftString = $leftSymbol->hashCode();
-        $rightString = $rightSymbol->hashCode();
+        $leftString = $leftSymbol->toString();
+        $rightString = $rightSymbol->toString();
 
         return strcmp($leftString, $rightString);
     }

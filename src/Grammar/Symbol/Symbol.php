@@ -14,5 +14,5 @@ interface Symbol
     /**
      * @return string
      */
-    public function hashCode();
+    public function toString();
 }

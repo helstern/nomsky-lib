@@ -22,7 +22,7 @@ class ExpressionSymbol implements Expression, Symbol
     static public function createAdapterForEpsilon()
     {
         $epsilon = new EpsilonSymbol;
-        return new self($epsilon->getType(), $epsilon->hashCode());
+        return new self($epsilon->getType(), $epsilon->toString());
     }
 
     /**
@@ -31,7 +31,7 @@ class ExpressionSymbol implements Expression, Symbol
      */
     static public function createAdapterForSymbol(Symbol $symbol)
     {
-        $expression = new self($symbol->getType(), $symbol->hashCode());
+        $expression = new self($symbol->getType(), $symbol->toString());
 
         return $expression;
     }
@@ -82,7 +82,7 @@ class ExpressionSymbol implements Expression, Symbol
     /**
      * @return string
      */
-    public function hashCode()
+    public function toString()
     {
         return $this->symbol;
     }

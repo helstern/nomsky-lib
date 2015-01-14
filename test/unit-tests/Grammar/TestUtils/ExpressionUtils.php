@@ -120,7 +120,7 @@ class ExpressionUtils
         /** @var $symbolObject ExpressionSymbol */
         foreach($expression as $symbolObject) {
             if ($symbolObject instanceof ExpressionSymbol) {
-                $listOfSerializedObjects[] = $symbolObject->hashCode();
+                $listOfSerializedObjects[] = $symbolObject->toString();
             } elseif($symbolObject instanceof ExpressionIterable) {
                 /** @var $symbolObject ExpressionIterable */
                 $listOfSerializedObjects[] = $this->serializeExpressionIterable($symbolObject);
