@@ -1,7 +1,6 @@
 <?php namespace Helstern\Nomsky\GrammarAnalysis\FirstSetsAnalysis;
 
 use Helstern\Nomsky\Grammar\Grammar;
-use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 
 use Helstern\Nomsky\Grammar\Symbol\SymbolSet;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
@@ -58,13 +57,13 @@ class SetGenerator
             $changes = false;
             foreach ($productions as $production) {
                 $expression = $production->getExpression();
-                if ($expression instanceof ExpressionIterable) {
-                    $rhs = $expression->toArray();
-                    $updateSet = $this->stringFirstSet->compute($rhs, $firstSets);
 
-                    $nonTerminal = $production->getNonTerminal();
-                    $changes |= $firstSets->addAllTerminals($nonTerminal, $updateSet);
-                }
+                $rhs = $expression->toArray();
+                $updateSet = $this->stringFirstSet->compute($rhs, $firstSets);
+
+                $nonTerminal = $production->getNonTerminal();
+                $changes |= $firstSets->addAllTerminals($nonTerminal, $updateSet);
+
             }
         } while($changes);
 

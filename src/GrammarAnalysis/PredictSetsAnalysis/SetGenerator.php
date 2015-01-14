@@ -1,7 +1,6 @@
 <?php namespace Helstern\Nomsky\GrammarAnalysis\PredictSetsAnalysis;
 
 use Helstern\Nomsky\Grammar\Grammar;
-use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Production\HashKey\SimpleHashKeyFactory;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\MatchCountingInterceptor;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
@@ -31,14 +30,12 @@ class SetGenerator
 
         $productions = $g->getProductions();
         foreach ($productions as $production) {
+            $lhs = $production->getNonTerminal();
             $expression = $production->getExpression();
-            if ($expression instanceof ExpressionIterable) {
-                $lhs = $production->getNonTerminal();
-                $rhs = $expression->toArray();
+            $rhs = $expression->toArray();
 
-                $predictSet = $this->computePredictSet($lhs, $rhs);
-                $lookAheadSets->add($production, $predictSet);
-            }
+            $predictSet = $this->computePredictSet($lhs, $rhs);
+            $lookAheadSets->add($production, $predictSet);
         }
 
         return $lookAheadSets;

@@ -1,26 +1,28 @@
 <?php namespace Helstern\Nomsky\Grammar\Production;
 
-use Helstern\Nomsky\Grammar\Expressions\Expression;
+use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
 use Helstern\Nomsky\Grammar\Expressions\Walker\Visit\NoDispatchDispatcher;
+
 use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\CountAllStateMachine;
 use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\CountMaxStateMachine;
 use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\FindFirstStateMachine;
 use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\FindMaxStateMachine;
+
+use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolTypeEquals;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\AnySymbolPredicate;
-use Helstern\Nomsky\Grammar\Symbol\Symbol;
 
 class DefaultProduction implements Production
 {
     /** @var \Helstern\Nomsky\Grammar\Symbol\Symbol  */
     protected $nonTerminal;
 
-    /** @var \Helstern\Nomsky\Grammar\Expressions\Expression  */
+    /** @var ExpressionIterable  */
     protected $expression;
 
-    public function __construct(Symbol $nonTerminal, Expression $expression)
+    public function __construct(Symbol $nonTerminal, ExpressionIterable $expression)
     {
         $this->nonTerminal = $nonTerminal;
         $this->expression = $expression;

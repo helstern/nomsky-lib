@@ -92,15 +92,16 @@ class EbnfToBnfTest extends \PHPUnit_Framework_TestCase
             ),
             new DefaultProduction(
                 $expressionUtils->createNonTerminal($generatedNames[0]),
-                $expressionUtils->createTerminal('')
+                $expressionUtils->createSequenceFromListOfStringSymbols(array(''))
             ),
             new DefaultProduction(
                 $expressionUtils->createNonTerminal($generatedNames[0]),
-                $expressionUtils->createTerminal('!')
+                $expressionUtils->createSequenceFromListOfStringSymbols(array('!'))
+
             ),
             new DefaultProduction(
                 $expressionUtils->createNonTerminal($generatedNames[1]),
-                $expressionUtils->createTerminal('')
+                $expressionUtils->createSequenceFromListOfStringSymbols(array(''))
             ),
             new DefaultProduction(
                 $expressionUtils->createNonTerminal($generatedNames[1]),
@@ -113,6 +114,8 @@ class EbnfToBnfTest extends \PHPUnit_Framework_TestCase
                 )
             )
         ];
+
+
 
         $assertFailMessage = 'Expected a different set of bnf productions';
         $this->assertEquals(count($expectedBnfProductions), count($actualBnfProductions), $assertFailMessage);

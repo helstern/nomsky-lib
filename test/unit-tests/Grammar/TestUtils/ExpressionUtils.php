@@ -77,7 +77,7 @@ class ExpressionUtils
         $listOfSymbolObjects = array();
         foreach($listOfSymbols as $stringSymbol) {
             if (is_string($stringSymbol)) {
-                $listOfSymbolObjects[] = SymbolAdapter::createAdapterForTerminal($stringSymbol);
+                $listOfSymbolObjects[] = $this->createTerminal($stringSymbol);
             } elseif ($stringSymbol instanceof Expression) {
                 $listOfSymbolObjects[] = $stringSymbol;
             } else {

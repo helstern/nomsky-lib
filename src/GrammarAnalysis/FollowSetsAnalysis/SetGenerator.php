@@ -46,12 +46,10 @@ class SetGenerator
         do {
             $changes = false;
             foreach ($productions as $production) {
-                $expression = $production->getExpression();
                 /** @var array|Symbol[] $rhsSymbols */
                 $rhsSymbols = null;
-                if ($expression instanceof ExpressionIterable) {
-                    $rhsSymbols = $expression->toArray();
-                }
+                $expression = $production->getExpression();
+                $rhsSymbols = $expression->toArray();
 
                 $nonTerminal = $production->getNonTerminal();
                 $index = 0;
