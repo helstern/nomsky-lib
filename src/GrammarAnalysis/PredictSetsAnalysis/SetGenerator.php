@@ -6,6 +6,7 @@ use Helstern\Nomsky\Grammar\Symbol\Predicate\MatchCountingInterceptor;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 
+use Helstern\Nomsky\GrammarAnalysis\Algorithms\ArbitraryStringFirstSet;
 use Helstern\Nomsky\GrammarAnalysis\Predicates\SymbolIsEpsilon;
 use Helstern\Nomsky\GrammarAnalysis\Sets\LookAheadSets;
 use Helstern\Nomsky\GrammarAnalysis\Sets\PredictiveParsingSets;
@@ -68,7 +69,7 @@ class SetGenerator
     protected function computeFirstSet(array $rhs, SymbolPredicate $rejectSymbolPredicate)
     {
         $firstSetCreator = new ArbitraryStringFirstSet($rejectSymbolPredicate);
-        $firstSet = $firstSetCreator->computeFirstSet($rhs, $this->firstSets);
+        $firstSet = $firstSetCreator->compute($rhs, $this->firstSets);
         return $firstSet;
     }
 
