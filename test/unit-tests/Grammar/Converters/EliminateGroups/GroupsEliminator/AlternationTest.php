@@ -10,7 +10,7 @@ use Helstern\Nomsky\Grammar\Converters;
 
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\SymbolAdapter;
+use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 
 use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
 
@@ -137,7 +137,7 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
         $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
         $group       = new Group($alternation);
 
-        $listOfSymbols = array(SymbolAdapter::createAdapterForTerminal('a'), $group);
+        $listOfSymbols = array(ExpressionSymbol::createAdapterForTerminal('a'), $group);
         $listOfSymbols = array_merge($listOfSymbols, $exprTestUtils->createListOfExpressions(array('2', '3')));
         $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
 
@@ -177,13 +177,13 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
 
         $listOfSymbols = array_merge(
             $exprTestUtils->createListOfExpressions(array('b', 'c')),
-            array($group, SymbolAdapter::createAdapterForTerminal('1'))
+            array($group, ExpressionSymbol::createAdapterForTerminal('1'))
         );
         $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
         $group       = new Group($alternation);
 
         $listOfSymbols = array_merge(
-            array(SymbolAdapter::createAdapterForTerminal('a'), $group),
+            array(ExpressionSymbol::createAdapterForTerminal('a'), $group),
             $exprTestUtils->createListOfExpressions(array('2', '3'))
         );
         $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);

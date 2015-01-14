@@ -7,7 +7,7 @@ use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
 use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
-use Helstern\Nomsky\Grammar\Expressions\SymbolAdapter;
+use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisitor;
 use Helstern\Nomsky\Grammar\Production\DefaultProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
@@ -191,7 +191,7 @@ class OptionalsEliminator implements HierarchyVisitor
         $repeatedExpression  = array_pop($children);
 
         $nonTerminalSymbol = $this->createNewNonTerminal();
-        $expression = SymbolAdapter::createAdapterForSymbol($nonTerminalSymbol);
+        $expression = ExpressionSymbol::createAdapterForSymbol($nonTerminalSymbol);
         $this->setAsRootOrAddToStackOfChildren($expression);
 
         $this->addEpsilonAlternativeForList($nonTerminalSymbol, $repeatedExpression);
@@ -207,21 +207,21 @@ class OptionalsEliminator implements HierarchyVisitor
     protected function addEpsilonAlternativeForList(Symbol $nonTerminal, Expression $optionalExpression)
     {
         $alternationItems = array(
-            SymbolAdapter::createAdapterForEpsilon()
+            ExpressionSymbol::createAdapterForEpsilon()
         );
 
         if ($optionalExpression instanceof ExpressionIterable) {
             /** @var $optionalExpression Expression */
             $items = array(
                 new Group($optionalExpression),
-                SymbolAdapter::createAdapterForSymbol($nonTerminal)
+                ExpressionSymbol::createAdapterForSymbol($nonTerminal)
             );
             $alternationItems[] = new Sequence(array_shift($items), $items);
         } else {
             /** @var $optionalExpression Expression */
             $items = array(
                 $optionalExpression,
-                SymbolAdapter::createAdapterForSymbol($nonTerminal)
+                ExpressionSymbol::createAdapterForSymbol($nonTerminal)
             );
             $alternationItems[] = new Sequence(array_shift($items), $items);
         }
@@ -257,7 +257,7 @@ class OptionalsEliminator implements HierarchyVisitor
         $optionalExpression = array_pop($children);
 
         $newNonTerminal = $this->createNewNonTerminal();
-        $expression = SymbolAdapter::createAdapterForSymbol($newNonTerminal);
+        $expression = ExpressionSymbol::createAdapterForSymbol($newNonTerminal);
         $this->setAsRootOrAddToStackOfChildren($expression);
 
         $this->addEpsilonAlternativeForItem($newNonTerminal, $optionalExpression);
@@ -266,7 +266,7 @@ class OptionalsEliminator implements HierarchyVisitor
     protected function addEpsilonAlternativeForItem(Symbol $nonTerminal, Expression $optionalExpression)
     {
         $alternationItems = array(
-            SymbolAdapter::createAdapterForEpsilon()
+            ExpressionSymbol::createAdapterForEpsilon()
         );
 
         if ($optionalExpression instanceof Sequence) {

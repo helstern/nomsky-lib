@@ -6,7 +6,7 @@ use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
 use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
-use Helstern\Nomsky\Grammar\Expressions\SymbolAdapter;
+use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisitor;
 use Helstern\Nomsky\Grammar\Symbol\Comparator\HashCodeComparator;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
@@ -130,7 +130,7 @@ class SymbolCollectorVisitor implements HierarchyVisitor
      */
     public function visitExpression(Expression $expression)
     {
-        if ($expression instanceof SymbolAdapter || $expression instanceof Symbol) {
+        if ($expression instanceof ExpressionSymbol || $expression instanceof Symbol) {
             $this->collectSymbol($expression);
         }
 

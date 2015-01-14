@@ -5,7 +5,7 @@ use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
-use Helstern\Nomsky\Grammar\Expressions\SymbolAdapter;
+use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 
 class ExpressionUtils
 {
@@ -70,7 +70,7 @@ class ExpressionUtils
     /**
      * @param array $listOfSymbols
      * @throws \InvalidArgumentException
-     * @return array|SymbolAdapter[]|Expression[]
+     * @return array|ExpressionSymbol[]|Expression[]
      */
     public function createListOfExpressions(array $listOfSymbols)
     {
@@ -90,23 +90,23 @@ class ExpressionUtils
 
     /**
      * @param string $identifier
-     * @return SymbolAdapter
+     * @return ExpressionSymbol
      */
     public function createNonTerminal($identifier)
     {
-        return SymbolAdapter::createAdapterForNonTerminal($identifier);
+        return ExpressionSymbol::createAdapterForNonTerminal($identifier);
     }
 
     /**
      * @param string $stringSymbol
-     * @return SymbolAdapter
+     * @return ExpressionSymbol
      */
     public function createTerminal($stringSymbol)
     {
         if ($stringSymbol === '') {
-            return SymbolAdapter::createAdapterForEpsilon();
+            return ExpressionSymbol::createAdapterForEpsilon();
         }
-        return SymbolAdapter::createAdapterForTerminal($stringSymbol);
+        return ExpressionSymbol::createAdapterForTerminal($stringSymbol);
     }
 
     /**
@@ -117,9 +117,9 @@ class ExpressionUtils
     public function serializeExpressionIterable(ExpressionIterable $expression)
     {
         $listOfSerializedObjects = array();
-        /** @var $symbolObject SymbolAdapter */
+        /** @var $symbolObject ExpressionSymbol */
         foreach($expression as $symbolObject) {
-            if ($symbolObject instanceof SymbolAdapter) {
+            if ($symbolObject instanceof ExpressionSymbol) {
                 $listOfSerializedObjects[] = $symbolObject->hashCode();
             } elseif($symbolObject instanceof ExpressionIterable) {
                 /** @var $symbolObject ExpressionIterable */

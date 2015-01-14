@@ -3,7 +3,12 @@
 use Helstern\Nomsky\Grammar\Symbol\EpsilonSymbol;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 
-class SymbolAdapter implements Expression, Symbol
+/**
+ * This class is an adapter from Symbol to Expression
+ *
+ * @package Helstern\Nomsky\Grammar\Expressions
+ */
+class ExpressionSymbol implements Expression, Symbol
 {
     /** @var int */
     protected $type;
@@ -12,7 +17,7 @@ class SymbolAdapter implements Expression, Symbol
     protected $symbol;
 
     /**
-     * @return SymbolAdapter
+     * @return ExpressionSymbol
      */
     static public function createAdapterForEpsilon()
     {
@@ -22,7 +27,7 @@ class SymbolAdapter implements Expression, Symbol
 
     /**
      * @param Symbol $symbol
-     * @return SymbolAdapter
+     * @return ExpressionSymbol
      */
     static public function createAdapterForSymbol(Symbol $symbol)
     {
@@ -34,7 +39,7 @@ class SymbolAdapter implements Expression, Symbol
     /**
      * @param $identifier
      * @throws \InvalidArgumentException
-     * @return SymbolAdapter
+     * @return ExpressionSymbol
      */
     static public function createAdapterForNonTerminal($identifier)
     {
@@ -47,7 +52,7 @@ class SymbolAdapter implements Expression, Symbol
     /**
      * @param string $symbol
      * @throws \InvalidArgumentException
-     * @return SymbolAdapter
+     * @return ExpressionSymbol
      */
     static public function createAdapterForTerminal($symbol)
     {

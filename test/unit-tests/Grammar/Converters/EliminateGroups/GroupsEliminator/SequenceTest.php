@@ -10,7 +10,7 @@ use Helstern\Nomsky\Grammar\Converters;
 
 use Helstern\Nomsky\Grammar\Expressions\Alternation;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\SymbolAdapter;
+use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 
 use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
 
