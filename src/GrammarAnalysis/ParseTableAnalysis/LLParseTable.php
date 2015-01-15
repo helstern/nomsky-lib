@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\GrammarAnalysis\ParseTableAnalysis;
 
-use Helstern\Nomsky\Grammar\Production\Set\SetEntry as ProductionSetEntry;
+use Helstern\Nomsky\Grammar\Production\Set\ProductionSetEntry;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammar\Symbol\SymbolSet;
 

@@ -6,7 +6,7 @@ use Helstern\Nomsky\Grammar\Production\Production;
 use Helstern\Nomsky\Grammar\Symbol\ArraySet;
 use Helstern\Nomsky\Grammar\Symbol\SymbolSet;
 use Helstern\Nomsky\GrammarAnalysis\Sets\LookAheadSets;
-use Helstern\Nomsky\Grammar\Production\Set\SetEntry as ProductionSetEntry;
+use Helstern\Nomsky\Grammar\Production\Set\ProductionSetEntry;
 
 class LLParseTableGenerator
 {
