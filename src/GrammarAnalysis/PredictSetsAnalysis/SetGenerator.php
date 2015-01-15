@@ -19,7 +19,11 @@ class SetGenerator
     /** @var  PredictiveParsingSets */
     protected $followSets;
 
-    public function __construct(PredictiveParsingSets $firstSets, $followSets)
+    /**
+     * @param PredictiveParsingSets $firstSets
+     * @param PredictiveParsingSets $followSets
+     */
+    public function __construct(PredictiveParsingSets $firstSets, PredictiveParsingSets $followSets)
     {
         $this->firstSets = $firstSets;
         $this->followSets = $followSets;
