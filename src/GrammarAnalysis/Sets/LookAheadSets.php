@@ -27,7 +27,7 @@ class LookAheadSets
             return false;
         }
 
-        $this->sets[$hashKey->toString()] = $predictSet;
+        $this->sets[$hashKey->toString()] = new LookAheadSetEntry($production, $predictSet);
         return true;
     }
 
@@ -39,7 +39,9 @@ class LookAheadSets
     {
         $hashKey = $this->productionHashKeyFactory->hash($production);
         if (array_key_exists($hashKey->toString(), $this->sets)) {
-            return $this->sets[$hashKey->toString()];
+            /** @var LookAheadSetEntry $entry */
+            $entry = $this->sets[$hashKey->toString()];
+            return $entry->getSymbolSet();
         }
 
         return null;
@@ -50,6 +52,19 @@ class LookAheadSets
      */
     public function getAllSets()
     {
-        return array_values($this->sets);
+        return array_map(
+            function (LookAheadSetEntry $entry) {
+                return $entry->getSymbolSet();
+            },
+            $this->sets
+        );
+    }
+
+    /**
+     * @return LookAheadSetEntryIterator
+     */
+    public function getEntrySetIterator()
+    {
+        return new LookAheadSetEntryIterator(new \ArrayIterator($this->sets));
     }
 }
