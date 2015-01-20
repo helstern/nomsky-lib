@@ -4,7 +4,7 @@ use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\Normaliz
 use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\SequenceGroup\OperationFactory as SequenceGroupOperationFactory;
 use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\AlternationGroup\OperationFactory as AlternationGroupOperationFactory;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternation;
+use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
@@ -120,7 +120,7 @@ class GroupsEliminator extends AbstractErrorTriggeringVisitor implements Hierarc
         }
     }
 
-    public function startVisitAlternation(Alternation $expression)
+    public function startVisitAlternation(Alternative $expression)
     {
         $normalizeOperationFactory = new AlternationGroupOperationFactory();
         $this->onBeforeStartVisitExpressionIterable($expression, $normalizeOperationFactory);
@@ -128,7 +128,7 @@ class GroupsEliminator extends AbstractErrorTriggeringVisitor implements Hierarc
         return true;
     }
 
-    public function endVisitAlternation(Alternation $expression)
+    public function endVisitAlternation(Alternative $expression)
     {
         $this->onAfterEndVisitExpressionIterable($expression);
 

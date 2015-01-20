@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\OperationResult;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternation;
+use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 
 use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsNormalizer\AlternationGroup\Operand;
@@ -29,11 +29,11 @@ class AlternationResult implements ResultInterface
     }
 
     /**
-     * @return Alternation
+     * @return Alternative
      */
     public function toExpression()
     {
-        return new Alternation(reset($this->alternationItems), array_slice($this->alternationItems, 1));
+        return new Alternative(reset($this->alternationItems), array_slice($this->alternationItems, 1));
     }
 
     /**

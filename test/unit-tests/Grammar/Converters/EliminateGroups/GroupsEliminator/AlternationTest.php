@@ -8,7 +8,7 @@ use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
 use Helstern\Nomsky\Grammar\Converters;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternation;
+use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 
@@ -57,13 +57,13 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
 
         $listOfSymbols = $exprTestUtils->createListOfExpressions(array('3', '2', '1'));
 
-        $alternation        = new Alternation(array_pop($listOfSymbols), array_reverse($listOfSymbols));
+        $alternation        = new Alternative(array_pop($listOfSymbols), array_reverse($listOfSymbols));
         $group              = new Group($alternation);
         $listOfSymbols      = array();
         $listOfSymbols[]    = $group;
 
         $listOfSymbols  = array_merge($listOfSymbols, $exprTestUtils->createListOfExpressions(array('c', 'b', 'a')));
-        $alternation    = new Alternation(array_pop($listOfSymbols), array_reverse($listOfSymbols));
+        $alternation    = new Alternative(array_pop($listOfSymbols), array_reverse($listOfSymbols));
 
         $actualExpressionWithoutGroups = $this->getDepthFirstWalkResult($alternation);
         $expectedExpressionWithoutGroups = $exprTestUtils->createAlternationFromListOfStringSymbols(
@@ -96,12 +96,12 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
         $exprTestUtils = $this->getExpressionTestUtils();
 
         $listOfSymbols = $exprTestUtils->createListOfExpressions(array('a', 'b', 'c'));
-        $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
+        $alternation = new Alternative(array_shift($listOfSymbols), $listOfSymbols);
         $group       = new Group($alternation);
 
         $listOfSymbols = array($group);
         $listOfSymbols = array_merge($listOfSymbols, $exprTestUtils->createListOfExpressions(array('1', '2', '3')));
-        $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
+        $alternation = new Alternative(array_shift($listOfSymbols), $listOfSymbols);
 
         $actualExpressionWithoutGroups = $this->getDepthFirstWalkResult($alternation);
         $expectedExpressionWithoutGroups = $exprTestUtils->createAlternationFromListOfStringSymbols(
@@ -134,12 +134,12 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
         $exprTestUtils = $this->getExpressionTestUtils();
 
         $listOfSymbols = $exprTestUtils->createListOfExpressions(array('b', 'c', '1'));
-        $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
+        $alternation = new Alternative(array_shift($listOfSymbols), $listOfSymbols);
         $group       = new Group($alternation);
 
         $listOfSymbols = array(ExpressionSymbol::createAdapterForTerminal('a'), $group);
         $listOfSymbols = array_merge($listOfSymbols, $exprTestUtils->createListOfExpressions(array('2', '3')));
-        $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
+        $alternation = new Alternative(array_shift($listOfSymbols), $listOfSymbols);
 
         $actualExpressionWithoutGroups = $this->getDepthFirstWalkResult($alternation);
         $expectedExpressionWithoutGroups = $exprTestUtils->createAlternationFromListOfStringSymbols(
@@ -172,21 +172,21 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
         $exprTestUtils = $this->getExpressionTestUtils();
 
         $listOfSymbols = $exprTestUtils->createListOfExpressions(array('x', 'y', 'z'));
-        $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
+        $alternation = new Alternative(array_shift($listOfSymbols), $listOfSymbols);
         $group       = new Group($alternation);
 
         $listOfSymbols = array_merge(
             $exprTestUtils->createListOfExpressions(array('b', 'c')),
             array($group, ExpressionSymbol::createAdapterForTerminal('1'))
         );
-        $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
+        $alternation = new Alternative(array_shift($listOfSymbols), $listOfSymbols);
         $group       = new Group($alternation);
 
         $listOfSymbols = array_merge(
             array(ExpressionSymbol::createAdapterForTerminal('a'), $group),
             $exprTestUtils->createListOfExpressions(array('2', '3'))
         );
-        $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
+        $alternation = new Alternative(array_shift($listOfSymbols), $listOfSymbols);
 
         $actualExpressionWithoutGroups = $this->getDepthFirstWalkResult($alternation);
         $expectedExpressionWithoutGroups = $exprTestUtils->createAlternationFromListOfStringSymbols(

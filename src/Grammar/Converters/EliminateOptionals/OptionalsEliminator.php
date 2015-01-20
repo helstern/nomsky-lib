@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\Converters\EliminateOptionals;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternation;
+use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Group;
@@ -87,10 +87,10 @@ class OptionalsEliminator implements HierarchyVisitor
     }
 
     /**
-     * @param Alternation $expression
+     * @param Alternative $expression
      * @return boolean
      */
-    public function startVisitAlternation(Alternation $expression)
+    public function startVisitAlternation(Alternative $expression)
     {
         $this->stackOfChildren[] = array();
 
@@ -98,16 +98,16 @@ class OptionalsEliminator implements HierarchyVisitor
     }
 
     /**
-     * @param Alternation $expression
+     * @param Alternative $expression
      * @return boolean
      */
-    public function endVisitAlternation(Alternation $expression)
+    public function endVisitAlternation(Alternative $expression)
     {
         /** @var Expression[]|array $children */
         $children = array_pop($this->stackOfChildren);
 
         $firstChild = array_shift($children);
-        $alternation = new Alternation($firstChild, $children);
+        $alternation = new Alternative($firstChild, $children);
 
         $this->setAsRootOrAddToStackOfChildren($alternation);
 
@@ -226,7 +226,7 @@ class OptionalsEliminator implements HierarchyVisitor
             $alternationItems[] = new Sequence(array_shift($items), $items);
         }
 
-        $alternation = new Alternation(array_shift($alternationItems), $alternationItems);
+        $alternation = new Alternative(array_shift($alternationItems), $alternationItems);
 
         $production = new DefaultProduction($nonTerminal, $alternation);
         $this->epsilonAlternatives[] = $production;
@@ -271,13 +271,13 @@ class OptionalsEliminator implements HierarchyVisitor
 
         if ($optionalExpression instanceof Sequence) {
             $alternationItems[] = $optionalExpression;
-        } elseif ($optionalExpression instanceof Alternation) {
+        } elseif ($optionalExpression instanceof Alternative) {
             $alternationItems[] = new Group($optionalExpression);
         } else {
             $alternationItems[] = $optionalExpression;
         }
 
-        $alternation = new Alternation(array_shift($alternationItems), $alternationItems);
+        $alternation = new Alternative(array_shift($alternationItems), $alternationItems);
         $production = new DefaultProduction($nonTerminal, $alternation);
         $this->epsilonAlternatives[] = $production;
 

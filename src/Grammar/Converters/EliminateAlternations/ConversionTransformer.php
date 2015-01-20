@@ -1,7 +1,7 @@
 <?php namespace Helstern\Nomsky\Grammar\Converters\EliminateAlternations;
 
 use Helstern\Nomsky\Grammar\Converters\ProductionTransformer;
-use Helstern\Nomsky\Grammar\Expressions\Alternation;
+use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
@@ -18,7 +18,7 @@ class ConversionTransformer implements ProductionTransformer
     {
         $expression = $production->getExpression();
 
-        if ($expression instanceof Alternation) {
+        if ($expression instanceof Alternative) {
             $productions = array();
 
             $expressions = iterator_to_array($expression->getIterator());

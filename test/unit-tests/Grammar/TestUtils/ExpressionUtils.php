@@ -3,7 +3,7 @@
 use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\IncrementalNamingStrategy;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
-use Helstern\Nomsky\Grammar\Expressions\Alternation;
+use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 
@@ -36,11 +36,11 @@ class ExpressionUtils
 
     /**
      * @param array $symbols
-     * @return Alternation
+     * @return Alternative
      */
     public function createAlternationFromSymbols(array $symbols)
     {
-        return new Alternation(array_shift($symbols), $symbols);
+        return new Alternative(array_shift($symbols), $symbols);
     }
 
     /**
@@ -57,12 +57,12 @@ class ExpressionUtils
 
     /**
      * @param array $listOfStringSymbols
-     * @return Alternation
+     * @return Alternative
      */
     public function createAlternationFromListOfStringSymbols(array $listOfStringSymbols)
     {
         $listOfSymbols = $this->createListOfExpressions($listOfStringSymbols);
-        $alternation = new Alternation(array_shift($listOfSymbols), $listOfSymbols);
+        $alternation = new Alternative(array_shift($listOfSymbols), $listOfSymbols);
 
         return $alternation;
     }
@@ -129,7 +129,7 @@ class ExpressionUtils
             }
         }
 
-        if ($expression instanceof Alternation) {
+        if ($expression instanceof Alternative) {
             $separator = '| ';
         } elseif ($expression instanceof Sequence) {
             $separator = ' ';

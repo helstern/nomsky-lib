@@ -1,7 +1,7 @@
 <?php namespace Helstern\Nomsky\Grammar\TestUtils;
 
 use Helstern\Nomsky\Grammar\DefaultGrammar;
-use Helstern\Nomsky\Grammar\Expressions\Alternation;
+use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
 use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
@@ -67,7 +67,7 @@ class TestGrammars
                  )
             )
         );
-        $rightSide = new Alternation(array_shift($expressionItems), $expressionItems);
+        $rightSide = new Alternative(array_shift($expressionItems), $expressionItems);
         $productions[] = new DefaultProduction($leftSide, $rightSide);
 
         $leftSide = $expressionUtils->createNonTerminal('BooleanOperator');
@@ -75,7 +75,7 @@ class TestGrammars
             $expressionUtils->createTerminal('And'),
             $expressionUtils->createTerminal('Or'),
         );
-        $rightSide = new Alternation(array_shift($expressionItems), $expressionItems);
+        $rightSide = new Alternative(array_shift($expressionItems), $expressionItems);
         $productions[] = new DefaultProduction($leftSide, $rightSide);
 
         $leftSide = $expressionUtils->createNonTerminal('BooleanConstant');
@@ -83,7 +83,7 @@ class TestGrammars
             $expressionUtils->createTerminal('True'),
             $expressionUtils->createTerminal('False'),
         );
-        $rightSide = new Alternation(array_shift($expressionItems), $expressionItems);
+        $rightSide = new Alternative(array_shift($expressionItems), $expressionItems);
         $productions[] = new DefaultProduction($leftSide, $rightSide);
 
         $grammar = new DefaultGrammar('simple test boolean logic', $productions);

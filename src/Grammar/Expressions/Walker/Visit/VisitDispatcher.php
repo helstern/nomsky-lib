@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions\Walker\Visit;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternation;
+use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
@@ -10,10 +10,10 @@ use Helstern\Nomsky\Grammar\Expressions\Sequence;
 interface VisitDispatcher
 {
     /**
-     * @param Alternation $expression
+     * @param Alternative $expression
      * @return VisitAction|null
      */
-    public function dispatchVisitAlternation(Alternation $expression);
+    public function dispatchVisitAlternation(Alternative $expression);
 
     /**
      * @param Expression $expression

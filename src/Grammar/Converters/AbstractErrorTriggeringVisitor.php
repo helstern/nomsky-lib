@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\Converters;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternation;
+use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
@@ -17,10 +17,10 @@ abstract class AbstractErrorTriggeringVisitor implements HierarchyVisitor
     abstract protected function getMethodNotCalledWarningMessage($methodName);
 
     /**
-     * @param Alternation $expression
+     * @param Alternative $expression
      * @return boolean
      */
-    public function startVisitAlternation(Alternation $expression)
+    public function startVisitAlternation(Alternative $expression)
     {
         $warningMessage = $this->getMethodNotCalledWarningMessage(__METHOD__);
         trigger_error($warningMessage, E_USER_WARNING);
@@ -29,10 +29,10 @@ abstract class AbstractErrorTriggeringVisitor implements HierarchyVisitor
     }
 
     /**
-     * @param Alternation $expression
+     * @param Alternative $expression
      * @return boolean
      */
-    public function endVisitAlternation(Alternation $expression)
+    public function endVisitAlternation(Alternative $expression)
     {
         $warningMessage = $this->getMethodNotCalledWarningMessage(__METHOD__);
         trigger_error($warningMessage, E_USER_WARNING);

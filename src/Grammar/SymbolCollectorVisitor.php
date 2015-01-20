@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternation;
+use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
@@ -35,19 +35,19 @@ class SymbolCollectorVisitor implements HierarchyVisitor
     }
 
     /**
-     * @param Alternation $expression
+     * @param Alternative $expression
      * @return boolean
      */
-    public function startVisitAlternation(Alternation $expression)
+    public function startVisitAlternation(Alternative $expression)
     {
         return true;
     }
 
     /**
-     * @param Alternation $expression
+     * @param Alternative $expression
      * @return boolean
      */
-    public function endVisitAlternation(Alternation $expression)
+    public function endVisitAlternation(Alternative $expression)
     {
         return true;
     }

@@ -3,7 +3,7 @@
 use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\OptionalsEliminator;
 
 use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
-use Helstern\Nomsky\Grammar\Expressions\Alternation;
+use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
@@ -73,13 +73,13 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
 
         /** @var DefaultProduction $production */
         $production = array_pop($epsilonAlternatives);
-        /** @var Alternation $actualExpression */
+        /** @var Alternative $actualExpression */
         $actualExpression = $production->getExpression();
 
         /** @var \Exception $castAlternationException */
         $castAlternationException = null;
         try {
-            $castToAlternation = function (Alternation $alternation) { return $alternation; };
+            $castToAlternation = function (Alternative $alternation) { return $alternation; };
             $castToAlternation($actualExpression);
         } catch (\Exception $castAlternationException) {
             /** on purpose left */
@@ -131,13 +131,13 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
 
         /** @var DefaultProduction $production */
         $production = array_pop($epsilonAlternatives);
-        /** @var Alternation $actualExpression */
+        /** @var Alternative $actualExpression */
         $actualExpression = $production->getExpression();
 
         /** @var \Exception $castAlternationException */
         $castAlternationException = null;
         try {
-            $castToAlternation = function (Alternation $alternation) { return $alternation; };
+            $castToAlternation = function (Alternative $alternation) { return $alternation; };
             $castToAlternation($actualExpression);
         } catch (\Exception $castAlternationException) {
             /** on purpose left */

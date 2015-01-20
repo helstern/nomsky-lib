@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions\Walker;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternation;
+use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
@@ -31,7 +31,7 @@ class VisitDispatcherRoute
         $futureVisitAction  = null;
         $actionDispatcher   = $this->actionDispatcher;
 
-        if ($expression instanceof Alternation) {
+        if ($expression instanceof Alternative) {
             $futureVisitAction = $actionDispatcher->dispatchVisitAlternation($expression);
         } else if ($expression instanceof Group) {
             $futureVisitAction = $actionDispatcher->dispatchVisitGroup($expression);

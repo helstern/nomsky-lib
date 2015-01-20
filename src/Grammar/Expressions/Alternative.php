@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions;
 
-class Alternation implements Expression, ExpressionIterable
+class Alternative implements Expression, ExpressionIterable
 {
     /** @var Expression[] */
     protected $expressions;

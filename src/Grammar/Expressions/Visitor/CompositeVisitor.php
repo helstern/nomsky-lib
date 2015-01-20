@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions\Visitor;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternation;
+use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
@@ -10,10 +10,10 @@ use Helstern\Nomsky\Grammar\Expressions\Sequence;
 interface CompositeVisitor
 {
     /**
-     * @param Alternation $expression
+     * @param Alternative $expression
      * @return boolean
      */
-    public function visitAlternation(Alternation $expression);
+    public function visitAlternation(Alternative $expression);
 
     /**
      * @param Group $expression

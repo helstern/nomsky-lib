@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions\Visitor\CompositeVisit;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternation;
+use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 
@@ -24,10 +24,10 @@ class CompleteVisitDispatcher extends AbstractDispatcher implements VisitDispatc
     }
 
     /**
-     * @param Alternation $expression
+     * @param Alternative $expression
      * @return null
      */
-    public function dispatchVisitAlternation(Alternation $expression)
+    public function dispatchVisitAlternation(Alternative $expression)
     {
         $this->visitor->visitAlternation($expression);
         return null;
