@@ -30,7 +30,7 @@ class RegexMatchStream
         $this->matches = array_map($tokenMatchFilter, $tokenMatches);
 
         $this->matchIndex = 0;
-        $this->lastByteIndex = 0;
+        $this->previousPosition = new CharacterPosition(0, 0, 0);
     }
 
     /**
@@ -119,7 +119,7 @@ class RegexMatchStream
     protected function calculateOffsetPosition()
     {
         $match = $this->current();
-        $matchByteIndex = $match[1];
+        $matchByteIndex = $match[0][1];
         $offsetByte = $matchByteIndex - $this->previousPosition->getByteIndex();
 
         $text = substr($this->originalText, $this->previousPosition->getByteIndex(), $offsetByte);
