@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Tokens\TokenStream;
+<?php namespace Helstern\Nomsky\Tokens\TokenPattern;
 
 interface TokenPattern
 {

@@ -2,10 +2,9 @@
 
 use Helstern\Nomsky\TextMatch\RegexMatchStream;
 use Helstern\Nomsky\TextMatch\RegexPatternBuilder;
+use Helstern\Nomsky\Tokens\TokenPattern\RegexPatterns;
+use Helstern\Nomsky\Tokens\TokenPattern\RegexTokenPattern;
 use Helstern\Nomsky\Tokens\TokenStream\CharacterSource\FileSource;
-use Helstern\Nomsky\Tokens\TokenStream\CharacterSource;
-use Helstern\Nomsky\Tokens\TokenStream\RegexTokenPattern;
-use Helstern\Nomsky\Tokens\TokenStream\RegexTokenPatterns;
 use Helstern\Nomsky\Tokens\TokenStream\RegexTokenStream;
 
 class NomskyRegexLexerFactory
@@ -19,7 +18,7 @@ class NomskyRegexLexerFactory
         $fileDescriptor = new \SplFileInfo($filePath);
         $source = new FileSource($fileDescriptor);
 
-        $tokenPatterns = RegexTokenPatterns::nomskyPatterns();
+        $tokenPatterns = RegexPatterns::nomskyPatterns();
         $regexMatchStream = $this->createRegexMatchStream($source, $tokenPatterns);
 
         $tokenStream = new RegexTokenStream($regexMatchStream, $source);
@@ -28,11 +27,11 @@ class NomskyRegexLexerFactory
     }
 
     /**
-     * @param CharacterSource $source
+     * @param FileSource $source
      * @param array $tokenPatterns
      * @return RegexMatchStream
      */
-    protected function createRegexMatchStream(CharacterSource $source, array $tokenPatterns)
+    protected function createRegexMatchStream(FileSource $source, array $tokenPatterns)
     {
         $regexPattern = $this->createRegexPattern($tokenPatterns);
         $regexMatchStream = new RegexMatchStream($regexPattern, $source->retrieveText());

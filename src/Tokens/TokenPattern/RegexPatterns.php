@@ -1,9 +1,9 @@
-<?php namespace Helstern\Nomsky\Tokens\TokenStream;
+<?php namespace Helstern\Nomsky\Tokens\TokenPattern;
 
 use Helstern\Nomsky\Tokens\RegExBuilder\RegexBuilder;
 use Helstern\Nomsky\Tokens\TokenTypeEnum;
 
-class RegexTokenPatterns
+class RegexPatterns
 {
     /**
      * @return array|RegexTokenPattern[]
