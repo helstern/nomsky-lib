@@ -1,7 +1,7 @@
 <?php namespace Helstern\Nomsky\Lexer;
 
-use Helstern\Nomsky\Tokens\Text\RegexMatchStream;
-use Helstern\Nomsky\Tokens\Text\RegexPatternBuilder;
+use Helstern\Nomsky\TextMatch\RegexMatchStream;
+use Helstern\Nomsky\TextMatch\RegexPatternBuilder;
 use Helstern\Nomsky\Tokens\TokenStream\CharacterSource\FileSource;
 use Helstern\Nomsky\Tokens\TokenStream\CharacterSource;
 use Helstern\Nomsky\Tokens\TokenStream\RegexTokenPattern;

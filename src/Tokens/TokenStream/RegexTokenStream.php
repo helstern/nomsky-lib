@@ -1,7 +1,7 @@
 <?php namespace Helstern\Nomsky\Tokens\TokenStream;
 
-use Helstern\Nomsky\Tokens\Text\CharacterPosition;
-use Helstern\Nomsky\Tokens\Text\RegexMatchStream;
+use Helstern\Nomsky\TextMatch\CharacterPosition;
+use Helstern\Nomsky\TextMatch\RegexMatchStream;
 use Helstern\Nomsky\Tokens\Token;
 use Helstern\Nomsky\Tokens\TokenTypeEnum;
 
