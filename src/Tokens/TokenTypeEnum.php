@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Tokens;
 
-use Helstern\Nomsky\Tokens\TokenStream\RegexTokenPattern;
+use Helstern\Nomsky\Tokens\TokenPattern\RegexTokenPattern;
 
 class TokenTypeEnum {
 
@@ -129,7 +129,7 @@ class TokenTypeEnum {
      * @param int $tokenType
      * @param string $pattern
      * @throws \RuntimeException
-     * @return TokenStream\TokenPattern
+     * @return RegexTokenPattern
      */
     public function buildRegexPattern($tokenType, $pattern)
     {
