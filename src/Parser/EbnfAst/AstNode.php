@@ -1,11 +1,11 @@
 <?php namespace Helstern\Nomsky\Parser\EbnfAst;
 
-use Helstern\Nomsky\TextMatch\CharacterPosition;
+use Helstern\Nomsky\Text\TextPosition;
 
 interface AstNode
 {
     /**
-     * @return CharacterPosition
+     * @return TextPosition
      */
     public function getTextPosition();
 }

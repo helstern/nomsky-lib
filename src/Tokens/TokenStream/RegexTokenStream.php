@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Tokens\TokenStream;
 
-use Helstern\Nomsky\TextMatch\CharacterPosition;
+use Helstern\Nomsky\Text\TextPosition;
 use Helstern\Nomsky\TextMatch\RegexMatchStream;
 use Helstern\Nomsky\Tokens\Token;
 use Helstern\Nomsky\Tokens\TokenTypeEnum;
@@ -77,10 +77,10 @@ class RegexTokenStream implements TokenStream
 
     /**
      * @param array $regexMatch
-     * @param CharacterPosition $tokenPosition
+     * @param TextPosition $tokenPosition
      * @return Token
      */
-    protected function createToken(array $regexMatch, CharacterPosition $tokenPosition)
+    protected function createToken(array $regexMatch, TextPosition $tokenPosition)
     {
         /** @var int $tokenType */
         $tokenType = null;
@@ -107,7 +107,7 @@ class RegexTokenStream implements TokenStream
     {
         $tokenType = TokenTypeEnum::TYPE_EOF;
         $tokenValue = '';
-        $tokenPosition = new CharacterPosition(0, 0, 0);
+        $tokenPosition = new TextPosition(0, 0, 0);
 
         return new Token($tokenType, $tokenValue, $tokenPosition);
     }

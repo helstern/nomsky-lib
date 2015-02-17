@@ -1,10 +1,10 @@
 <?php namespace Helstern\Nomsky\Parser\EbnfAst;
 
-use Helstern\Nomsky\TextMatch\CharacterPosition;
+use Helstern\Nomsky\Text\TextPosition;
 
 class AlternativeNode extends AbstractCompositeAstNode implements AstNode
 {
-    /** @var CharacterPosition */
+    /** @var TextPosition */
     protected $textPosition;
 
     /** @var AstNode */
@@ -14,11 +14,11 @@ class AlternativeNode extends AbstractCompositeAstNode implements AstNode
     protected $otherChildren;
 
     /**
-     * @param CharacterPosition $textPosition
+     * @param TextPosition $textPosition
      * @param AstNode $firstChild
      * @param array $otherChildren
      */
-    public function __construct(CharacterPosition $textPosition, AstNode $firstChild, array $otherChildren)
+    public function __construct(TextPosition $textPosition, AstNode $firstChild, array $otherChildren)
     {
         $this->textPosition = $textPosition;
         $this->firstChild = $firstChild;

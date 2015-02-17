@@ -1,16 +1,16 @@
 <?php namespace Helstern\Nomsky\Parser\EbnfAst;
 
-use Helstern\Nomsky\TextMatch\CharacterPosition;
+use Helstern\Nomsky\Text\TextPosition;
 
 class SyntaxNode extends AbstractCompositeAstNode implements AstNode
 {
     /** @var array | ProductionNode[] */
     protected $productionNodes;
 
-    /** @var CharacterPosition */
+    /** @var TextPosition */
     protected $textPosition;
 
-    public function __construct(CharacterPosition $textPosition, array $productionNodes, $grammarTitle, $comment)
+    public function __construct(TextPosition $textPosition, array $productionNodes, $grammarTitle, $comment)
     {
         $this->textPosition = $textPosition;
         $this->productionNodes = $productionNodes;
@@ -24,7 +24,7 @@ class SyntaxNode extends AbstractCompositeAstNode implements AstNode
     }
 
     /**
-     * @return CharacterPosition
+     * @return TextPosition
      */
     public function getTextPosition()
     {

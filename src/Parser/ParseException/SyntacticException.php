@@ -1,7 +1,7 @@
 <?php namespace Helstern\Nomsky\Parser\ParseException;
 
 use Exception;
-use Helstern\Nomsky\TextMatch\CharacterPosition;
+use Helstern\Nomsky\Text\TextPosition;
 use Helstern\Nomsky\Tokens\Token;
 
 class SyntacticException extends \Exception
@@ -16,7 +16,7 @@ class SyntacticException extends \Exception
     }
 
     /**
-     * @return CharacterPosition
+     * @return TextPosition
      */
     public function getTextPosition()
     {

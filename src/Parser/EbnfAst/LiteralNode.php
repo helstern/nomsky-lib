@@ -1,13 +1,13 @@
 <?php namespace Helstern\Nomsky\Parser\EbnfAst;
 
-use Helstern\Nomsky\TextMatch\CharacterPosition;
+use Helstern\Nomsky\Text\TextPosition;
 
 class LiteralNode implements AstNode
 {
-    /** @var CharacterPosition */
+    /** @var TextPosition */
     protected $textPosition;
 
-    public function __construct(CharacterPosition $textPosition, $string)
+    public function __construct(TextPosition $textPosition, $string)
     {
         $this->textPosition = $textPosition;
         $this->string = $string;

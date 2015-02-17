@@ -1,5 +1,7 @@
 <?php namespace Helstern\Nomsky\TextMatch;
 
+use Helstern\Nomsky\Text\TextPosition;
+
 class RegexMatchStream
 {
     /** @var array[] */
@@ -11,10 +13,10 @@ class RegexMatchStream
     /** @var int */
     protected $matchIndex = -1;
 
-    /** @var CharacterPosition */
+    /** @var TextPosition */
     protected $previousPosition;
 
-    /** @var CharacterPosition */
+    /** @var TextPosition */
     protected $offsetPosition;
 
     /**
@@ -30,7 +32,7 @@ class RegexMatchStream
         $this->matches = array_map($tokenMatchFilter, $tokenMatches);
 
         $this->matchIndex = 0;
-        $this->previousPosition = new CharacterPosition(0, 0, 0);
+        $this->previousPosition = new TextPosition(0, 0, 0);
     }
 
     /**
@@ -98,7 +100,7 @@ class RegexMatchStream
     }
 
     /**
-     * @return null|CharacterPosition
+     * @return null|TextPosition
      */
     public function position()
     {
@@ -114,7 +116,7 @@ class RegexMatchStream
     }
 
     /**
-     * @return CharacterPosition
+     * @return TextPosition
      */
     protected function calculateOffsetPosition()
     {
@@ -133,7 +135,7 @@ class RegexMatchStream
         }
         $offsetColumn = mb_strlen($text, 'UTF-8');
 
-        $offsetPosition = new CharacterPosition($offsetByte, $offsetColumn, $offsetLines);
+        $offsetPosition = new TextPosition($offsetByte, $offsetColumn, $offsetLines);
         return $offsetPosition;
     }
 }

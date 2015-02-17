@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Tokens;
 
-use Helstern\Nomsky\TextMatch\CharacterPosition;
+use Helstern\Nomsky\Text\TextPosition;
 
 class Token {
 
@@ -10,10 +10,10 @@ class Token {
     /** @var string */
     protected $text;
 
-    /** @var CharacterPosition */
+    /** @var TextPosition */
     protected $position;
 
-    public function __construct($type, $text, CharacterPosition $firstCharacterPosition)
+    public function __construct($type, $text, TextPosition $firstCharacterPosition)
     {
         $this->type = $type;
         $this->text = $text;
@@ -37,7 +37,7 @@ class Token {
     }
 
     /**
-     * @return CharacterPosition
+     * @return TextPosition
      */
     public function getPosition()
     {
