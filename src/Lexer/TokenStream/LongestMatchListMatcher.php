@@ -85,8 +85,8 @@ class LongestMatchListMatcher implements TokenStringMatcherListAdapter
     }
 
     /**
-     * @param TextMatch $match
-     * @param TextMatch $longestMatch
+     * @param TextMatch $match candidate match
+     * @param TextMatch $longestMatch current longestMatch
      * @return TextMatch|null
      */
     protected function chooseLongestMatch(TextMatch $match, TextMatch $longestMatch)
