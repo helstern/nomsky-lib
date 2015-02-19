@@ -2,7 +2,6 @@
 
 use Helstern\Nomsky\Parser\Lexer;
 use Helstern\Nomsky\Tokens\Token;
-use Helstern\Nomsky\Tokens\TokenStream\TokenStream;
 
 class TokenStreamLexer implements Lexer
 {

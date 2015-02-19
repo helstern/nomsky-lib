@@ -1,15 +1,9 @@
-<?php namespace Helstern\Nomsky\Tokens\TokenStream;
+<?php namespace Helstern\Nomsky\Lexer;
 
-use Helstern\Nomsky\Text\TextSource;
 use Helstern\Nomsky\Tokens\Token;
 
 interface TokenStream
 {
-    /**
-     * @return TextSource
-     */
-    public function getSource();
-
     /**
      * @return Token
      */
