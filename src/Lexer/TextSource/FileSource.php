@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Text\TokenSource\FileSource;
+<?php namespace Helstern\Nomsky\Lexer\TextSource;
 
 use Helstern\Nomsky\Text\String\StringReader;
 use Helstern\Nomsky\Text\TextSource;

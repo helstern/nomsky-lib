@@ -1,8 +1,10 @@
 <?php namespace Helstern\Nomsky\Lexer;
 
 use Helstern\Nomsky\Lexer\TokenStream\LongestMatchListMatcher;
+use Helstern\Nomsky\Lexer\TextSource\FileSource;
+
 use Helstern\Nomsky\Text\TextSource;
-use Helstern\Nomsky\Text\TokenSource\FileSource\FileSource;
+
 use Helstern\Nomsky\TextMatch\RegexPatternBuilder;
 
 use Helstern\Nomsky\Tokens\TokenMatch\AnchoredPcreMatcher;
