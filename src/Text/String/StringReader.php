@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Text\String;
 
-use Helstern\Nomsky\Text\TextMatcher;
+use Helstern\Nomsky\Text\StringMatcher;
 use Helstern\Nomsky\Text\TextReader;
 use Helstern\Nomsky\Text\TextSource;
 
@@ -44,7 +44,7 @@ class StringReader implements TextReader
         return $character;
     }
 
-    public function readTextMatch(TextMatcher $matcher)
+    public function readTextMatch(StringMatcher $matcher)
     {
         if (is_null($this->remainingText)) {
             return null;

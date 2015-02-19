@@ -1,18 +1,12 @@
 <?php namespace Helstern\Nomsky\Tokens\TokenMatch;
 
-use Helstern\Nomsky\Text\TextMatcher;
+use Helstern\Nomsky\Text\StringMatcher;
 use Helstern\Nomsky\Tokens\TokenPattern\TokenPattern;
 
-interface TokenMatcher extends TextMatcher
+interface TokenMatcher extends StringMatcher
 {
     /**
      * @return TokenPattern
      */
     public function getTokenPattern();
-
-    /**
-     * @param string $text
-     * @return TokenMatch
-     */
-    public function match($text);
 }

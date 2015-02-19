@@ -18,10 +18,10 @@ interface TextReader
     /**
      * Reads a token match
      *
-     * @param TextMatcher $matcher
+     * @param StringMatcher $matcher
      * @return TextMatch|null
      */
-    public function readTextMatch(TextMatcher $matcher);
+    public function readTextMatch(StringMatcher $matcher);
 
     /**
      * @param int $bytes
