@@ -14,7 +14,7 @@ use Helstern\Nomsky\Parser\EbnfAst\SyntaxNode;
 use Helstern\Nomsky\ParseAssertion\TokenAssertions;
 use Helstern\Nomsky\Parser\Lexer;
 use Helstern\Nomsky\TextMatch\TextPosition;
-use Helstern\Nomsky\Tokens\TokenTypeEnum;
+use Helstern\Nomsky\Lexer\NomskyTokenTypeEnum;
 
 /**
  * Class StandardEbnfParser
@@ -58,31 +58,31 @@ class IsoEbnfParser
         /** @var string $grammarTitle */
         $grammarTitle = null;
         $tokenPredicates = $this->tokenAssertions->getPredicates();
-        if ($tokenPredicates->hasSameType($token, TokenTypeEnum::TYPE_LITERAL)) {
+        if ($tokenPredicates->hasSameType($token, NomskyTokenTypeEnum::TYPE_LITERAL)) {
             $grammarTitle = $token->getValue();
 
             $lexer->nextToken();
         }
 
         $token = $lexer->currentToken();
-        $this->tokenAssertions->assertSameType('expected token', $token, TokenTypeEnum::TYPE_START_REPEAT);
+        $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::TYPE_START_REPEAT);
 
         $productionNodes = array();
         $token = $lexer->peekToken();
-        while ($tokenPredicates->hasSameType($token, TokenTypeEnum::TYPE_IDENTIFIER)) {
+        while ($tokenPredicates->hasSameType($token, NomskyTokenTypeEnum::TYPE_IDENTIFIER)) {
             $productionNode = $this->parseProduction($lexer);
             $productionNodes[] = $productionNode;
 
             $token = $lexer->peekToken();
         }
 
-        $this->tokenAssertions->assertSameType('expected token', $token, TokenTypeEnum::TYPE_END_REPEAT);
+        $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::TYPE_END_REPEAT);
 
         $grammarComment = null;
         $lexer->nextToken();
         $token = $lexer->currentToken();
         $tokenPredicates = $this->tokenAssertions->getPredicates();
-        if ($tokenPredicates->hasSameType($token, TokenTypeEnum::TYPE_LITERAL)) {
+        if ($tokenPredicates->hasSameType($token, NomskyTokenTypeEnum::TYPE_LITERAL)) {
             $grammarComment = $token->getValue();
         }
 
@@ -100,14 +100,14 @@ class IsoEbnfParser
 
         $lexer->nextToken();
         $token = $lexer->currentToken();
-        $this->tokenAssertions->assertSameType('expected token', $token, TokenTypeEnum::TYPE_DEFINITION_LIST_START);
+        $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::TYPE_DEFINITION_LIST_START);
 
         $expressionNode = $this->parseExpression($lexer);
 
         $lexer->nextToken();
         $token = $lexer->currentToken();
 
-        $this->tokenAssertions->assertSameType('expected token', $token, TokenTypeEnum::TYPE_EOR);
+        $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::TYPE_EOR);
 
         $textPosition = $identifierNode->getTextPosition();
         $node = new ProductionNode($textPosition, $identifierNode, $expressionNode);
@@ -122,7 +122,7 @@ class IsoEbnfParser
     {
         $lexer->nextToken();
         $token = $lexer->currentToken();
-        $this->tokenAssertions->assertSameType('expected token', $token, TokenTypeEnum::TYPE_IDENTIFIER);
+        $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::TYPE_IDENTIFIER);
 
         $identifierName = $token->getValue();
         $textPosition = $token->getPosition();
@@ -142,7 +142,7 @@ class IsoEbnfParser
 
         $predicates = $this->tokenAssertions->getPredicates();
         $token = $lexer->peekToken();
-        while ($predicates->hasSameType($token, TokenTypeEnum::TYPE_DEFINITION_SEPARATOR)) {
+        while ($predicates->hasSameType($token, NomskyTokenTypeEnum::TYPE_DEFINITION_SEPARATOR)) {
             $tail[] = $this->parseTerm($lexer);
             $token = $lexer->peekToken();
         }
@@ -167,7 +167,7 @@ class IsoEbnfParser
 
         $predicates = $this->tokenAssertions->getPredicates();
 //        $token = $tokenScanner->peekToken();
-//        while ($predicates->hasSameType($token, TokenTypeEnum::TYPE_WS)) {
+//        while ($predicates->hasSameType($token, NomskyTokenTypeEnum::TYPE_WS)) {
 //            $tokenScanner->nextToken();
 //            $token = $tokenScanner->peekToken();
 //        }
@@ -176,11 +176,11 @@ class IsoEbnfParser
         $token = $lexer->peekToken();
         while (
             $predicates->hasAnyType($token, array(
-                TokenTypeEnum::TYPE_IDENTIFIER
-                , TokenTypeEnum::TYPE_LITERAL
-                , TokenTypeEnum::TYPE_START_REPEAT
-                , TokenTypeEnum::TYPE_START_OPTION
-                , TokenTypeEnum::TYPE_START_GROUP
+                NomskyTokenTypeEnum::TYPE_IDENTIFIER
+                , NomskyTokenTypeEnum::TYPE_LITERAL
+                , NomskyTokenTypeEnum::TYPE_START_REPEAT
+                , NomskyTokenTypeEnum::TYPE_START_OPTION
+                , NomskyTokenTypeEnum::TYPE_START_GROUP
             ))
         ) {
             $tail[] = $this->parseFactor($lexer);
@@ -206,48 +206,48 @@ class IsoEbnfParser
         $predicates = $this->tokenAssertions->getPredicates();
 
         $token = $lexer->peekToken();
-        if ($predicates->hasSameType($token, TokenTypeEnum::TYPE_WS)) {
+        if ($predicates->hasSameType($token, NomskyTokenTypeEnum::TYPE_WS)) {
             $lexer->nextToken();
             $token = $lexer->peekToken();
         }
 
         /** @var AstNode $node */
         $node = null;
-        if ($predicates->hasSameType($token, TokenTypeEnum::TYPE_IDENTIFIER)) {
+        if ($predicates->hasSameType($token, NomskyTokenTypeEnum::TYPE_IDENTIFIER)) {
             $node = $this->parseIdentifier($lexer);
-        } elseif ($predicates->hasSameType($token, TokenTypeEnum::TYPE_LITERAL)) {
+        } elseif ($predicates->hasSameType($token, NomskyTokenTypeEnum::TYPE_LITERAL)) {
             $lexer->nextToken();
             $token = $lexer->currentToken();
 
             $node = new LiteralNode($token->getPosition(), $token->getValue());
-        } elseif ($predicates->hasSameType($token, TokenTypeEnum::TYPE_START_REPEAT)) {
+        } elseif ($predicates->hasSameType($token, NomskyTokenTypeEnum::TYPE_START_REPEAT)) {
             $startAtTextPosition = $token->getPosition();
             $lexer->nextToken();
             $expression = $this->parseExpression($lexer);
 
             $lexer->nextToken();
             $token = $lexer->currentToken();
-            $this->tokenAssertions->assertSameType('expected token', $token, TokenTypeEnum::TYPE_END_REPEAT);
+            $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::TYPE_END_REPEAT);
 
             $node = new OptionalExpressionListNode($startAtTextPosition, $expression);
-        } elseif ($predicates->hasSameType($token, TokenTypeEnum::TYPE_START_OPTION)) {
+        } elseif ($predicates->hasSameType($token, NomskyTokenTypeEnum::TYPE_START_OPTION)) {
             $startAtTextPosition = $token->getPosition();
             $lexer->nextToken();
             $expression = $this->parseExpression($lexer);
 
             $lexer->nextToken();
             $token = $lexer->currentToken();
-            $this->tokenAssertions->assertSameType('expected token', $token, TokenTypeEnum::TYPE_END_OPTION);
+            $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::TYPE_END_OPTION);
 
             $node = new OptionalExpressionNode($startAtTextPosition, $expression);
-        } elseif ($predicates->hasSameType($token, TokenTypeEnum::TYPE_START_GROUP)) {
+        } elseif ($predicates->hasSameType($token, NomskyTokenTypeEnum::TYPE_START_GROUP)) {
             $startAtTextPosition = $token->getPosition();
             $lexer->nextToken();
             $expression = $this->parseExpression($lexer);
 
             $lexer->nextToken();
             $token = $lexer->currentToken();
-            $this->tokenAssertions->assertSameType('expected token', $token, TokenTypeEnum::TYPE_END_GROUP);
+            $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::TYPE_END_GROUP);
 
             $node = new GroupNode($startAtTextPosition, $expression);
         }

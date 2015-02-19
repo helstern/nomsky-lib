@@ -3,7 +3,6 @@
 use Helstern\Nomsky\Parser\Lexer;
 use Helstern\Nomsky\Tokens\Token;
 use Helstern\Nomsky\Tokens\TokenStream\TokenStream;
-use Helstern\Nomsky\Tokens\TokenTypeEnum;
 
 class TokenStreamLexer implements Lexer
 {
@@ -31,7 +30,7 @@ class TokenStreamLexer implements Lexer
     public function nextToken()
     {
         $previousToken = $this->token;
-        if ($previousToken->getType() === TokenTypeEnum::TYPE_EOF) {
+        if ($previousToken->getType() === NomskyTokenTypeEnum::TYPE_EOF) {
             return false;
         }
 
@@ -43,7 +42,7 @@ class TokenStreamLexer implements Lexer
 
     public function peekToken()
     {
-        if ($this->token->getType() === TokenTypeEnum::TYPE_EOF) {
+        if ($this->token->getType() === NomskyTokenTypeEnum::TYPE_EOF) {
             throw new \RuntimeException('Can not peek over EOF');
         }
 

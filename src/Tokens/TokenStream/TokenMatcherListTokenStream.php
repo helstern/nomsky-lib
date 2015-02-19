@@ -5,11 +5,11 @@ use Helstern\Nomsky\Text\TextReader;
 use Helstern\Nomsky\Text\TextMatch;
 use Helstern\Nomsky\Text\String\StringMatch;
 
+use Helstern\Nomsky\Text\TextSource;
 use Helstern\Nomsky\Tokens\Token;
-use Helstern\Nomsky\Tokens\TokenMatch\StringMatcherTextReaderAdapter;
 use Helstern\Nomsky\Tokens\TokenMatch\TokenMatch;
 
-use Helstern\Nomsky\Tokens\TokenTypeEnum;
+use Helstern\Nomsky\Lexer\NomskyTokenTypeEnum;
 
 class MatcherListTokenStream implements TokenStream
 {
@@ -96,7 +96,7 @@ class MatcherListTokenStream implements TokenStream
     }
 
     /**
-     * @return CharacterSource
+     * @return TextSource
      */
     public function getSource()
     {
@@ -134,7 +134,7 @@ class MatcherListTokenStream implements TokenStream
 
         $previousPosition = $this->token->getPosition();
         $nextToken = $this->readNextToken($previousPosition);
-        if ($nextToken->getType() == TokenTypeEnum::TYPE_EOF) {
+        if ($nextToken->getType() == NomskyTokenTypeEnum::TYPE_EOF) {
             $this->eofToken = $nextToken;
             $this->token = null;
 
@@ -164,7 +164,7 @@ class MatcherListTokenStream implements TokenStream
      */
     protected function createEOFToken()
     {
-        $tokenType = TokenTypeEnum::TYPE_EOF;
+        $tokenType = NomskyTokenTypeEnum::TYPE_EOF;
         $tokenValue = '';
         $tokenPosition = new TextPosition(0, 0, 0);
 

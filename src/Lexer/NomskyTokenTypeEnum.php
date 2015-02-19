@@ -1,8 +1,8 @@
-<?php namespace Helstern\Nomsky\Tokens;
+<?php namespace Helstern\Nomsky\Lexer;
 
 use Helstern\Nomsky\Tokens\TokenPattern\RegexTokenPattern;
 
-class TokenTypeEnum {
+class NomskyTokenTypeEnum {
 
     /** end of file */
     const TYPE_EOF = 0;
