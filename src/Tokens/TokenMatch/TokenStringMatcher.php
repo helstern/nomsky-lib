@@ -3,7 +3,7 @@
 use Helstern\Nomsky\Text\StringMatcher;
 use Helstern\Nomsky\Tokens\TokenPattern\TokenPattern;
 
-interface TokenMatcher extends StringMatcher
+interface TokenStringMatcher extends StringMatcher
 {
     /**
      * @return TokenPattern

@@ -3,7 +3,7 @@
 use Helstern\Nomsky\Text\String\StringMatch;
 use Helstern\Nomsky\Tokens\TokenPattern\TokenPattern;
 
-class AnchoredPcreMatcher implements TokenMatcher
+class AnchoredPcreMatcher implements TokenStringMatcher
 {
     /** @var TokenPattern  */
     protected $tokenPattern;
