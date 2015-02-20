@@ -87,7 +87,7 @@ class MatcherListTokenStream implements SourceAwareTokenStream
     {
         $matchText = '';
         $char = $this->sourceReader->readCharacter();
-        while (preg_match('[:space:]', $char)) {
+        while (preg_match('[[:space:]]', $char)) {
             $matchText .= $char;
             $this->sourceReader->skip(strlen($char));
         }
