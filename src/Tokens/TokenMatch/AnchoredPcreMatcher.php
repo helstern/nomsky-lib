@@ -18,6 +18,10 @@ class AnchoredPcreMatcher implements TokenStringMatcher
         return $this->tokenPattern;
     }
 
+    /**
+     * @param string $string
+     * @return StringMatch
+     */
     public function match($string)
     {
         $pattern = $this->buildAnchoredPattern();
@@ -25,7 +29,7 @@ class AnchoredPcreMatcher implements TokenStringMatcher
         $matches = [];
         $nrMatches = preg_match($pattern, $string, $matches);
         if ($nrMatches > 0) {
-            $tokenMatch = $this->createTokenMatch($matches);
+            $tokenMatch = $this->createTextMatch($matches);
             return $tokenMatch;
         }
 
@@ -34,14 +38,13 @@ class AnchoredPcreMatcher implements TokenStringMatcher
 
     /**
      * @param array $pregMatch
-     * @return TokenMatch
+     * @return StringMatch
      */
-    protected function createTokenMatch(array $pregMatch)
+    protected function createTextMatch(array $pregMatch)
     {
         $matchedText = $pregMatch[0];
 
-        $simpleMatch = new StringMatch($matchedText);
-        $match = new TokenMatch($simpleMatch, $this->tokenPattern);
+        $match = new StringMatch($matchedText);
         return $match;
     }
 
