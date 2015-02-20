@@ -27,9 +27,9 @@ class AnchoredPcreMatcher implements TokenStringMatcher
         $pattern = $this->buildAnchoredPattern();
 
         $matches = [];
-        $nrMatches = preg_match($pattern, $string, $matches);
+        $nrMatches = preg_match($pattern, $string, $matches, PREG_OFFSET_CAPTURE);
         if ($nrMatches > 0) {
-            $tokenMatch = $this->createTextMatch($matches);
+            $tokenMatch = $this->createTextMatch($matches, PREG_OFFSET_CAPTURE);
             return $tokenMatch;
         }
 
@@ -38,11 +38,17 @@ class AnchoredPcreMatcher implements TokenStringMatcher
 
     /**
      * @param array $pregMatch
+     * @param null|int $pregMatchFormat
      * @return StringMatch
      */
-    protected function createTextMatch(array $pregMatch)
+    protected function createTextMatch(array $pregMatch, $pregMatchFormat = 0)
     {
-        $matchedText = $pregMatch[0];
+        if ($pregMatchFormat == PREG_OFFSET_CAPTURE) {
+            $matchedText = $pregMatch[0][0];
+        } else {
+            $matchedText = $pregMatch[0];
+        }
+
 
         $match = new StringMatch($matchedText);
         return $match;
@@ -53,10 +59,11 @@ class AnchoredPcreMatcher implements TokenStringMatcher
         $patternString = '^' . $this->tokenPattern->getTokenPattern();
         $patternString = '#' . $patternString . '#';
 
-        $patternString .= 'm'; //PCRE_MULTILINE
-        $patternString .= 's'; //PCRE_DOTALL
-        $patternString .= 'u'; //utf-8
+        $modifiers = 's'; //PCRE_DOTALL
+        $modifiers .= 'u'; //utf-8
+        //disable PCRE_MULTILINE because it impacts anchoring
+        //$modifiers .= 'm'; //PCRE_MULTILINE
 
-        return $patternString;
+        return $patternString.$modifiers;
     }
 }
