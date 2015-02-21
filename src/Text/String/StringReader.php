@@ -1,7 +1,7 @@
 <?php namespace Helstern\Nomsky\Text\String;
 
 use Helstern\Nomsky\Text\StringMatcher;
-use Helstern\Nomsky\Text\TextSource;
+use Helstern\Nomsky\Text\TextReader;
 
 class StringReader implements TextReader
 {
