@@ -1,20 +1,20 @@
 <?php namespace Helstern\Nomsky\Tokens\TokenStream;
 
+use Helstern\Nomsky\Lexer\TokenStream;
 use Helstern\Nomsky\Text\TextPosition;
-use Helstern\Nomsky\Text\TextSourceReader;
+use Helstern\Nomsky\Text\TextReader;
 use Helstern\Nomsky\Text\TextMatch;
 use Helstern\Nomsky\Text\String\StringMatch;
 
-use Helstern\Nomsky\Text\TextSource;
 use Helstern\Nomsky\Tokens\Token;
 use Helstern\Nomsky\Tokens\TokenMatch\TokenMatch;
 
 use Helstern\Nomsky\Lexer\NomskyTokenTypeEnum;
 
-class MatcherListTokenStream implements SourceAwareTokenStream
+class MatcherListTokenStream implements TokenStream
 {
-    /** @var TextSourceReader */
-    protected $sourceReader;
+    /** @var TextReader */
+    protected $textReader;
 
     /** @var CompositeTokenStringMatcher  */
     protected $tokenMatchReader;
@@ -26,12 +26,12 @@ class MatcherListTokenStream implements SourceAwareTokenStream
     protected $eofToken;
 
     /**
-     * @param TextSourceReader $sourceReader
+     * @param TextReader $sourceReader
      * @param CompositeTokenStringMatcher $nextTokenReader
      */
-    public function __construct(TextSourceReader $sourceReader, CompositeTokenStringMatcher $nextTokenReader)
+    public function __construct(TextReader $sourceReader, CompositeTokenStringMatcher $nextTokenReader)
     {
-        $this->sourceReader = $sourceReader;
+        $this->textReader = $sourceReader;
         $this->tokenMatchReader = $nextTokenReader;
 
         $previousPosition = new TextPosition(0, 0, 0);
@@ -46,12 +46,12 @@ class MatcherListTokenStream implements SourceAwareTokenStream
     {
         $whitespaceMatch = $this->matchWhitespace();
 
-        $tokenMatch = $this->tokenMatchReader->match($this->sourceReader);
+        $tokenMatch = $this->tokenMatchReader->match($this->textReader);
         if (is_null($tokenMatch)) {
             return $this->createEOFToken();
         }
 
-        $this->sourceReader->skip($tokenMatch->getByteLength());
+        $this->textReader->skip($tokenMatch->getByteLength());
 
         $offsetPosition = $this->calculateOffsetPosition($whitespaceMatch, $tokenMatch);
         $tokenPosition = $previousPosition->offsetRight($offsetPosition);
@@ -86,21 +86,13 @@ class MatcherListTokenStream implements SourceAwareTokenStream
     protected function matchWhitespace()
     {
         $matchText = '';
-        $char = $this->sourceReader->readCharacter();
+        $char = $this->textReader->readCharacter();
         while (preg_match('[[:space:]]', $char)) {
             $matchText .= $char;
-            $this->sourceReader->skip(strlen($char));
+            $this->textReader->skip(strlen($char));
         }
 
         return new StringMatch($matchText);
-    }
-
-    /**
-     * @return TextSource
-     */
-    public function getSource()
-    {
-        return $this->sourceReader->getSource();
     }
 
     /**
