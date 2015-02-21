@@ -1,7 +1,7 @@
 <?php namespace Helstern\Nomsky\Tokens\TokenStream;
 
 use Helstern\Nomsky\Text\TextPosition;
-use Helstern\Nomsky\Text\TextReader;
+use Helstern\Nomsky\Text\TextSourceReader;
 use Helstern\Nomsky\Text\TextMatch;
 use Helstern\Nomsky\Text\String\StringMatch;
 
@@ -13,7 +13,7 @@ use Helstern\Nomsky\Lexer\NomskyTokenTypeEnum;
 
 class MatcherListTokenStream implements SourceAwareTokenStream
 {
-    /** @var TextReader */
+    /** @var TextSourceReader */
     protected $sourceReader;
 
     /** @var CompositeTokenStringMatcher  */
@@ -26,10 +26,10 @@ class MatcherListTokenStream implements SourceAwareTokenStream
     protected $eofToken;
 
     /**
-     * @param TextReader $sourceReader
+     * @param TextSourceReader $sourceReader
      * @param CompositeTokenStringMatcher $nextTokenReader
      */
-    public function __construct(TextReader $sourceReader, CompositeTokenStringMatcher $nextTokenReader)
+    public function __construct(TextSourceReader $sourceReader, CompositeTokenStringMatcher $nextTokenReader)
     {
         $this->sourceReader = $sourceReader;
         $this->tokenMatchReader = $nextTokenReader;

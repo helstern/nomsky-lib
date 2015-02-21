@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Tokens\TokenStream;
 
-use Helstern\Nomsky\Text\TextReader;
+use Helstern\Nomsky\Text\TextSourceReader;
 use Helstern\Nomsky\Tokens\TokenMatch\TokenMatch;
 use Helstern\Nomsky\Tokens\TokenMatch\TokenStringMatcher;
 
@@ -12,9 +12,9 @@ interface CompositeTokenStringMatcher
     public function getTokenMatchersList();
 
     /**
-     * @param TextReader $reader
+     * @param TextSourceReader $reader
      * @return TokenMatch|null
      */
-    public function match(TextReader $reader);
+    public function match(TextSourceReader $reader);
 }
 

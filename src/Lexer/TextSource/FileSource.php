@@ -20,7 +20,7 @@ class FileSource implements TextSource
     }
 
     /**
-     * @return StringReader|\Helstern\Nomsky\Text\TextReader
+     * @return StringReader|\Helstern\Nomsky\Text\TextSourceReader
      */
     public function createReader()
     {

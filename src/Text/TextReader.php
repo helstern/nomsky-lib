@@ -1,13 +1,7 @@
 <?php namespace Helstern\Nomsky\Text;
 
-
 interface TextReader
 {
-    /**
-     * @return TextSource
-     */
-    public function getSource();
-
     /**
      * Reads one character
      *

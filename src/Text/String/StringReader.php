@@ -1,10 +1,10 @@
 <?php namespace Helstern\Nomsky\Text\String;
 
 use Helstern\Nomsky\Text\StringMatcher;
-use Helstern\Nomsky\Text\TextReader;
+use Helstern\Nomsky\Text\TextSourceReader;
 use Helstern\Nomsky\Text\TextSource;
 
-class StringReader implements TextReader
+class StringReader implements TextSourceReader
 {
     /** @var TextSource  */
     protected $source;

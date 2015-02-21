@@ -8,7 +8,7 @@ interface TextSource
     public function retrieveText();
 
     /**
-     * @return TextReader
+     * @return TextSourceReader
      */
     public function createReader();
 }
