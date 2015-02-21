@@ -87,7 +87,7 @@ class TextReaderTokenStream implements TokenStream
     {
         $matchText = '';
         $char = $this->textReader->readCharacter();
-        while (preg_match('[[:space:]]', $char)) {
+        while (preg_match('#[[:space:]]#', $char)) {
             $matchText .= $char;
             $this->textReader->skip(strlen($char));
         }
