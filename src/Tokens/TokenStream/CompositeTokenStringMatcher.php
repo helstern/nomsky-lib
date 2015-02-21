@@ -4,7 +4,7 @@ use Helstern\Nomsky\Text\TextReader;
 use Helstern\Nomsky\Tokens\TokenMatch\TokenMatch;
 use Helstern\Nomsky\Tokens\TokenMatch\TokenStringMatcher;
 
-interface TokenStringMatcherListAdapter
+interface CompositeTokenStringMatcher
 {
     /**
      * @return array|TokenStringMatcher[]

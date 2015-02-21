@@ -16,7 +16,7 @@ class MatcherListTokenStream implements SourceAwareTokenStream
     /** @var TextReader */
     protected $sourceReader;
 
-    /** @var TokenStringMatcherListAdapter  */
+    /** @var CompositeTokenStringMatcher  */
     protected $tokenMatchReader;
 
     /** @var Token */
@@ -27,9 +27,9 @@ class MatcherListTokenStream implements SourceAwareTokenStream
 
     /**
      * @param TextReader $sourceReader
-     * @param TokenStringMatcherListAdapter $nextTokenReader
+     * @param CompositeTokenStringMatcher $nextTokenReader
      */
-    public function __construct(TextReader $sourceReader, TokenStringMatcherListAdapter $nextTokenReader)
+    public function __construct(TextReader $sourceReader, CompositeTokenStringMatcher $nextTokenReader)
     {
         $this->sourceReader = $sourceReader;
         $this->tokenMatchReader = $nextTokenReader;

@@ -6,9 +6,9 @@ use Helstern\Nomsky\Text\String\StringMatch;
 
 use Helstern\Nomsky\Tokens\TokenMatch\TokenMatch;
 use Helstern\Nomsky\Tokens\TokenMatch\TokenStringMatcher;
-use Helstern\Nomsky\Tokens\TokenStream\TokenStringMatcherListAdapter;
+use Helstern\Nomsky\Tokens\TokenStream\CompositeTokenStringMatcher;
 
-class LongestMatchListMatcher implements TokenStringMatcherListAdapter
+class LongestMatchCompositeMatcher implements CompositeTokenStringMatcher
 {
     /** @var array|TokenStringMatcher[] */
     protected $tokenMatchersList;

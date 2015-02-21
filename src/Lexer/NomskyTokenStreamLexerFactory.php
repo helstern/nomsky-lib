@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Lexer;
 
-use Helstern\Nomsky\Lexer\TokenStream\LongestMatchListMatcher;
+use Helstern\Nomsky\Lexer\TokenStream\LongestMatchCompositeMatcher;
 use Helstern\Nomsky\Lexer\TextSource\FileSource;
 
 use Helstern\Nomsky\Text\TextSource;
@@ -46,7 +46,7 @@ class NomskyTokenStreamLexerFactory
 
     /**
      * @param array|RegexTokenPattern[] $tokenPatterns
-     * @return LongestMatchListMatcher
+     * @return LongestMatchCompositeMatcher
      */
     protected function createLongestMatchListMatcher(array $tokenPatterns)
     {
@@ -55,7 +55,7 @@ class NomskyTokenStreamLexerFactory
             $matchers[] = $this->createPcreMatcher($pattern);
         }
 
-        $listMatcher = new LongestMatchListMatcher($matchers);
+        $listMatcher = new LongestMatchCompositeMatcher($matchers);
         return $listMatcher;
     }
 
