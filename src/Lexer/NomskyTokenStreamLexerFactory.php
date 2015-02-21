@@ -9,7 +9,7 @@ use Helstern\Nomsky\TextMatch\RegexPatternBuilder;
 
 use Helstern\Nomsky\Tokens\TokenMatch\AnchoredPcreMatcher;
 use Helstern\Nomsky\Tokens\TokenPattern\RegexTokenPattern;
-use Helstern\Nomsky\Tokens\TokenStream\MatcherListTokenStream;
+use Helstern\Nomsky\Tokens\TokenStream\TextReaderTokenStream;
 
 class NomskyTokenStreamLexerFactory
 {
@@ -33,14 +33,14 @@ class NomskyTokenStreamLexerFactory
     /**
      * @param TextSource $source
      * @param array|RegexTokenPattern[] $tokenPatterns
-     * @return MatcherListTokenStream
+     * @return TextReaderTokenStream
      */
     protected function createTokenStream(TextSource $source, array $tokenPatterns)
     {
         $reader = $source->createReader();
         $matcherListAdapter = $this->createLongestMatchListMatcher($tokenPatterns);
 
-        $tokenStream = new MatcherListTokenStream($reader, $matcherListAdapter);
+        $tokenStream = new TextReaderTokenStream($reader, $matcherListAdapter);
         return $tokenStream;
     }
 

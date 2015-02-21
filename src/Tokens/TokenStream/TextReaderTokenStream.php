@@ -11,7 +11,7 @@ use Helstern\Nomsky\Tokens\TokenMatch\TokenMatch;
 
 use Helstern\Nomsky\Lexer\NomskyTokenTypeEnum;
 
-class MatcherListTokenStream implements TokenStream
+class TextReaderTokenStream implements TokenStream
 {
     /** @var TextReader */
     protected $textReader;
