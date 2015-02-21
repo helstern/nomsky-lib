@@ -1,37 +1,22 @@
 <?php namespace Helstern\Nomsky\Text\String;
 
 use Helstern\Nomsky\Text\StringMatcher;
-use Helstern\Nomsky\Text\TextSourceReader;
 use Helstern\Nomsky\Text\TextSource;
 
-class StringReader implements TextSourceReader
+class StringReader implements TextReader
 {
-    /** @var TextSource  */
-    protected $source;
-
     /** @var string */
     protected $readText;
 
     protected $remainingText;
 
-    public function __construct(TextSource $source)
+    public function __construct($text)
     {
-        $this->source = $source;
-        $text = $source->retrieveText();
-
         if (empty($text)) {
             $this->remainingText = null;
         } else {
             $this->remainingText = $text;
         }
-    }
-
-    /**
-     * @return TextSource
-     */
-    public function getSource()
-    {
-        return $this->source;
     }
 
     public function readCharacter()

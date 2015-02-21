@@ -20,11 +20,12 @@ class FileSource implements TextSource
     }
 
     /**
-     * @return StringReader|\Helstern\Nomsky\Text\TextSourceReader
+     * @return StringReader|\Helstern\Nomsky\Text\TextReader
      */
     public function createReader()
     {
-        $reader = new StringReader($this);
+        $string = $this->retrieveText();
+        $reader = new StringReader($string);
         return $reader;
     }
 }

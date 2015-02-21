@@ -1,7 +1,7 @@
 <?php namespace Helstern\Nomsky\Lexer\TokenStream;
 
 use Helstern\Nomsky\Text\TextMatch;
-use Helstern\Nomsky\Text\TextSourceReader;
+use Helstern\Nomsky\Text\TextReader;
 use Helstern\Nomsky\Text\String\StringMatch;
 
 use Helstern\Nomsky\Tokens\TokenMatch\TokenMatch;
@@ -30,10 +30,10 @@ class LongestMatchCompositeMatcher implements CompositeTokenStringMatcher
     }
 
     /**
-     * @param TextSourceReader $reader
+     * @param TextReader $reader
      * @return TokenMatch|null
      */
-    public function match(TextSourceReader $reader)
+    public function match(TextReader $reader)
     {
         $oneCharacterAhead = $reader->readCharacter();
         if (is_null($oneCharacterAhead)) {
