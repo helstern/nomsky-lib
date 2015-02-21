@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Lexer;
 
-use Helstern\Nomsky\Tokens\RegExBuilder\RegexBuilder;
+use Helstern\Nomsky\RegExBuilder\RegexBuilder;
 use Helstern\Nomsky\Tokens\TokenPattern\RegexTokenPattern;
 
 class NomskyTokenPatterns

@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Tokens\RegExBuilder;
+<?php namespace Helstern\Nomsky\RegExBuilder;
 
 class RegexPatternBuilder
 {
