@@ -1,7 +1,5 @@
 <?php namespace Helstern\Nomsky\Lexer;
 
-use Helstern\Nomsky\Tokens\TokenPattern\RegexTokenPattern;
-
 class NomskyTokenTypeEnum {
 
     /** end of file */
@@ -123,21 +121,5 @@ class NomskyTokenTypeEnum {
     public function contains($tokenType)
     {
         return true;
-    }
-
-    /**
-     * @param int $tokenType
-     * @param string $pattern
-     * @throws \RuntimeException
-     * @return RegexTokenPattern
-     */
-    public function buildRegexPattern($tokenType, $pattern)
-    {
-        if (! $this->contains($tokenType)) {
-            throw new \RuntimeException('unknown token type ' . $tokenType);
-        }
-
-        $tokenPattern = new RegexTokenPattern($tokenType, $pattern);
-        return $tokenPattern;
     }
 }

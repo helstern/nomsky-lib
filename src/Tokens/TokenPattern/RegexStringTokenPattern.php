@@ -1,9 +1,7 @@
 <?php namespace Helstern\Nomsky\Tokens\TokenPattern;
 
-class RegexTokenPattern implements TokenPattern
+class RegexStringTokenPattern extends AbstractRegexTokenPattern
 {
-    protected $tokenType;
-
     protected $textPattern;
 
     /**
@@ -17,13 +15,9 @@ class RegexTokenPattern implements TokenPattern
         $this->textPattern = $textPattern;
     }
 
-    public function getTokenType()
-    {
-        return $this->tokenType;
-    }
-
     public function getTokenPattern()
     {
         return $this->textPattern;
     }
+
 }

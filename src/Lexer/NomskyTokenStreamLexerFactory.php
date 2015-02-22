@@ -5,10 +5,8 @@ use Helstern\Nomsky\Lexer\TextSource\FileSource;
 
 use Helstern\Nomsky\Text\TextSource;
 
-use Helstern\Nomsky\TextMatch\RegexPatternBuilder;
-
 use Helstern\Nomsky\Tokens\TokenMatch\AnchoredPcreMatcher;
-use Helstern\Nomsky\Tokens\TokenPattern\RegexTokenPattern;
+use Helstern\Nomsky\Tokens\TokenPattern\AbstractRegexTokenPattern;
 use Helstern\Nomsky\Tokens\TokenStream\TextReaderTokenStream;
 
 class NomskyTokenStreamLexerFactory
@@ -32,7 +30,7 @@ class NomskyTokenStreamLexerFactory
 
     /**
      * @param TextSource $source
-     * @param array|RegexTokenPattern[] $tokenPatterns
+     * @param array|AbstractRegexTokenPattern[] $tokenPatterns
      * @return TextReaderTokenStream
      */
     protected function createTokenStream(TextSource $source, array $tokenPatterns)
@@ -45,7 +43,7 @@ class NomskyTokenStreamLexerFactory
     }
 
     /**
-     * @param array|RegexTokenPattern[] $tokenPatterns
+     * @param array|AbstractRegexTokenPattern[] $tokenPatterns
      * @return LongestMatchCompositeMatcher
      */
     protected function createLongestMatchListMatcher(array $tokenPatterns)
@@ -60,25 +58,10 @@ class NomskyTokenStreamLexerFactory
     }
 
     /**
-     * @param array|RegexTokenPattern[] $tokenPatterns
-     * @return string
-     */
-    protected function createRegexPattern(array $tokenPatterns)
-    {
-        $regexBuilder = new RegexPatternBuilder();
-        foreach ($tokenPatterns as $tokenPattern) {
-            $regexBuilder->addNamedPattern($tokenPattern->getTokenType(), $tokenPattern->getTokenPattern());
-        }
-
-        $pattern = $regexBuilder->build();
-        return $pattern;
-    }
-
-    /**
-     * @param RegexTokenPattern $pattern
+     * @param AbstractRegexTokenPattern $pattern
      * @return AnchoredPcreMatcher
      */
-    protected function createPcreMatcher(RegexTokenPattern $pattern)
+    protected function createPcreMatcher(AbstractRegexTokenPattern $pattern)
     {
         return new AnchoredPcreMatcher($pattern);
     }
