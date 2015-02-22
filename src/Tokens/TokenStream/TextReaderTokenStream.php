@@ -35,7 +35,8 @@ class TextReaderTokenStream implements TokenStream
         $this->tokenMatchReader = $nextTokenReader;
 
         $previousPosition = new TextPosition(0, 0, 0);
-        $this->token = $this->readNextToken($previousPosition);
+        $token = $this->readNextToken($previousPosition);
+        $this->token = $token;
     }
 
     /**
@@ -90,6 +91,8 @@ class TextReaderTokenStream implements TokenStream
         while (preg_match('#[[:space:]]#', $char)) {
             $matchText .= $char;
             $this->textReader->skip(strlen($char));
+
+            $char = $this->textReader->readCharacter();
         }
 
         return new StringMatch($matchText);
