@@ -54,6 +54,15 @@ abstract class RegexPatternListBuilder
     }
 
     /**
+     * @return array
+     */
+    public function toList()
+    {
+        return $this->patternsList;
+    }
+
+
+    /**
      * @return RegexPatternListBuilder
      */
     abstract public function copy();
