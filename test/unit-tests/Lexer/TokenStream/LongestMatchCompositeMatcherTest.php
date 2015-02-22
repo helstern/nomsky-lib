@@ -7,6 +7,9 @@ use Helstern\Nomsky\Tokens\TokenPattern\TokenPattern;
 
 class LongestMatchCompositeMatcherTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @group small
+     */
     public function testLongestMatchIsChosen()
     {
         /** @var TokenPattern $shorterMatchPattern */
