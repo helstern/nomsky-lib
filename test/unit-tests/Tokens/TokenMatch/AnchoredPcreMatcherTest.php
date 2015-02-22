@@ -2,7 +2,7 @@
 
 use Helstern\Nomsky\Lexer\Resource;
 use Helstern\Nomsky\Lexer\TextSource\FileSource;
-use Helstern\Nomsky\Tokens\TokenPattern\RegexTokenPattern;
+use Helstern\Nomsky\Tokens\TokenPattern\RegexAlternativesTokenPattern;
 
 class AnchoredPcreMatcherText extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +11,7 @@ class AnchoredPcreMatcherText extends \PHPUnit_Framework_TestCase
      */
     public function testPatternWithAlternativesMatchesAsAGroup()
     {
-        $pattern = new RegexTokenPattern(1, '=|:==');
+        $pattern = new RegexAlternativesTokenPattern(1, ['=',':==']);
         $tokenMatcher = new AnchoredPcreMatcher($pattern);
 
         $reader = (new FileSource(Resource::getFileObject('nomsky.iso.ebnf')))->createReader();

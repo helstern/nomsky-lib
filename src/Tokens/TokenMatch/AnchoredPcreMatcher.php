@@ -1,6 +1,7 @@
 <?php namespace Helstern\Nomsky\Tokens\TokenMatch;
 
 use Helstern\Nomsky\Text\String\StringMatch;
+use Helstern\Nomsky\Tokens\TokenPattern\RegexAlternativesTokenPattern;
 use Helstern\Nomsky\Tokens\TokenPattern\TokenPattern;
 
 class AnchoredPcreMatcher implements TokenStringMatcher
@@ -49,15 +50,20 @@ class AnchoredPcreMatcher implements TokenStringMatcher
             $matchedText = $pregMatch[0];
         }
 
-
         $match = new StringMatch($matchedText);
         return $match;
     }
 
     protected function buildAnchoredPattern()
     {
-        $patternString = $this->tokenPattern->getTokenPattern();
-        $patternString = '^' . '(?:' . $patternString . ')';
+        if ($this->tokenPattern instanceof RegexAlternativesTokenPattern) {
+            $patternString = $this->tokenPattern->getTokenPattern();
+            $patternString = '(?:' . $patternString . ')';
+        } else {
+            $patternString = $this->tokenPattern->getTokenPattern();
+        }
+
+        $patternString = '^' . $patternString;
         $patternString = '#' . $patternString . '#';
 
         $modifiers = 's'; //PCRE_DOTALL
