@@ -29,4 +29,13 @@ class RegexBuilder
 
         return $instance;
     }
+
+    /**
+     * @param $pattern
+     * @return RegexPatternBuilder
+     */
+    public function pattern($pattern)
+    {
+        return new RegexPatternBuilder($pattern);
+    }
 }

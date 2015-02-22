@@ -2,6 +2,7 @@
 
 class RegexPatternBuilder
 {
+    /** @var string */
     protected $pattern;
 
     /**
@@ -27,6 +28,16 @@ class RegexPatternBuilder
     public function build()
     {
         return $this->pattern;
+    }
+
+    /**
+     * @return RegexPatternBuilder
+     */
+    public function quote()
+    {
+        $this->pattern = preg_quote($this->pattern);
+
+        return $this;
     }
 
     /**
