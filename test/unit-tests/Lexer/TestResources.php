@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Lexer;
 
-class Resource
+class TestResources
 {
     /**
      * @param $fileName
