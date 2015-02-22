@@ -56,7 +56,8 @@ class AnchoredPcreMatcher implements TokenStringMatcher
 
     protected function buildAnchoredPattern()
     {
-        $patternString = '^' . $this->tokenPattern->getTokenPattern();
+        $patternString = $this->tokenPattern->getTokenPattern();
+        $patternString = '^' . '(?:' . $patternString . ')';
         $patternString = '#' . $patternString . '#';
 
         $modifiers = 's'; //PCRE_DOTALL
