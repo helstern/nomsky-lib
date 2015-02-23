@@ -26,17 +26,27 @@ class TokenStreamLexer implements Lexer
         return $this->token;
     }
 
-    public function nextToken()
+    /**
+     * @return bool
+     */
+    public function hasNextToken()
     {
-        $previousToken = $this->token;
-        if ($previousToken->getType() === NomskyTokenTypeEnum::TYPE_EOF) {
+        if ($this->token->getType() === NomskyTokenTypeEnum::TYPE_EOF) {
             return false;
         }
 
-        $this->token = $this->tokenStream->current();
-        $this->tokenStream->next();
-
         return true;
+    }
+
+    public function nextToken()
+    {
+        if ($this->hasNextToken()) {
+            $this->token = $this->tokenStream->current();
+            $this->tokenStream->next();
+            return true;
+        }
+
+        return false;
     }
 
     public function peekToken()
