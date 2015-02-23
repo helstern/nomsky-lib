@@ -14,6 +14,8 @@
   title      = string_literal .
   comment    = string_literal .
 
+  (* simple tokens *)
+
   concatenate = ',' .
 
   definition_list_start = '=' | ':=='  .
@@ -44,7 +46,8 @@
 
   digit      = "0" .. "9"
 
-  # composite tokens
+  (* composite tokens *)
+
 
   character  = letter | digit | "+" | "-" | "*" | "/" | "[" | "]" | "{" | "}" | "(" | ")" | "<" | ">" | "=" | "|" | "." | "," | ";" .
 
