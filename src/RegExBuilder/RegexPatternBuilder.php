@@ -54,7 +54,7 @@ class RegexPatternBuilder
      */
     public function repeat()
     {
-        $this->pattern = '(?:' . $this->pattern . '+)';
+        $this->pattern .= '+';
 
         return $this;
     }
