@@ -26,118 +26,124 @@ class NomskyTokenPatterns
 
         $tokenPatterns = [];
 
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_CONCATENATE)) {
-            $tokenPatterns[] = $instance->createStringTokenPattern(NomskyTokenTypeEnum::TYPE_CONCATENATE, ',');
+        if ($tokens->contains(NomskyTokenTypeEnum::ENUM_CONCATENATE)) {
+            $tokenPatterns[] = $instance->createStringTokenPattern(NomskyTokenTypeEnum::ENUM_CONCATENATE, ',');
         } else {
             throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_CONCATENATE');
         }
 
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_DEFINITION_LIST_START)) {
+        if ($tokens->contains(NomskyTokenTypeEnum::ENUM_DEFINITION_LIST_START)) {
             $tokenPatterns[] = $instance->buildDefinitionListStartPattern(
-                NomskyTokenTypeEnum::TYPE_DEFINITION_LIST_START
+                NomskyTokenTypeEnum::ENUM_DEFINITION_LIST_START
             );
         } else {
             throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_DEFINITION_LIST_START');
         }
 
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_DEFINITION_SEPARATOR)) {
+        if ($tokens->contains(NomskyTokenTypeEnum::ENUM_DEFINITION_SEPARATOR)) {
             $tokenPatterns[] = $instance->createStringTokenPattern(
-                NomskyTokenTypeEnum::TYPE_DEFINITION_SEPARATOR,
+                NomskyTokenTypeEnum::ENUM_DEFINITION_SEPARATOR,
                 $regexBuilder->pattern('|')->quote()->build()
             );
         } else {
             throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_DEFINITION_SEPARATOR');
         }
 
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_START_REPEAT)) {
-            $tokenPatterns[] = $instance->createStringTokenPattern(NomskyTokenTypeEnum::TYPE_START_REPEAT, '{');
+        if ($tokens->contains(NomskyTokenTypeEnum::ENUM_START_REPEAT)) {
+            $tokenPatterns[] = $instance->createStringTokenPattern(NomskyTokenTypeEnum::ENUM_START_REPEAT, '{');
         } else {
             throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_START_REPEAT');
         }
 
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_END_REPEAT)) {
-            $tokenPatterns[] = $instance->createStringTokenPattern(NomskyTokenTypeEnum::TYPE_END_REPEAT, '}');
+        if ($tokens->contains(NomskyTokenTypeEnum::ENUM_END_REPEAT)) {
+            $tokenPatterns[] = $instance->createStringTokenPattern(NomskyTokenTypeEnum::ENUM_END_REPEAT, '}');
         } else {
             throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_END_REPEAT');
         }
 
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_START_OPTION)) {
+        if ($tokens->contains(NomskyTokenTypeEnum::ENUM_START_OPTION)) {
             $tokenPatterns[] = $instance->createStringTokenPattern(
-                NomskyTokenTypeEnum::TYPE_START_OPTION,
+                NomskyTokenTypeEnum::ENUM_START_OPTION,
                 $regexBuilder->pattern('[')->quote()->build()
             );
         } else {
             throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_START_OPTION');
         }
 
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_END_OPTION)) {
+        if ($tokens->contains(NomskyTokenTypeEnum::ENUM_END_OPTION)) {
             $tokenPatterns[] = $instance->createStringTokenPattern(
-                NomskyTokenTypeEnum::TYPE_END_OPTION,
+                NomskyTokenTypeEnum::ENUM_END_OPTION,
                 $regexBuilder->pattern(']')->quote()->build()
             );
         } else {
             throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_END_OPTION');
         }
 
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_START_GROUP)) {
+        if ($tokens->contains(NomskyTokenTypeEnum::ENUM_START_GROUP)) {
             $tokenPatterns[] = $instance->createStringTokenPattern(
-                NomskyTokenTypeEnum::TYPE_START_GROUP,
+                NomskyTokenTypeEnum::ENUM_START_GROUP,
                 $regexBuilder->pattern('(')->quote()->build()
             );
         } else {
             throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_START_GROUP');
         }
 
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_END_GROUP)) {
+        if ($tokens->contains(NomskyTokenTypeEnum::ENUM_END_GROUP)) {
             $tokenPatterns[] = $instance->createStringTokenPattern(
-                NomskyTokenTypeEnum::TYPE_END_GROUP,
+                NomskyTokenTypeEnum::ENUM_END_GROUP,
                 $regexBuilder->pattern(')')->quote()->build()
             );
         } else {
             throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_END_GROUP');
         }
 
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_TERMINATOR)) {
+        if ($tokens->contains(NomskyTokenTypeEnum::ENUM_TERMINATOR)) {
             $tokenPatterns[] = $instance->createStringTokenPattern(
-                NomskyTokenTypeEnum::TYPE_TERMINATOR,
+                NomskyTokenTypeEnum::ENUM_TERMINATOR,
                 $regexBuilder->pattern('.')->quote()->build()
             );
         } else {
             throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_TERMINATOR');
         }
 
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_SINGLE_QUOTE)) {
-            $tokenPatterns[] = $instance->buildSingleQuotePattern(NomskyTokenTypeEnum::TYPE_SINGLE_QUOTE);
-        } else {
-            throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_SINGLE_QUOTE');
-        }
+//        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_SINGLE_QUOTE)) {
+//            $tokenPatterns[] = $instance->buildSingleQuotePattern(NomskyTokenTypeEnum::TYPE_SINGLE_QUOTE);
+//        } else {
+//            throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_SINGLE_QUOTE');
+//        }
+//
+//        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_DOUBLE_QUOTE)) {
+//            $tokenPatterns[] = $instance->buildDoubleQuotePattern(NomskyTokenTypeEnum::TYPE_DOUBLE_QUOTE);
+//        } else {
+//            throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_DOUBLE_QUOTE');
+//        }
 
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_DOUBLE_QUOTE)) {
-            $tokenPatterns[] = $instance->buildDoubleQuotePattern(NomskyTokenTypeEnum::TYPE_DOUBLE_QUOTE);
-        } else {
-            throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_DOUBLE_QUOTE');
-        }
-
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_CHARACTER_LITERAL)) {
-            $tokenPatterns[] = $instance->buildCharacterLiteralPattern(NomskyTokenTypeEnum::TYPE_CHARACTER_LITERAL);
+        if ($tokens->contains(NomskyTokenTypeEnum::ENUM_CHARACTER_LITERAL)) {
+            $tokenPatterns[] = $instance->buildCharacterLiteralPattern(NomskyTokenTypeEnum::ENUM_CHARACTER_LITERAL);
         } else {
             throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_CHARACTER_LITERAL');
         }
 
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_STRING_LITERAL)) {
-            $tokenPatterns[] = $instance->buildStringLiteralPattern(NomskyTokenTypeEnum::TYPE_STRING_LITERAL);
+        if ($tokens->contains(NomskyTokenTypeEnum::ENUM_STRING_LITERAL)) {
+            $tokenPatterns[] = $instance->buildStringLiteralPattern(NomskyTokenTypeEnum::ENUM_STRING_LITERAL);
         } else {
             throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_STRING_LITERAL');
         }
 
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_CHARACTER_RANGE)) {
-            $tokenPatterns[] = $instance->buildCharacterRangePattern(NomskyTokenTypeEnum::TYPE_CHARACTER_RANGE);
+        if ($tokens->contains(NomskyTokenTypeEnum::ENUM_COMMENT_LITERAL)) {
+            $tokenPatterns[] = $instance->buildCommentLiteralPattern(NomskyTokenTypeEnum::ENUM_COMMENT_LITERAL);
+        } else {
+            throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_COMMENT_LITERAL');
+        }
+
+        if ($tokens->contains(NomskyTokenTypeEnum::ENUM_CHARACTER_RANGE)) {
+            $tokenPatterns[] = $instance->buildCharacterRangePattern(NomskyTokenTypeEnum::ENUM_CHARACTER_RANGE);
         } else {
             throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_CHARACTER_RANGE');
         }
 
-        if ($tokens->contains(NomskyTokenTypeEnum::TYPE_IDENTIFIER)) {
-            $tokenPatterns[] = $instance->buildIdentifierPattern(NomskyTokenTypeEnum::TYPE_IDENTIFIER);
+        if ($tokens->contains(NomskyTokenTypeEnum::ENUM_IDENTIFIER)) {
+            $tokenPatterns[] = $instance->buildIdentifierPattern(NomskyTokenTypeEnum::ENUM_IDENTIFIER);
         } else {
             throw new \RuntimeException('unknown token type NomskyTokenTypeEnum::TYPE_IDENTIFIER');
         }
@@ -186,21 +192,38 @@ class NomskyTokenPatterns
         return $pattern;
     }
 
+    //\(\*(?!\*\))?(?:.|\n|\r)*?\*\)
+
+    public function buildCommentLiteralPattern($tokenType)
+    {
+        $regexBuilder = $this->regexBuilder;
+
+        $stringPattern = (string) $regexBuilder->sequence(
+            (string) $regexBuilder->pattern('(*')->quote()
+            , (string) $regexBuilder->negativeLookAhead('*)')->lazy()->quote()
+            , (string) $regexBuilder->alternatives('.', '\n', '\r')->group()->repeatZeroOrMore()->lazy()
+            , (string) $regexBuilder->pattern('*)')->quote()
+        );
+
+        $tokenPattern = $this->createStringTokenPattern($tokenType, $stringPattern);
+        return $tokenPattern;
+
+    }
+
     /**
      * @param int $tokenType
      * @return RegexAlternativesTokenPattern
      */
     public function buildCharacterLiteralPattern($tokenType)
     {
-        $regexBuilder = $this->regexBuilder;
         $singleCharacter = $this->createSingleCharacterRegex();
 
         $tokenPattern = $this->createAlternativesTokenPattern(
             $tokenType,
-            $regexBuilder->alternatives()
-                ->add((string) $singleCharacter->implode()->group()->delimit("'"))
-                ->add((string) $singleCharacter->implode()->group()->delimit('"'))
-                ->toList()
+            [
+                (string) $singleCharacter->group()->delimit("'")
+                , (string) $singleCharacter->group()->delimit('"')
+            ]
         );
 
         return $tokenPattern;
@@ -216,10 +239,14 @@ class NomskyTokenPatterns
 
         $tokenPattern = $this->createAlternativesTokenPattern(
             $tokenType,
-            $regexBuilder->alternatives()
-                ->add((string) $regexBuilder->alternatives("[^']", "''")->implode()->group()->repeat()->delimit("'"))
-                ->add((string) $regexBuilder->alternatives('[^"]', '""')->implode()->group()->repeat()->delimit('"'))
-                ->toList()
+            [
+                (string) $regexBuilder->sequence(
+                    "'",
+                    $regexBuilder->alternatives("[^']", "''")->group()->repeatOnceOrMore(),
+                    "'"
+                )
+                , (string) $regexBuilder->alternatives('[^"]', '""')->group()->repeatOnceOrMore()->delimit('"')
+            ]
         );
         return $tokenPattern;
     }
@@ -236,10 +263,11 @@ class NomskyTokenPatterns
 
         $tokenPattern = $this->createStringTokenPattern(
             $tokenType,
-            (string) $regexBuilder->sequence()
-                ->add((string) $singleCharacter->implode()->group())
-                ->add($regexBuilder->pattern('..')->quote()->build())
-                ->add( (string) $singleCharacter->implode()->group())
+            (string) $regexBuilder->sequence(
+                (string) $singleCharacter->group()
+                , $regexBuilder->pattern('..')->quote()->build()
+                , (string) $singleCharacter->group()
+            )
         );
 
         return $tokenPattern;
@@ -259,7 +287,7 @@ class NomskyTokenPatterns
                 ->add('[aA-zZ]')
                 ->add(
                     //(string) $regexBuilder->alternatives('[aA-zZ]', '[0-9]')->implode()->group()->repeat()->group()
-                    (string) $regexBuilder->alternatives('[aA-zZ]', '[0-9]')->implode()->group()->repeat()
+                    (string) $regexBuilder->alternatives('[aA-zZ]', '[0-9]')->group()->repeatOnceOrMore()
                 )
         );
 

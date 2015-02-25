@@ -38,4 +38,35 @@ class RegexBuilder
     {
         return new RegexPatternBuilder($pattern);
     }
+
+    /**
+     * @param $pattern
+     * @return RegexPatternBuilder
+     */
+    public function negativeLookAhead($pattern)
+    {
+        $regexBuilder = RegexPatternBuilder::newInstance($pattern);
+        $regexBuilder->negativeLookAhead();
+
+        return $regexBuilder;
+    }
+
+    /**
+     * @param $string
+     * @return RegexCharacterSetBuilder
+     */
+    public function characterSet($string)
+    {
+        return RegexCharacterSetBuilder::newInstanceFromString($string);
+    }
+
+    /**
+     * @param string $rangeStart
+     * @param string $rangeEnd
+     * @return RegexPatternBuilder
+     */
+    public function characterRange($rangeStart, $rangeEnd)
+    {
+        return RegexCharacterSetBuilder::newInstanceFromRange($rangeStart, $rangeEnd);
+    }
 }

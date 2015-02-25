@@ -82,7 +82,7 @@ class TokenAssertions
      */
     public function assertNotEOF($msg, Token $token)
     {
-        if ($token->getType() !== NomskyTokenTypeEnum::TYPE_EOF) {
+        if ($token->getType() !== NomskyTokenTypeEnum::ENUM_EOF) {
             return true;
         }
 

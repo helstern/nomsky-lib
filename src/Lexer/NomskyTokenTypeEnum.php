@@ -3,109 +3,123 @@
 class NomskyTokenTypeEnum {
 
     /** end of file */
-    const TYPE_EOF = 0;
+    const ENUM_EOF = 0;
 
     /** end of rule */
-    const TYPE_EOR = 10;
+    const ENUM_EOR = 10;
 
-    const TYPE_OPERATOR = 20;
+    const ENUM_OPERATOR = 20;
 
     /**
      * ,
      */
-    const TYPE_CONCATENATE = 30;
+    const ENUM_CONCATENATE = 30;
 
     /** =
      * :==
      */
-    const TYPE_DEFINITION_LIST_START = 35;
+    const ENUM_DEFINITION_LIST_START = 35;
 
     /**
      * |
      */
-    const TYPE_DEFINITION_SEPARATOR = 40;
+    const ENUM_DEFINITION_SEPARATOR = 40;
 
     /**
      * {
      */
-    const TYPE_START_REPEAT = 45;
+    const ENUM_START_REPEAT = 45;
 
     /**
      * }
      */
-    const TYPE_END_REPEAT = 50;
-
+    const ENUM_END_REPEAT = 50;
 
     /**
      * [
      */
-    const TYPE_START_OPTION = 55;
+    const ENUM_START_OPTION = 55;
 
     /**
      * ]
      */
-    const TYPE_END_OPTION = 60;
+    const ENUM_END_OPTION = 60;
 
     /**
      * (
      */
-    const TYPE_START_GROUP = 65;
+    const ENUM_START_GROUP = 65;
 
     /**
      * )
      */
-    const TYPE_END_GROUP = 70;
+    const ENUM_END_GROUP = 70;
+
+    /**
+     * (*
+     */
+    const ENUM_START_COMMENT = 75;
+
+    /**
+     * *)
+     */
+    const ENUM_END_COMMENT = 80;
 
     /**
      * ;
      * .
      */
-    const TYPE_TERMINATOR = 75;
+    const ENUM_TERMINATOR = 85;
 
     /**
      * '
      */
-    const TYPE_SINGLE_QUOTE = 80;
+    const ENUM_SINGLE_QUOTE = 90;
 
     /**
      * "
      */
-    const TYPE_DOUBLE_QUOTE = 85;
+    const ENUM_DOUBLE_QUOTE = 95;
 
     /**
      * ..
      */
-    const TYPE_RANGE_OPERATOR = 90;
+    const ENUM_RANGE_OPERATOR = 95;
 
 
     //composite tokens
 
-    const TYPE_LITERAL = 200;
+    const ENUM_LITERAL = 200;
 
     /**
      *
      */
-    const TYPE_CHARACTER_LITERAL = 205;
+    const ENUM_CHARACTER_LITERAL = 205;
 
     /**
      *
      */
-    const TYPE_STRING_LITERAL = 210;
+    const ENUM_STRING_LITERAL = 210;
 
     /**
      *
      */
-    const TYPE_CHARACTER_RANGE = 215;
+    const ENUM_COMMENT_LITERAL = 215;
 
     /**
      *
      */
-    const TYPE_IDENTIFIER = 220;
+    const ENUM_CHARACTER_RANGE = 220;
 
     /**
      *
      */
-    const TYPE_WS = 225;
+    const ENUM_IDENTIFIER = 225;
+
+    /**
+     *
+     */
+    const ENUM_WS = 230;
 
     public function toArray() {
         $reflection = new \ReflectionClass($this);

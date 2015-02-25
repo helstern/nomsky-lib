@@ -129,7 +129,7 @@ class TextReaderTokenStream implements TokenStream
 
         $previousPosition = $this->token->getPosition();
         $nextToken = $this->readNextToken($previousPosition);
-        if ($nextToken->getType() == NomskyTokenTypeEnum::TYPE_EOF) {
+        if ($nextToken->getType() == NomskyTokenTypeEnum::ENUM_EOF) {
             $this->eofToken = $nextToken;
             $this->token = null;
 
@@ -159,7 +159,7 @@ class TextReaderTokenStream implements TokenStream
      */
     protected function createEOFToken()
     {
-        $tokenType = NomskyTokenTypeEnum::TYPE_EOF;
+        $tokenType = NomskyTokenTypeEnum::ENUM_EOF;
         $tokenValue = '';
         $tokenPosition = new TextPosition(0, 0, 0);
 

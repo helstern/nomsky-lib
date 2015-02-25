@@ -31,7 +31,7 @@ class TokenStreamLexer implements Lexer
      */
     public function hasNextToken()
     {
-        if ($this->token->getType() === NomskyTokenTypeEnum::TYPE_EOF) {
+        if ($this->token->getType() === NomskyTokenTypeEnum::ENUM_EOF) {
             return false;
         }
 
@@ -51,7 +51,7 @@ class TokenStreamLexer implements Lexer
 
     public function peekToken()
     {
-        if ($this->token->getType() === NomskyTokenTypeEnum::TYPE_EOF) {
+        if ($this->token->getType() === NomskyTokenTypeEnum::ENUM_EOF) {
             throw new \RuntimeException('Can not peek over EOF');
         }
 

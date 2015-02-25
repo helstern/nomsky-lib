@@ -22,9 +22,12 @@ abstract class RegexPatternListBuilder
     /**
      * @return RegexPatternBuilder
      */
-    public function implode()
+    public function pattern()
     {
-        return new RegexPatternBuilder($this->build());
+        $basePattern = $this->build();
+        $regexBuilder =  new RegexPatternBuilder($basePattern);
+
+        return $regexBuilder;
     }
 
     /**
@@ -35,6 +38,18 @@ abstract class RegexPatternListBuilder
     {
         $this->patternsList[] = $pattern;
         return $this;
+    }
+
+    /**
+     * @return RegexPatternBuilder
+     */
+    public function group()
+    {
+        $basePattern = $this->build();
+        $regexBuilder = new RegexPatternBuilder($basePattern);
+        $regexBuilder->group();
+
+        return $regexBuilder;
     }
 
     /**
