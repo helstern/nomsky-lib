@@ -13,8 +13,7 @@ use Helstern\Nomsky\Parser\EbnfAst\SequenceNode;
 use Helstern\Nomsky\Parser\EbnfAst\SyntaxNode;
 use Helstern\Nomsky\ParseAssertion\TokenAssertions;
 use Helstern\Nomsky\Parser\Lexer;
-use Helstern\Nomsky\TextMatch\TextPosition;
-use Helstern\Nomsky\Lexer\NomskyTokenTypeEnum;
+use Helstern\Nomsky\Lexer\NomskyTokenTypesEnum;
 
 /**
  * Class StandardEbnfParser
@@ -58,31 +57,31 @@ class IsoEbnfParser
         /** @var string $grammarTitle */
         $grammarTitle = null;
         $tokenPredicates = $this->tokenAssertions->getPredicates();
-        if ($tokenPredicates->hasSameType($token, NomskyTokenTypeEnum::ENUM_LITERAL)) {
+        if ($tokenPredicates->hasSameType($token, NomskyTokenTypesEnum::ENUM_LITERAL)) {
             $grammarTitle = $token->getValue();
 
             $lexer->nextToken();
         }
 
         $token = $lexer->currentToken();
-        $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::ENUM_START_REPEAT);
+        $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypesEnum::ENUM_START_REPEAT);
 
         $productionNodes = array();
         $token = $lexer->peekToken();
-        while ($tokenPredicates->hasSameType($token, NomskyTokenTypeEnum::ENUM_IDENTIFIER)) {
+        while ($tokenPredicates->hasSameType($token, NomskyTokenTypesEnum::ENUM_IDENTIFIER)) {
             $productionNode = $this->parseProduction($lexer);
             $productionNodes[] = $productionNode;
 
             $token = $lexer->peekToken();
         }
 
-        $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::ENUM_END_REPEAT);
+        $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypesEnum::ENUM_END_REPEAT);
 
         $grammarComment = null;
         $lexer->nextToken();
         $token = $lexer->currentToken();
         $tokenPredicates = $this->tokenAssertions->getPredicates();
-        if ($tokenPredicates->hasSameType($token, NomskyTokenTypeEnum::ENUM_LITERAL)) {
+        if ($tokenPredicates->hasSameType($token, NomskyTokenTypesEnum::ENUM_LITERAL)) {
             $grammarComment = $token->getValue();
         }
 
@@ -100,14 +99,14 @@ class IsoEbnfParser
 
         $lexer->nextToken();
         $token = $lexer->currentToken();
-        $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::ENUM_DEFINITION_LIST_START);
+        $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypesEnum::ENUM_DEFINITION_LIST_START);
 
         $expressionNode = $this->parseExpression($lexer);
 
         $lexer->nextToken();
         $token = $lexer->currentToken();
 
-        $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::ENUM_EOR);
+        $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypesEnum::ENUM_EOR);
 
         $textPosition = $identifierNode->getTextPosition();
         $node = new ProductionNode($textPosition, $identifierNode, $expressionNode);
@@ -122,7 +121,7 @@ class IsoEbnfParser
     {
         $lexer->nextToken();
         $token = $lexer->currentToken();
-        $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::ENUM_IDENTIFIER);
+        $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypesEnum::ENUM_IDENTIFIER);
 
         $identifierName = $token->getValue();
         $textPosition = $token->getPosition();
@@ -142,7 +141,7 @@ class IsoEbnfParser
 
         $predicates = $this->tokenAssertions->getPredicates();
         $token = $lexer->peekToken();
-        while ($predicates->hasSameType($token, NomskyTokenTypeEnum::ENUM_DEFINITION_SEPARATOR)) {
+        while ($predicates->hasSameType($token, NomskyTokenTypesEnum::ENUM_DEFINITION_SEPARATOR)) {
             $tail[] = $this->parseTerm($lexer);
             $token = $lexer->peekToken();
         }
@@ -176,11 +175,11 @@ class IsoEbnfParser
         $token = $lexer->peekToken();
         while (
             $predicates->hasAnyType($token, array(
-                NomskyTokenTypeEnum::ENUM_IDENTIFIER
-                , NomskyTokenTypeEnum::ENUM_LITERAL
-                , NomskyTokenTypeEnum::ENUM_START_REPEAT
-                , NomskyTokenTypeEnum::ENUM_START_OPTION
-                , NomskyTokenTypeEnum::ENUM_START_GROUP
+                NomskyTokenTypesEnum::ENUM_IDENTIFIER
+                , NomskyTokenTypesEnum::ENUM_LITERAL
+                , NomskyTokenTypesEnum::ENUM_START_REPEAT
+                , NomskyTokenTypesEnum::ENUM_START_OPTION
+                , NomskyTokenTypesEnum::ENUM_START_GROUP
             ))
         ) {
             $tail[] = $this->parseFactor($lexer);
@@ -206,48 +205,48 @@ class IsoEbnfParser
         $predicates = $this->tokenAssertions->getPredicates();
 
         $token = $lexer->peekToken();
-        if ($predicates->hasSameType($token, NomskyTokenTypeEnum::ENUM_WS)) {
+        if ($predicates->hasSameType($token, NomskyTokenTypesEnum::ENUM_WS)) {
             $lexer->nextToken();
             $token = $lexer->peekToken();
         }
 
         /** @var AstNode $node */
         $node = null;
-        if ($predicates->hasSameType($token, NomskyTokenTypeEnum::ENUM_IDENTIFIER)) {
+        if ($predicates->hasSameType($token, NomskyTokenTypesEnum::ENUM_IDENTIFIER)) {
             $node = $this->parseIdentifier($lexer);
-        } elseif ($predicates->hasSameType($token, NomskyTokenTypeEnum::ENUM_LITERAL)) {
+        } elseif ($predicates->hasSameType($token, NomskyTokenTypesEnum::ENUM_LITERAL)) {
             $lexer->nextToken();
             $token = $lexer->currentToken();
 
             $node = new LiteralNode($token->getPosition(), $token->getValue());
-        } elseif ($predicates->hasSameType($token, NomskyTokenTypeEnum::ENUM_START_REPEAT)) {
+        } elseif ($predicates->hasSameType($token, NomskyTokenTypesEnum::ENUM_START_REPEAT)) {
             $startAtTextPosition = $token->getPosition();
             $lexer->nextToken();
             $expression = $this->parseExpression($lexer);
 
             $lexer->nextToken();
             $token = $lexer->currentToken();
-            $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::ENUM_END_REPEAT);
+            $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypesEnum::ENUM_END_REPEAT);
 
             $node = new OptionalExpressionListNode($startAtTextPosition, $expression);
-        } elseif ($predicates->hasSameType($token, NomskyTokenTypeEnum::ENUM_START_OPTION)) {
+        } elseif ($predicates->hasSameType($token, NomskyTokenTypesEnum::ENUM_START_OPTION)) {
             $startAtTextPosition = $token->getPosition();
             $lexer->nextToken();
             $expression = $this->parseExpression($lexer);
 
             $lexer->nextToken();
             $token = $lexer->currentToken();
-            $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::ENUM_END_OPTION);
+            $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypesEnum::ENUM_END_OPTION);
 
             $node = new OptionalExpressionNode($startAtTextPosition, $expression);
-        } elseif ($predicates->hasSameType($token, NomskyTokenTypeEnum::ENUM_START_GROUP)) {
+        } elseif ($predicates->hasSameType($token, NomskyTokenTypesEnum::ENUM_START_GROUP)) {
             $startAtTextPosition = $token->getPosition();
             $lexer->nextToken();
             $expression = $this->parseExpression($lexer);
 
             $lexer->nextToken();
             $token = $lexer->currentToken();
-            $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypeEnum::ENUM_END_GROUP);
+            $this->tokenAssertions->assertSameType('expected token', $token, NomskyTokenTypesEnum::ENUM_END_GROUP);
 
             $node = new GroupNode($startAtTextPosition, $expression);
         }

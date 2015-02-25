@@ -31,12 +31,24 @@ class RegexBuilder
     }
 
     /**
-     * @param $pattern
+     * @param string $pattern
      * @return RegexPatternBuilder
      */
     public function pattern($pattern)
     {
         return new RegexPatternBuilder($pattern);
+    }
+
+    /**
+     * @param string $pattern
+     * @return RegexPatternBuilder
+     */
+    public function quoted($pattern)
+    {
+        $builder = new RegexPatternBuilder($pattern);
+        $builder->quote();
+
+        return $builder;
     }
 
     /**
@@ -63,10 +75,26 @@ class RegexBuilder
     /**
      * @param string $rangeStart
      * @param string $rangeEnd
-     * @return RegexPatternBuilder
+     * @return RegexCharacterSetBuilder
      */
     public function characterRange($rangeStart, $rangeEnd)
     {
         return RegexCharacterSetBuilder::newInstanceFromRange($rangeStart, $rangeEnd);
+    }
+
+    /**
+     * @return RegexCharacterSetBuilder
+     */
+    public function digitsSet()
+    {
+        return RegexCharacterSetBuilder::newInstanceFromRange('0', '9');
+    }
+
+    /**
+     * @return RegexCaseLetterSetBuilder
+     */
+    public function lettersSet()
+    {
+        return new RegexCaseLetterSetBuilder;
     }
 }

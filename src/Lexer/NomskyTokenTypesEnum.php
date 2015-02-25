@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Lexer;
 
-class NomskyTokenTypeEnum {
+class NomskyTokenTypesEnum {
 
     /** end of file */
     const ENUM_EOF = 0;
@@ -8,15 +8,13 @@ class NomskyTokenTypeEnum {
     /** end of rule */
     const ENUM_EOR = 10;
 
-    const ENUM_OPERATOR = 20;
-
     /**
      * ,
      */
     const ENUM_CONCATENATE = 30;
 
-    /** =
-     * :==
+    /**
+     * =
      */
     const ENUM_DEFINITION_LIST_START = 35;
 
@@ -56,30 +54,10 @@ class NomskyTokenTypeEnum {
     const ENUM_END_GROUP = 70;
 
     /**
-     * (*
-     */
-    const ENUM_START_COMMENT = 75;
-
-    /**
-     * *)
-     */
-    const ENUM_END_COMMENT = 80;
-
-    /**
      * ;
      * .
      */
     const ENUM_TERMINATOR = 85;
-
-    /**
-     * '
-     */
-    const ENUM_SINGLE_QUOTE = 90;
-
-    /**
-     * "
-     */
-    const ENUM_DOUBLE_QUOTE = 95;
 
     /**
      * ..

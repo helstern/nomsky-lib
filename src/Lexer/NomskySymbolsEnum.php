@@ -6,6 +6,8 @@ class NomskySymbolsEnum
 
     const ENUM_DEFINE = '=';
 
+    const ENUM_DEFINE_ALT_ONE = ':==';
+
     const ENUM_DEFINITION_SEPARATOR = '|';
 
     const ENUM_END_COMMENT = '*)';

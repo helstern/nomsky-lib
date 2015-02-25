@@ -3,14 +3,14 @@
 class RegexCharacterSetBuilder
 {
     /** @var array */
-    protected $characters;
+    protected $sets;
 
     protected $patternFormat = '[%s]';
 
     /**
      * @param string $rangeStart
      * @param string $rangeEnd
-     * @return RegexPatternBuilder
+     * @return RegexCharacterSetBuilder
      */
     public static function newInstanceFromRange($rangeStart, $rangeEnd)
     {
@@ -50,7 +50,7 @@ class RegexCharacterSetBuilder
      */
     public function pattern()
     {
-        $finalPattern = implode('', $this->characters);
+        $finalPattern = implode('', $this->sets);
         $finalPattern = sprintf($this->patternFormat, $finalPattern);
 
         $patternBuilder = new RegexPatternBuilder($finalPattern);
@@ -70,22 +70,68 @@ class RegexCharacterSetBuilder
     /**
      * @param string $rangeStart
      * @param string $rangeEnd
-     * @return $this
+     * @return RegexCharacterSetBuilder
      */
     public function addRange($rangeStart, $rangeEnd)
     {
-        $this->characters[] = $rangeStart . '-' . $rangeEnd;
+        $this->sets[] = $rangeStart . '-' . $rangeEnd;
 
         return $this;
     }
 
     /**
      * @param string $string
-     * @return $this
+     * @return RegexCharacterSetBuilder
      */
     public function addCharacters($string)
     {
-        $this->characters[] = $string;
+        $this->sets[] = $string;
+
+        return $this;
+    }
+
+    /**
+     * @param $metaString
+     * @return RegexCharacterSetBuilder
+     */
+    public function addMeta($metaString)
+    {
+        $this->sets[] = $metaString;
+
+        return $this;
+    }
+
+    /**
+     * @return RegexCharacterSetBuilder
+     */
+    public function addDigits()
+    {
+        $this->addRange('0', '9');
+
+        return $this;
+    }
+
+    /**
+     * @param string $case
+     * @return RegexCharacterSetBuilder
+     */
+    public function addLetters($case = 'upper')
+    {
+        if ($case == 'upper') {
+            $this->addRange('A', 'Z');
+        } else {
+            $this->addRange('a', 'z');
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return RegexCharacterSetBuilder
+     */
+    public function addMetaPunctuation()
+    {
+        $this->addMeta('[:punct:]');
 
         return $this;
     }

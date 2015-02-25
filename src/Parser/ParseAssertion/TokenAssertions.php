@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\ParseAssertion;
 
-use Helstern\Nomsky\Lexer\NomskyTokenTypeEnum;
+use Helstern\Nomsky\Lexer\NomskyTokenTypesEnum;
 use Helstern\Nomsky\Parser\ParseException\SyntacticException;
 use Helstern\Nomsky\Tokens\TokenPredicates;
 use Helstern\Nomsky\Tokens\Token;
@@ -82,7 +82,7 @@ class TokenAssertions
      */
     public function assertNotEOF($msg, Token $token)
     {
-        if ($token->getType() !== NomskyTokenTypeEnum::ENUM_EOF) {
+        if ($token->getType() !== NomskyTokenTypesEnum::ENUM_EOF) {
             return true;
         }
 

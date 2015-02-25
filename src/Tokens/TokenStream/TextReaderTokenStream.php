@@ -9,7 +9,7 @@ use Helstern\Nomsky\Text\String\StringMatch;
 use Helstern\Nomsky\Tokens\Token;
 use Helstern\Nomsky\Tokens\TokenMatch\TokenMatch;
 
-use Helstern\Nomsky\Lexer\NomskyTokenTypeEnum;
+use Helstern\Nomsky\Lexer\NomskyTokenTypesEnum;
 
 class TextReaderTokenStream implements TokenStream
 {
@@ -129,7 +129,7 @@ class TextReaderTokenStream implements TokenStream
 
         $previousPosition = $this->token->getPosition();
         $nextToken = $this->readNextToken($previousPosition);
-        if ($nextToken->getType() == NomskyTokenTypeEnum::ENUM_EOF) {
+        if ($nextToken->getType() == NomskyTokenTypesEnum::ENUM_EOF) {
             $this->eofToken = $nextToken;
             $this->token = null;
 
@@ -159,7 +159,7 @@ class TextReaderTokenStream implements TokenStream
      */
     protected function createEOFToken()
     {
-        $tokenType = NomskyTokenTypeEnum::ENUM_EOF;
+        $tokenType = NomskyTokenTypesEnum::ENUM_EOF;
         $tokenValue = '';
         $tokenPosition = new TextPosition(0, 0, 0);
 
