@@ -4,7 +4,8 @@
   rule       = identifier , ( "=" | ":" | ":==" ) , expression , ( "." | ";" ) .
   expression = term { "|" , term } .
   term       = factor { ',' , factor } .
-  factor     = literal
+  factor     = identifier
+             | literal
              | range
              | "[" , expression , "]"
              | "(" , expression , ")"
@@ -42,20 +43,17 @@
 
   range_operator = '..' .
 
-  letter     = "a" .. "z" | "A" .. "Z"
+  letter     = "a" .. "z" | "A" .. "Z" .
 
-  digit      = "0" .. "9"
+  digit      = "0" .. "9" .
 
   (* composite tokens *)
 
-
   character  = letter | digit | "+" | "-" | "*" | "/" | "[" | "]" | "{" | "}" | "(" | ")" | "<" | ">" | "=" | "|" | "." | "," | ";" .
 
-  char_literal      = "'" , character , "'" | '"' , character , '"'
+  char_literal      = single_quote , character , single_quote | double_quote , character , double_quote .
 
-  string_literal     = "'" , character , { character } , "'" | '"' , character , { character } , '"' .
+  string_literal     = single_quote , character , { character } , single_quote | double_quote , character , { character } , double_quote .
 
   range       = char_literal ".." char_literal .
-
-  identifier = letter, { letter | digit }
 }
