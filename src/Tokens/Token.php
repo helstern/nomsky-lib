@@ -43,4 +43,17 @@ class Token {
     {
         return $this->position;
     }
+
+    /**
+     * @param TokenEqualityTestStrategy $testStrategy
+     * @return bool
+     */
+    public function testEquality(TokenEqualityTestStrategy $testStrategy)
+    {
+        if ($testStrategy->getExpectedValue() == $testStrategy->extractActualValue($this)) {
+            return true;
+        }
+
+        return false;
+    }
 }

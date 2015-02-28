@@ -1,6 +1,6 @@
-<?php namespace Helstern\Nomsky\Lexer;
+<?php namespace Helstern\Nomsky\NomskyLexer;
 
-class NomskySymbolsEnum
+class SymbolsEnum
 {
     const ENUM_CONCATENATE = ',';
 

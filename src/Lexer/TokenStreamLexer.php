@@ -2,6 +2,7 @@
 
 use Helstern\Nomsky\Parser\Lexer;
 use Helstern\Nomsky\Tokens\Token;
+use Helstern\Nomsky\Tokens\TokenDefinition;
 
 class TokenStreamLexer implements Lexer
 {
@@ -11,14 +12,20 @@ class TokenStreamLexer implements Lexer
     /** @var Token */
     protected $token;
 
+    /** @var TokenDefinition */
+    protected $eofTokenDefinition;
+
     /**
      * @param TokenStream $tokenStream
+     * @param TokenDefinition $eofTokenEqualityTester
      */
-    public function __construct(TokenStream $tokenStream)
+    public function __construct(TokenStream $tokenStream, TokenDefinition $eofTokenEqualityTester)
     {
         $this->tokenStream = $tokenStream;
         $this->token = $tokenStream->current();
         $tokenStream->next();
+
+        $this->eofTokenDefinition = $eofTokenEqualityTester;
     }
 
     public function currentToken()
@@ -26,32 +33,20 @@ class TokenStreamLexer implements Lexer
         return $this->token;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasNextToken()
+    public function nextToken()
     {
-        if ($this->token->getType() === NomskyTokenTypesEnum::ENUM_EOF) {
+        if ($this->token->getType() == $this->eofTokenDefinition->getType()) {
             return false;
         }
 
+        $this->token = $this->tokenStream->current();
+        $this->tokenStream->next();
         return true;
-    }
-
-    public function nextToken()
-    {
-        if ($this->hasNextToken()) {
-            $this->token = $this->tokenStream->current();
-            $this->tokenStream->next();
-            return true;
-        }
-
-        return false;
     }
 
     public function peekToken()
     {
-        if ($this->token->getType() === NomskyTokenTypesEnum::ENUM_EOF) {
+        if ($this->token->getType() == $this->eofTokenDefinition->getType()) {
             throw new \RuntimeException('Can not peek over EOF');
         }
 

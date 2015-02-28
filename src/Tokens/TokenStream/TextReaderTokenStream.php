@@ -7,9 +7,8 @@ use Helstern\Nomsky\Text\TextMatch;
 use Helstern\Nomsky\Text\String\StringMatch;
 
 use Helstern\Nomsky\Tokens\Token;
+use Helstern\Nomsky\Tokens\TokenDefinition;
 use Helstern\Nomsky\Tokens\TokenMatch\TokenMatch;
-
-use Helstern\Nomsky\Lexer\NomskyTokenTypesEnum;
 
 class TextReaderTokenStream implements TokenStream
 {
@@ -25,14 +24,22 @@ class TextReaderTokenStream implements TokenStream
     /** @var Token */
     protected $eofToken;
 
+    /** @var TokenDefinition */
+    protected $eofTokenDefinition;
+
     /**
      * @param TextReader $sourceReader
      * @param CompositeTokenStringMatcher $nextTokenReader
+     * @param TokenDefinition $eofTokenDefinition
      */
-    public function __construct(TextReader $sourceReader, CompositeTokenStringMatcher $nextTokenReader)
-    {
+    public function __construct(
+        TextReader $sourceReader,
+        CompositeTokenStringMatcher $nextTokenReader,
+        TokenDefinition $eofTokenDefinition
+    ) {
         $this->textReader = $sourceReader;
         $this->tokenMatchReader = $nextTokenReader;
+        $this->eofTokenDefinition = $eofTokenDefinition;
 
         $previousPosition = new TextPosition(0, 0, 0);
         $token = $this->readNextToken($previousPosition);
@@ -129,7 +136,7 @@ class TextReaderTokenStream implements TokenStream
 
         $previousPosition = $this->token->getPosition();
         $nextToken = $this->readNextToken($previousPosition);
-        if ($nextToken->getType() == NomskyTokenTypesEnum::ENUM_EOF) {
+        if ($this->isEOFToken($nextToken)) {
             $this->eofToken = $nextToken;
             $this->token = null;
 
@@ -138,6 +145,19 @@ class TextReaderTokenStream implements TokenStream
 
         $this->token = $nextToken;
         return true;
+    }
+
+    /**
+     * @param Token $token
+     * @return bool
+     */
+    protected function isEOFToken(Token $token)
+    {
+        if ($token->getType() == $this->eofTokenDefinition->getType()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -159,8 +179,8 @@ class TextReaderTokenStream implements TokenStream
      */
     protected function createEOFToken()
     {
-        $tokenType = NomskyTokenTypesEnum::ENUM_EOF;
-        $tokenValue = '';
+        $tokenType = $this->eofTokenDefinition->getType();
+        $tokenValue = $this->eofTokenDefinition->getValue();
         $tokenPosition = new TextPosition(0, 0, 0);
 
         return new Token($tokenType, $tokenValue, $tokenPosition);

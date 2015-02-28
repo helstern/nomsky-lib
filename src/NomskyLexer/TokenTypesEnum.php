@@ -1,6 +1,6 @@
-<?php namespace Helstern\Nomsky\Lexer;
+<?php namespace Helstern\Nomsky\NomskyLexer;
 
-class NomskyTokenTypesEnum {
+class TokenTypesEnum {
 
     /** end of file */
     const ENUM_EOF = 0;

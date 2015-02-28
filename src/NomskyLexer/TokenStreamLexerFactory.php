@@ -1,15 +1,16 @@
-<?php namespace Helstern\Nomsky\Lexer;
+<?php namespace Helstern\Nomsky\NomskyLexer;
 
 use Helstern\Nomsky\Lexer\TokenStream\LongestMatchCompositeMatcher;
 use Helstern\Nomsky\Lexer\TextSource\FileSource;
 
+use Helstern\Nomsky\Lexer\TokenStreamLexer;
 use Helstern\Nomsky\Text\TextSource;
 
 use Helstern\Nomsky\Tokens\TokenMatch\AnchoredPcreMatcher;
 use Helstern\Nomsky\Tokens\TokenPattern\AbstractRegexTokenPattern;
 use Helstern\Nomsky\Tokens\TokenStream\TextReaderTokenStream;
 
-class NomskyTokenStreamLexerFactory
+class TokenStreamLexerFactory
 {
     /**
      * @param $filePath
@@ -20,10 +21,10 @@ class NomskyTokenStreamLexerFactory
         $fileDescriptor = new \SplFileInfo($filePath);
 
         $source = new FileSource($fileDescriptor);
-        $tokenPatterns = NomskyTokenPatterns::regexPatterns();
+        $tokenPatterns = TokenPatterns::regexPatterns();
         $tokenStream = $this->createTokenStream($source, $tokenPatterns);
 
-        $lexer = new TokenStreamLexer($tokenStream);
+        $lexer = new TokenStreamLexer($tokenStream, new EofTokenDefinition);
 
         return $lexer;
     }
@@ -38,7 +39,7 @@ class NomskyTokenStreamLexerFactory
         $reader = $source->createReader();
         $matcherListAdapter = $this->createLongestMatchListMatcher($tokenPatterns);
 
-        $tokenStream = new TextReaderTokenStream($reader, $matcherListAdapter);
+        $tokenStream = new TextReaderTokenStream($reader, $matcherListAdapter, new EofTokenDefinition);
         return $tokenStream;
     }
 
