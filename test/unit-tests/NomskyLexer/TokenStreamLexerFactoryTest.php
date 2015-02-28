@@ -1,8 +1,8 @@
-<?php namespace Helstern\Nomsky\Lexer;
+<?php namespace Helstern\Nomsky\NomskyLexer;
 
 use Helstern\Nomsky\Tokens\Token;
 
-class NomskyTokenStreamLexerFactoryTest extends \PHPUnit_Framework_TestCase
+class TokenStreamLexerFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @small
@@ -11,7 +11,7 @@ class NomskyTokenStreamLexerFactoryTest extends \PHPUnit_Framework_TestCase
     public function testTokenizeNomskyIsoEbnf()
     {
         $grammarFile = TestResources::getResourceFilePath('nomsky.iso.ebnf');
-        $lexer = (new NomskyTokenStreamLexerFactory())->fromFile($grammarFile);
+        $lexer = (new TokenStreamLexerFactory())->fromFile($grammarFile);
 
         $actualTokens = [];
 
@@ -22,8 +22,7 @@ class NomskyTokenStreamLexerFactoryTest extends \PHPUnit_Framework_TestCase
                 'type' => $token->getType()
             );
 
-            if ($lexer->hasNextToken()) {
-                $lexer->nextToken();
+            if ($lexer->nextToken()) {
                 $token = $lexer->currentToken();
             } else {
                 $token = null;

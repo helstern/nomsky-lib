@@ -1,6 +1,5 @@
-<?php namespace Helstern\Nomsky\Lexer;
+<?php namespace Helstern\Nomsky\NomskyLexer;
 
-use Helstern\Nomsky\Lexer\TextSource\FileSource;
 use Helstern\Nomsky\Lexer\TokenStream\LongestMatchCompositeMatcher;
 use Helstern\Nomsky\RegExBuilder\RegexBuilder;
 use Helstern\Nomsky\Text\String\StringReader;
@@ -33,12 +32,12 @@ class NomskyTokenPatternsTest extends \PHPUnit_Framework_TestCase
         ];
 
         $regexBuilder = new RegexBuilder();
-        $patterns = new NomskyTokenPatterns($regexBuilder);
+        $patterns = new TokenPatterns($regexBuilder);
 
-        $pattern = $patterns->buildSingleQuotePattern(2);
+        $pattern = new RegexStringTokenPattern(2, "'");
         $matchers[] = new AnchoredPcreMatcher($pattern);
 
-        $pattern = $patterns->buildDoubleQuotePattern(3);
+        $pattern = new RegexStringTokenPattern(3, '"');
         $matchers[] = new AnchoredPcreMatcher($pattern);
 
         $pattern = $patterns->buildStringLiteralPattern(4);
