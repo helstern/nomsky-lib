@@ -10,7 +10,7 @@ use Helstern\Nomsky\Tokens\Token;
 use Helstern\Nomsky\Tokens\TokenDefinition;
 use Helstern\Nomsky\Tokens\TokenMatch\TokenMatch;
 
-class TextReaderTokenStream implements TokenStream
+class TextReaderAdapter implements TokenStream
 {
     /** @var TextReader */
     protected $textReader;
