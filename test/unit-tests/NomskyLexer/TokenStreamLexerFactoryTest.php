@@ -34,6 +34,10 @@ class TokenStreamLexerFactoryTest extends \PHPUnit_Framework_TestCase
             'lexer failed to match any token from file nomsky.iso.ebnf (' . $grammarFile . ')'
         );
 
+        $expectedNrOfTokens = 267;
+        $actualNrOfTokens = count($actualTokens);
+        $this->assertEquals($expectedNrOfTokens, $actualNrOfTokens, 'Incorrect number of tokens');
+
         $this->markTestIncomplete('test should also provide the full list of tokens in that file');
     }
 }
