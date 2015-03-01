@@ -78,7 +78,7 @@ class TextReaderTokenStream implements TokenStream
         $offsetTextMatch = $whitespaceMatch->getText() . $tokenMatch->getText();
         $offsetByte = $whitespaceMatch->getByteLength() + $tokenMatch->getByteLength();
 
-        $offsetLines = (int)preg_match("#\r\n|\n|\r#m", $offsetTextMatch, $newLineMatches, PREG_OFFSET_CAPTURE);
+        $offsetLines = (int) preg_match("#\r\n|\n|\r#m", $offsetTextMatch, $newLineMatches, PREG_OFFSET_CAPTURE);
         if ($offsetLines > 0) {
             $lastMatchByteIndex = end($newLineMatches)[1];
             $offsetTextMatch = substr($offsetTextMatch, $lastMatchByteIndex);
@@ -95,7 +95,7 @@ class TextReaderTokenStream implements TokenStream
     {
         $matchText = '';
         $char = $this->textReader->readCharacter();
-        while (preg_match('#[[:space:]]#', $char)) {
+        while (preg_match('#[[:space:]]|\r\n|\n|\r#m', $char)) {
             $matchText .= $char;
             $this->textReader->skip(strlen($char));
 
