@@ -5,9 +5,6 @@ class TokenTypesEnum {
     /** end of file */
     const ENUM_EOF = 0;
 
-    /** end of rule */
-    const ENUM_EOR = 10;
-
     /**
      * ,
      */
@@ -69,34 +66,16 @@ class TokenTypesEnum {
 
     const ENUM_LITERAL = 200;
 
-    /**
-     *
-     */
     const ENUM_CHARACTER_LITERAL = 205;
 
-    /**
-     *
-     */
     const ENUM_STRING_LITERAL = 210;
 
-    /**
-     *
-     */
     const ENUM_COMMENT_LITERAL = 215;
 
-    /**
-     *
-     */
     const ENUM_CHARACTER_RANGE = 220;
 
-    /**
-     *
-     */
     const ENUM_IDENTIFIER = 225;
 
-    /**
-     *
-     */
     const ENUM_WS = 230;
 
     public function toArray() {
