@@ -2,6 +2,9 @@
 
 class RegexPatternBuilder
 {
+    /** @var bool */
+    protected $quote = false;
+
     /** @var string */
     protected $pattern;
 
@@ -32,6 +35,11 @@ class RegexPatternBuilder
     {
         ksort($this->modifiers);
         $finalPattern = $this->pattern;
+
+        if ($this->quote) {
+            $finalPattern = preg_quote($finalPattern);
+        }
+
         foreach ($this->modifiers as $formatPattern) {
             $finalPattern = sprintf($formatPattern, $finalPattern);
         }
@@ -66,8 +74,7 @@ class RegexPatternBuilder
      */
     public function quote()
     {
-        $this->pattern = preg_quote($this->pattern);
-
+        $this->quote = true;
         return $this;
     }
 
