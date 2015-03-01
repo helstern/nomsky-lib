@@ -17,9 +17,42 @@
   syntax_comment    = string_literal .
 
   string_literal    = '"', {CHARACTER}, '"' | "'", {CHARACTER}, "'"
-  (* ' and " can not be part of the corresponding string characters *)
   comment_literal   = '(*', {CHARACTER}, '*)'
+  range_literal     = "'", CHARACTER, "'", '..', "'", CHARACTER, "'"
 
-  special_sequence = '?', {CHARACTER}, '?'
-  (* characters in a special sequence can not contain ? *)
+  special_sequence = '?', {character}, '?'
+
+  (* lexical rules *)
+
+  LETTER        = "a" .. "z" | "A" .. "Z" .
+
+  DECIMAL_DIGIT  = "0" .. "9" .
+
+  CHARACTER  = LETTER | DIGIT | "+" | "-" | "*" | "/" | "[" | "]" | "{" | "}" | "(" | ")" | "<" | ">" | "=" | "|" | "." | "," | ";" .
+
+  RANGE_OPERATOR = '..' .
+
+  CONCATENATE = ',' .
+
+  DEFINITION_LIST_START = '=' | ':==' | ':' .
+
+  DEFINITION_SEPARATOR = '|' .
+
+  START_REPEAT = '{' .
+
+  END_REPEAT = '}' .
+
+  START_OPTION = '[' .
+
+  END_OPTION = ']' .
+
+  START_GROUP = '(' .
+
+  END_GROUP = ')' .
+
+  TERMINATOR = '.' | ';' .
+
+  SINGLE_QUOTE = "'" .
+
+  DOUBLE_QUOTE = '"' .
 }
