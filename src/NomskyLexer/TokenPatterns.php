@@ -161,7 +161,11 @@ class TokenPatterns
     public function buildTerminatorPattern($tokenType)
     {
         $regexBuilder = $this->regexBuilder;
-        $stringPattern = (string) $regexBuilder->pattern(Symbols::ENUM_TERMINATOR)->quote();
+
+        $stringPattern = (string) $regexBuilder->alternatives(
+            (string) $regexBuilder->pattern(Symbols::ENUM_TERMINATOR)->quote()
+            , (string) $regexBuilder->pattern(Symbols::ENUM_TERMINATOR_ALT_ONE)->quote()
+        );
 
         $tokenPattern = $this->createStringPattern($tokenType, $stringPattern);
         return $tokenPattern;
@@ -170,12 +174,24 @@ class TokenPatterns
     public function buildCommentLiteralPattern($tokenType)
     {
         $regexBuilder = $this->regexBuilder;
-        $stringPattern = (string) $regexBuilder->sequence(
+
+        $emptyCommentPattern = $regexBuilder->sequence(
             (string) $regexBuilder->pattern(Symbols::ENUM_START_COMMENT)->quote()
-            , (string) $regexBuilder->negativeLookAhead(Symbols::ENUM_END_COMMENT)->lazy()->quote()
+            , (string) $regexBuilder->pattern('\s')->repeatZeroOrMore()
+            , (string) $regexBuilder->pattern(Symbols::ENUM_END_COMMENT)->quote()
+        );
+
+        $nonEmptyCommentPattern = $regexBuilder->sequence(
+            (string) $regexBuilder->pattern(Symbols::ENUM_START_COMMENT)->quote()
+            , (string) $regexBuilder->negativeLookAhead(Symbols::ENUM_END_COMMENT)->quote()
             , (string) $regexBuilder->alternatives('.', '\n', '\r')->group()->repeatZeroOrMore()->lazy()
             , (string) $regexBuilder->pattern(Symbols::ENUM_END_COMMENT)->quote()
         );
+
+        $stringPattern = (string) $regexBuilder->alternatives(
+            (string) $emptyCommentPattern
+            , (string) $nonEmptyCommentPattern
+        )->group();
 
         $tokenPattern = $this->createStringPattern($tokenType, $stringPattern);
         return $tokenPattern;
