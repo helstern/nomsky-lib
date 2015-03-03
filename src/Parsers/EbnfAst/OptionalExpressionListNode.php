@@ -1,5 +1,6 @@
-<?php namespace Helstern\Nomsky\Parser\EbnfAst;
+<?php namespace Helstern\Nomsky\Parsers\EbnfAst;
 
+use Helstern\Nomsky\Parsers\AstNode;
 use Helstern\Nomsky\Text\TextPosition;
 
 class OptionalExpressionListNode extends AbstractCompositeAstNode implements AstNode

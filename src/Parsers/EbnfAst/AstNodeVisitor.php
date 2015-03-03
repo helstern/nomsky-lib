@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Parser\EbnfAst;
+<?php namespace Helstern\Nomsky\Parsers\EbnfAst;
 
 interface AstNodeVisitor
 {
