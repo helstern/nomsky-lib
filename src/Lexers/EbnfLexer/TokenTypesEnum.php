@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\NomskyLexer;
+<?php namespace Helstern\Nomsky\Lexers\EbnfLexer;
 
 class TokenTypesEnum {
 
@@ -12,6 +12,7 @@ class TokenTypesEnum {
 
     /**
      * =
+     * :
      */
     const ENUM_DEFINITION_LIST_START = 35;
 
@@ -51,32 +52,60 @@ class TokenTypesEnum {
     const ENUM_END_GROUP = 70;
 
     /**
+     * (*
+     */
+    const ENUM_START_COMMENT = 75;
+
+    /**
+     * *)
+     */
+    const ENUM_END_COMMENT = 80;
+
+    /**
      * ;
      * .
      */
     const ENUM_TERMINATOR = 85;
 
     /**
-     * ..
+     * '
      */
-    const ENUM_RANGE_OPERATOR = 95;
+    const ENUM_SINGLE_QUOTE = 90;
 
+    /**
+     * "
+     */
+    const ENUM_DOUBLE_QUOTE = 95;
+
+    /**
+     * ?
+     */
+    const ENUM_SPECIAL_SEQUENCE = 100;
+
+    /**
+     * _
+     */
+    const ENUM_ID_SEPARATOR = 105;
+
+
+    /**
+     * a-zA-Z
+     */
+    const ENUM_LETTER = 110;
+
+    /**
+     * 0-9
+     */
+    const ENUM_DECIMAL_DIGIT = 115;
+
+    /**
+     *
+     */
+    const OTHER_CHARACTER = 200;
 
     //composite tokens
 
-    const ENUM_LITERAL = 200;
-
-    const ENUM_CHARACTER_LITERAL = 205;
-
-    const ENUM_STRING_LITERAL = 210;
-
-    const ENUM_COMMENT_LITERAL = 215;
-
-    const ENUM_CHARACTER_RANGE = 220;
-
-    const ENUM_IDENTIFIER = 225;
-
-    const ENUM_WS = 230;
+    const ENUM_WS = 235;
 
     public function toArray() {
         $reflection = new \ReflectionClass($this);

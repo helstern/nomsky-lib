@@ -1,12 +1,12 @@
-<?php namespace Helstern\Nomsky\NomskyLexer;
+<?php namespace Helstern\Nomsky\Lexers\NomskyLexer;
 
 use Helstern\Nomsky\RegExBuilder\RegexBuilder;
 use Helstern\Nomsky\Tokens\TokenPattern\RegexAlternativesTokenPattern;
 use Helstern\Nomsky\Tokens\TokenPattern\AbstractRegexTokenPattern;
 use Helstern\Nomsky\Tokens\TokenPattern\RegexStringTokenPattern;
 
-use Helstern\Nomsky\NomskyLexer\SymbolsEnum as Symbols;
-use Helstern\Nomsky\NomskyLexer\TokenTypesEnum as TokenTypes;
+use Helstern\Nomsky\Lexers\NomskyLexer\SymbolsEnum as Symbols;
+use Helstern\Nomsky\Lexers\NomskyLexer\TokenTypesEnum as TokenTypes;
 
 class TokenPatterns
 {
