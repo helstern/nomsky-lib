@@ -16,9 +16,12 @@
   syntax_title      = string_literal .
   syntax_comment    = string_literal .
 
+  character_range   = character_literal, '..', character_literal
+
+  character_literal = '"', CHARACTER, '"' | "'", CHARACTER, "'"
   string_literal    = '"', {CHARACTER}, '"' | "'", {CHARACTER}, "'"
   comment_literal   = '(*', {CHARACTER}, '*)'
-  range_literal     = "'", CHARACTER, "'", '..', "'", CHARACTER, "'"
+
 
   special_sequence = '?', {character}, '?'
 

@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\NomskyLexer;
+<?php namespace Helstern\Nomsky\Lexers\NomskyLexer;
 
 use Helstern\Nomsky\Lexer\TokenStream\LongestMatchCompositeMatcher;
 use Helstern\Nomsky\RegExBuilder\RegexBuilder;
