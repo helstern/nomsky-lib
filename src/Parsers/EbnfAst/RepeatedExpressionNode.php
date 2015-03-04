@@ -1,9 +1,9 @@
 <?php namespace Helstern\Nomsky\Parsers\EbnfAst;
 
-use Helstern\Nomsky\Parsers\AstNode;
+use Helstern\Nomsky\Parser\AstNode;
 use Helstern\Nomsky\Text\TextPosition;
 
-class OptionalExpressionListNode extends AbstractCompositeAstNode implements AstNode
+class RepeatedExpressionNode extends AbstractCompositeAstNode implements AstNode
 {
     /** @var TextPosition */
     protected $textPosition;

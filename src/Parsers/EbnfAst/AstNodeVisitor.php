@@ -27,10 +27,10 @@ interface AstNodeVisitor
     public function visitSequenceNode(SequenceNode $node);
 
     /**
-     * @param OptionalExpressionListNode $node
+     * @param RepeatedExpressionNode $node
      * @return boolean
      */
-    public function visitOptionalExpressionListNode(OptionalExpressionListNode $node);
+    public function visitOptionalExpressionListNode(RepeatedExpressionNode $node);
 
     /**
      * @param OptionalExpressionNode $node
@@ -39,10 +39,10 @@ interface AstNodeVisitor
     public function visitOptionalExpressionNode(OptionalExpressionNode $node);
 
     /**
-     * @param GroupNode $node
+     * @param GroupedExpressionNode $node
      * @return boolean
      */
-    public function visitGroupNode(GroupNode $node);
+    public function visitGroupNode(GroupedExpressionNode $node);
 
     /**
      * @param IdentifierNode $node
