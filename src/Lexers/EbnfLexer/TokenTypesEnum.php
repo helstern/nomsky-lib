@@ -52,30 +52,10 @@ class TokenTypesEnum {
     const ENUM_END_GROUP = 70;
 
     /**
-     * (*
-     */
-    const ENUM_START_COMMENT = 75;
-
-    /**
-     * *)
-     */
-    const ENUM_END_COMMENT = 80;
-
-    /**
      * ;
      * .
      */
     const ENUM_TERMINATOR = 85;
-
-    /**
-     * '
-     */
-    const ENUM_SINGLE_QUOTE = 90;
-
-    /**
-     * "
-     */
-    const ENUM_DOUBLE_QUOTE = 95;
 
     /**
      * ?
@@ -83,25 +63,19 @@ class TokenTypesEnum {
     const ENUM_SPECIAL_SEQUENCE = 100;
 
     /**
-     * _
+     * LETTER , { '_' | LETTER | DECIMAL_DIGIT  } .
      */
-    const ENUM_ID_SEPARATOR = 105;
-
-
-    /**
-     * a-zA-Z
-     */
-    const ENUM_LETTER = 110;
+    const ENUM_IDENTIFIER = 105;
 
     /**
-     * 0-9
+     * "[^"]+"
      */
-    const ENUM_DECIMAL_DIGIT = 115;
+    const ENUM_STRING_LITERAL = 105;
 
     /**
-     *
+     * \(\*\s*\*\)|\(\*(?!\*\))(?:.|\n|\r)*?\*\)
      */
-    const OTHER_CHARACTER = 200;
+    const ENUM_COMMENT = 110;
 
     //composite tokens
 

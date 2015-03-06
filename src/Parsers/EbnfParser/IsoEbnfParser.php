@@ -3,7 +3,7 @@
 
 use Helstern\Nomsky\Exception\SyntacticException;
 use Helstern\Nomsky\Parsers\EbnfAst\AlternativeNode;
-use Helstern\Nomsky\Parsers\AstNode;
+use Helstern\Nomsky\Parser\AstNode;
 use Helstern\Nomsky\Parsers\EbnfAst\GroupedExpressionNode;
 use Helstern\Nomsky\Parsers\EbnfAst\IdentifierNode;
 use Helstern\Nomsky\Parsers\EbnfAst\LiteralNode;
@@ -57,11 +57,8 @@ class IsoEbnfParser
         $grammarTitle = null;
         $grammarComment = null;
 
-        $actualType = $token->getType();
-        $expectedTypes = array(TokenTypesEnum::ENUM_SINGLE_QUOTE, TokenTypesEnum::ENUM_DOUBLE_QUOTE);
-        if (in_array($actualType, $expectedTypes)) {
-            $startTextPosition = $token->getPosition();
-            $grammarTitle = $this->parseStringExpression($lexer);
+        if ($token->getType() == TokenTypesEnum::ENUM_STRING_LITERAL) {
+            $grammarTitle = $this->parseStringLiteral($lexer);
             $lexer->nextToken();
         }
 
@@ -74,20 +71,19 @@ class IsoEbnfParser
 
         $productionNodes = array();
         $token = $lexer->currentToken();
-        while ($token->getType() == TokenTypesEnum::ENUM_START_COMMENT) {
-
-            $productionNodes[] = $this->parseRuleComment($lexer);
+        while ($token->getType() == TokenTypesEnum::ENUM_COMMENT) {
+            $productionNodes[] = $this->parseComment($lexer);
             $lexer->nextToken();
             $token = $lexer->currentToken();
         }
 
-        while ($token->getType() == TokenTypesEnum::ENUM_LETTER) {
+        while ($token->getType() == TokenTypesEnum::ENUM_IDENTIFIER) {
             $productionNodes[] = $this->parseRule($lexer);
             $lexer->nextToken();
             $token = $lexer->currentToken();
 
-            if ($token->getType() == TokenTypesEnum::ENUM_START_COMMENT) {
-                $productionNodes[] = $this->parseRuleComment($lexer);
+            if ($token->getType() == TokenTypesEnum::ENUM_COMMENT) {
+                $productionNodes[] = $this->parseComment($lexer);
                 $lexer->nextToken();
                 $token = $lexer->currentToken();
             }
@@ -97,10 +93,9 @@ class IsoEbnfParser
         $lexer->nextToken();
         $token = $lexer->currentToken();
 
-        $actualType = $token->getType();
-        $expectedTypes = array(TokenTypesEnum::ENUM_SINGLE_QUOTE, TokenTypesEnum::ENUM_DOUBLE_QUOTE);
-        if (in_array($actualType, $expectedTypes)) {
-            $grammarComment = $this->parseStringExpression($lexer);
+
+        if ($token->getType() == TokenTypesEnum::ENUM_STRING_LITERAL) {
+            $grammarComment = $this->parseStringLiteral($lexer);
             $lexer->nextToken();
             $token = null;
         }
@@ -114,30 +109,19 @@ class IsoEbnfParser
      * @return LiteralNode
      * @throws \Helstern\Nomsky\Exception\SyntacticException
      */
-    protected function parseRuleComment(Lexer $lexer)
+    protected function parseComment(Lexer $lexer)
     {
+
         $token = $lexer->currentToken();
-        $this->tokenAssertions->assertSameType('expected token', $token, TokenTypesEnum::ENUM_START_COMMENT);
+
+        if ($token->getType() != TokenTypesEnum::ENUM_COMMENT) {
+            throw new SyntacticException($token, 'Expected ' . TokenTypesEnum::ENUM_COMMENT);
+        }
+
         $textPosition = $token->getPosition();
-        $comment = '';
+        $literal = $token->getValue();
 
-        $peekToken = $lexer->peekToken();
-        while (!is_null($peekToken) && $peekToken->getType() != TokenTypesEnum::ENUM_END_COMMENT) {
-            $comment .= $peekToken->getValue();
-
-            $peekToken = null;
-            if ($lexer->nextToken()) {
-                $peekToken = $lexer->peekToken();
-            }
-        }
-
-        if (is_null($peekToken)) {
-            throw new SyntacticException('un-terminated comment');
-        } else {
-            $lexer->nextToken();
-        }
-
-        $node = new LiteralNode($textPosition, $comment);
+        $node = new LiteralNode($textPosition, $literal);
         return $node;
     }
 
@@ -156,7 +140,8 @@ class IsoEbnfParser
         $expressionNode = $this->parseExpression($lexer);
 
         $peekToken = $lexer->peekToken();
-        $this->tokenAssertions->assertSameType('expected token', $peekToken, TokenTypesEnum::ENUM_TERMINATOR);
+
+        $this->tokenAssertions->assertSameType('invalid token type %s at %s, expected %s', $peekToken, TokenTypesEnum::ENUM_TERMINATOR);
         $lexer->nextToken();
 
         $textPosition = $identifierNode->getTextPosition();
@@ -172,37 +157,12 @@ class IsoEbnfParser
     protected function parseIdentifier(Lexer $lexer)
     {
         $token = $lexer->currentToken();
-        $this->tokenAssertions->assertSameType('expected token', $token, TokenTypesEnum::ENUM_LETTER);
+        $this->tokenAssertions->assertSameType('expected token', $token, TokenTypesEnum::ENUM_IDENTIFIER);
+
         $identifierName = $token->getValue();
         $textPosition = $token->getPosition();
-
-        $peekToken = $lexer->peekToken();
-
-        $actualTokenType = $peekToken->getType();
-        $expectedTokenTypes = [
-            TokenTypesEnum::ENUM_LETTER,
-            TokenTypesEnum::ENUM_DECIMAL_DIGIT,
-            TokenTypesEnum::ENUM_ID_SEPARATOR
-        ];
-
-        while (!is_null($peekToken) && in_array($actualTokenType, $expectedTokenTypes)) {
-            $identifierName .= $peekToken->getValue();
-
-            $peekToken = null;
-            if ($lexer->nextToken()) {
-                $peekToken = $lexer->peekToken();
-                $actualTokenType = $peekToken->getType();
-            }
-        }
-
-        if (is_null($peekToken)) {
-            throw new SyntacticException('unexpected eof');
-        } else {
-            $lexer->nextToken();
-        }
-
-
         $node = new IdentifierNode($textPosition, $identifierName);
+
         return $node;
     }
 
@@ -273,15 +233,12 @@ class IsoEbnfParser
 
         /** @var AstNode $node */
         $node = null;
-        if ($predicates->hasSameType($peekToken, TokenTypesEnum::ENUM_LETTER)) {
+        if ($predicates->hasSameType($peekToken, TokenTypesEnum::ENUM_IDENTIFIER)) {
             $lexer->nextToken();
             $node = $this->parseIdentifier($lexer);
-        } elseif ($predicates->hasSameType($peekToken, TokenTypesEnum::ENUM_SINGLE_QUOTE)) {
+        } elseif ($predicates->hasSameType($peekToken, TokenTypesEnum::ENUM_STRING_LITERAL)) {
             $lexer->nextToken();
-            $node = $this->parseStringExpression($lexer);
-        } elseif ($predicates->hasSameType($peekToken, TokenTypesEnum::ENUM_DOUBLE_QUOTE)) {
-            $lexer->nextToken();
-            $node = $this->parseStringExpression($lexer);
+            $node = $this->parseStringLiteral($lexer);
         } elseif ($predicates->hasSameType($peekToken, TokenTypesEnum::ENUM_SPECIAL_SEQUENCE)) {
             $lexer->nextToken();
             $node = $this->parseSpecialExpression($lexer);
@@ -303,34 +260,16 @@ class IsoEbnfParser
         return $node;
     }
 
-    protected function parseStringExpression(Lexer $lexer)
+    protected function parseStringLiteral(Lexer $lexer)
     {
         $token = $lexer->currentToken();
-        $actualTokenType = $token->getType();
 
-        $expectedTokenTypes = array(TokenTypesEnum::ENUM_SINGLE_QUOTE, TokenTypesEnum::ENUM_DOUBLE_QUOTE);
-        if (!in_array($actualTokenType, $expectedTokenTypes)) {
-            throw new SyntacticException($token, 'Expected ' . implode($expectedTokenTypes));
+        if ($token->getType() != TokenTypesEnum::ENUM_STRING_LITERAL) {
+            throw new SyntacticException($token, 'Expected ' . TokenTypesEnum::ENUM_STRING_LITERAL);
         }
 
         $textPosition = $token->getPosition();
-        $peekToken = $lexer->peekToken();
-
-        $literal = '';
-        while (false == is_null($peekToken) && $peekToken->getType() !== $actualTokenType) {
-            $literal .= $peekToken->getValue();
-
-            $peekToken = null;
-            if ($lexer->nextToken()) {
-                $peekToken = $lexer->peekToken();
-            }
-        }
-
-        if (is_null($peekToken)) {
-            throw new SyntacticException('un-enclosed string');
-        } else {
-            $lexer->nextToken();
-        }
+        $literal = $token->getValue();
 
         $node = new LiteralNode($textPosition, $literal);
         return $node;
@@ -344,30 +283,15 @@ class IsoEbnfParser
     protected function parseSpecialExpression(Lexer $lexer)
     {
         $token = $lexer->currentToken();
-        $this->tokenAssertions->assertSameType('expected token', $token, TokenTypesEnum::ENUM_SPECIAL_SEQUENCE);
-        $startPosition = $token->getPosition();
 
-        $specialSequence = '';
-        $peekToken = $lexer->peekToken();
-        $peekTokenType = $peekToken->getType();
-
-        while (!is_null($peekToken) && $peekTokenType != TokenTypesEnum::ENUM_SPECIAL_SEQUENCE) {
-            $specialSequence .= $peekToken->getValue();
-
-            $peekToken = null;
-            if ($lexer->nextToken()) {
-                $peekToken = $lexer->peekToken();
-                $peekTokenType = $peekToken->getType();
-            }
+        if ($token->getType() != TokenTypesEnum::ENUM_SPECIAL_SEQUENCE) {
+            throw new SyntacticException($token, 'Expected ' . TokenTypesEnum::ENUM_SPECIAL_SEQUENCE);
         }
 
-        if (is_null($peekToken)) {
-            throw new SyntacticException('un-enclosed special sequence');
-        } else {
-            $lexer->nextToken();
-        }
+        $textPosition = $token->getPosition();
+        $literal = $token->getValue();
 
-        $node = new LiteralNode($startPosition, $specialSequence);
+        $node = new LiteralNode($textPosition, $literal);
         return $node;
     }
 

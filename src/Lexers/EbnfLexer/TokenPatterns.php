@@ -48,8 +48,10 @@ class TokenPatterns
         //add longer patterns first
         $tokenPatterns = [];
         //longer patterns
-        $tokenPatterns[] = $instance->createQuotedPattern(TokenTypes::ENUM_START_COMMENT, Symbols::ENUM_START_COMMENT);
-        $tokenPatterns[] = $instance->createQuotedPattern(TokenTypes::ENUM_END_COMMENT, Symbols::ENUM_END_COMMENT);
+        $tokenPatterns[] = $instance->buildStringLiteralPattern(TokenTypes::ENUM_STRING_LITERAL);
+        $tokenPatterns[] = $instance->buildIdentifierPattern(TokenTypes::ENUM_STRING_LITERAL);
+        $tokenPatterns[] = $instance->buildSpecialSequencePattern(TokenTypes::ENUM_SPECIAL_SEQUENCE);
+        $tokenPatterns[] = $instance->buildCommentPattern(TokenTypes::ENUM_COMMENT);
         $tokenPatterns[] = $instance->buildDefinitionListStartPattern(TokenTypes::ENUM_DEFINITION_LIST_START);
         //shorter patterns
         $tokenPatterns[] = $instance->createStringPattern(TokenTypes::ENUM_CONCATENATE, Symbols::ENUM_CONCATENATE);
@@ -64,19 +66,6 @@ class TokenPatterns
         $tokenPatterns[] = $instance->createQuotedPattern(TokenTypes::ENUM_START_GROUP, Symbols::ENUM_START_GROUP);
         $tokenPatterns[] = $instance->createQuotedPattern(TokenTypes::ENUM_END_GROUP, Symbols::ENUM_END_GROUP);
         $tokenPatterns[] = $instance->buildTerminatorPattern(TokenTypes::ENUM_TERMINATOR);
-        $tokenPatterns[] = $instance->createStringPattern(TokenTypes::ENUM_SINGLE_QUOTE, Symbols::ENUM_SINGLE_QUOTE);
-        $tokenPatterns[] = $instance->createStringPattern(TokenTypes::ENUM_DOUBLE_QUOTE, Symbols::ENUM_DOUBLE_QUOTE);
-        $tokenPatterns[] = $instance->createQuotedPattern(
-            TokenTypes::ENUM_SPECIAL_SEQUENCE,
-            Symbols::ENUM_SPECIAL_SEQUENCE_DELIMITER
-        );
-        $tokenPatterns[] = $instance->buildLetterPattern(TokenTypes::ENUM_LETTER);
-        $tokenPatterns[] = $instance->buildDecimalDigitPattern(TokenTypes::ENUM_DECIMAL_DIGIT);
-        $tokenPatterns[] = $instance->buildIdSeparatorPattern(TokenTypes::ENUM_ID_SEPARATOR);
-
-        $tokenPatterns[] = $instance->buildOtherCharacterPattern(TokenTypes::OTHER_CHARACTER);
-
-
 
         return $tokenPatterns;
     }
@@ -86,26 +75,113 @@ class TokenPatterns
         $this->regexBuilder = $regexBuilder;
     }
 
-    /**
-     * @param int $tokenType
-     * @return RegexStringTokenPattern
-     */
-    public function buildIdSeparatorPattern($tokenType)
+    public function buildCommentPattern($tokenType)
     {
-        $pattern = $this->createStringPattern($tokenType, '_');
-        return $pattern;
+        $regexBuilder = $this->regexBuilder;
+
+        $emptyCommentPattern = $regexBuilder->sequence(
+            (string) $regexBuilder->pattern(Symbols::ENUM_START_COMMENT)->quote()
+            , (string) $regexBuilder->pattern('\s')->repeatZeroOrMore()
+            , (string) $regexBuilder->pattern(Symbols::ENUM_END_COMMENT)->quote()
+        );
+
+        $nonEmptyCommentPattern = $regexBuilder->sequence(
+            (string) $regexBuilder->pattern(Symbols::ENUM_START_COMMENT)->quote()
+            , (string) $regexBuilder->negativeLookAhead(Symbols::ENUM_END_COMMENT)->quote()
+            , (string) $regexBuilder->alternatives('.', '\n', '\r')->group()->repeatZeroOrMore()->lazy()
+            , (string) $regexBuilder->pattern(Symbols::ENUM_END_COMMENT)->quote()
+        );
+
+        $stringPattern = (string) $regexBuilder->alternatives(
+            (string) $emptyCommentPattern
+            , (string) $nonEmptyCommentPattern
+        )->group();
+
+        $tokenPattern = $this->createStringPattern($tokenType, $stringPattern);
+        return $tokenPattern;
     }
 
     /**
      * @param int $tokenType
      * @return RegexStringTokenPattern
      */
-    public function buildOtherCharacterPattern($tokenType)
+    public function buildIdentifierPattern($tokenType)
     {
-        $regexBuilder = $this->regexBuilder->pattern('.');
-        $pattern = $this->createStringPattern($tokenType, (string) $regexBuilder);
+        $regexBuilder = $this->regexBuilder;
+        $stringPattern =  (string) $regexBuilder->sequence()
+            ->add('[aA-zZ]')
+            ->add(
+            //(string) $regexBuilder->alternatives('[aA-zZ]', '[0-9]')->implode()->group()->repeat()->group()
+                (string) $regexBuilder->alternatives('[aA-zZ]', '[0-9]', '[-]')->group()->repeatOnceOrMore()
+            );
 
-        return $pattern;
+        $tokenPattern = $this->createStringPattern($tokenType, $stringPattern);
+        return $tokenPattern;
+    }
+
+    public function buildCharLiteralPattern($tokenType)
+    {
+        $regexBuilder = $this->regexBuilder;
+        $pattern = $regexBuilder->sequence(
+            Symbols::ENUM_SINGLE_QUOTE,
+            (string) $regexBuilder->alternatives('\p{L}|\s', str_repeat(Symbols::ENUM_SINGLE_QUOTE, 2))
+                ->group(),
+            Symbols::ENUM_SINGLE_QUOTE
+        );
+
+        $tokenPattern = $this->createStringPattern($tokenType, (string) $pattern);
+        return $tokenPattern;
+    }
+
+    /**
+     * @param int $tokenType
+     * @return RegexAlternativesTokenPattern
+     */
+    public function buildStringLiteralPattern($tokenType)
+    {
+        $regexBuilder = $this->regexBuilder;
+        $alternatives = [
+            (string) $regexBuilder->sequence(
+                Symbols::ENUM_SINGLE_QUOTE,
+                (string) $regexBuilder->alternatives("[^']", str_repeat(Symbols::ENUM_SINGLE_QUOTE, 2))
+                    ->group()
+                    ->repeatOnceOrMore(),
+                Symbols::ENUM_SINGLE_QUOTE
+            )
+            , (string) $regexBuilder->alternatives('[^"]', str_repeat(Symbols::ENUM_DOUBLE_QUOTE, 2))
+                ->group()
+                ->repeatOnceOrMore()
+                ->delimit(Symbols::ENUM_DOUBLE_QUOTE)
+        ];
+
+        $tokenPattern = $this->createAlternativesTokenPattern($tokenType, $alternatives);
+        return $tokenPattern;
+    }
+
+    public function buildSpecialSequencePattern($tokenType)
+    {
+        $regexBuilder = $this->regexBuilder;
+
+        $emptyCommentPattern = $regexBuilder->sequence(
+            (string) $regexBuilder->pattern(Symbols::ENUM_SPECIAL_SEQUENCE_DELIMITER)->quote()
+            , (string) $regexBuilder->pattern('\s')->repeatZeroOrMore()
+            , (string) $regexBuilder->pattern(Symbols::ENUM_SPECIAL_SEQUENCE_DELIMITER)->quote()
+        );
+
+        $nonEmptyCommentPattern = $regexBuilder->sequence(
+            (string) $regexBuilder->pattern(Symbols::ENUM_SPECIAL_SEQUENCE_DELIMITER)->quote()
+            , (string) $regexBuilder->negativeLookAhead(Symbols::ENUM_SPECIAL_SEQUENCE_DELIMITER)->quote()
+            , (string) $regexBuilder->pattern(Symbols::ENUM_SPECIAL_SEQUENCE_DELIMITER)->quote()
+        );
+
+        $stringPattern = (string) $regexBuilder->alternatives(
+            (string) $emptyCommentPattern
+            , (string) $nonEmptyCommentPattern
+        )->group();
+
+        $tokenPattern = $this->createStringPattern($tokenType, $stringPattern);
+        return $tokenPattern;
+
     }
 
     /**
@@ -164,24 +240,6 @@ class TokenPatterns
         ];
 
         $tokenPattern = $this->createAlternativesTokenPattern($tokenType, $alternatives);
-        return $tokenPattern;
-    }
-
-    /**
-     * @param int $tokenType
-     * @return RegexStringTokenPattern
-     */
-    public function buildIdentifierPattern($tokenType)
-    {
-        $regexBuilder = $this->regexBuilder;
-        $stringPattern =  (string) $regexBuilder->sequence()
-            ->add('[aA-zZ]')
-            ->add(
-            //(string) $regexBuilder->alternatives('[aA-zZ]', '[0-9]')->implode()->group()->repeat()->group()
-            (string) $regexBuilder->alternatives('[aA-zZ]', '[0-9]')->group()->repeatOnceOrMore()
-        );
-
-        $tokenPattern = $this->createStringPattern($tokenType, $stringPattern);
         return $tokenPattern;
     }
 

@@ -25,18 +25,25 @@ class TokenAssertions
 
     /**
      * @param $msg
-     * @param Token $token
-     * @param int $type
+     * @param Token $actualToken
+     * @param int $expectedType
      * @throws SyntacticException
      * @return bool
      */
-    public function assertSameType($msg, Token $token, $type)
+    public function assertSameType($msg, Token $actualToken, $expectedType)
     {
-        if ($this->tokenPredicates->hasSameType($token, $type)) {
+        if ($this->tokenPredicates->hasSameType($actualToken, $expectedType)) {
             return true;
         }
 
-        throw new SyntacticException($token, $msg, SyntacticExceptionCodes::CODE_BASE);
+        $positionText = sprintf(
+            'line %s, column: %s',
+            $actualToken->getPosition()->getLine(),
+            $actualToken->getPosition()->getColumn()
+        );
+        $exceptionMsg = sprintf($msg, $actualToken->getType(), $positionText, $expectedType);
+
+        throw new SyntacticException($actualToken, $exceptionMsg, SyntacticExceptionCodes::CODE_BASE);
     }
 
     /**
