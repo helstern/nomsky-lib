@@ -78,9 +78,11 @@ class TextReaderAdapter implements TokenStream
         $offsetTextMatch = $whitespaceMatch->getText() . $tokenMatch->getText();
         $offsetByte = $whitespaceMatch->getByteLength() + $tokenMatch->getByteLength();
 
-        $offsetLines = (int) preg_match("#\r\n|\n|\r#m", $offsetTextMatch, $newLineMatches, PREG_OFFSET_CAPTURE);
+        $offsetLines = (int) preg_match_all("#(\r\n|\n|\r)#m", $offsetTextMatch, $newLineMatches, PREG_OFFSET_CAPTURE);
         if ($offsetLines > 0) {
-            $lastMatchByteIndex = end($newLineMatches)[1];
+            /** @var array $lastPregMatch */
+            $lastPregMatch = end($newLineMatches);
+            $lastMatchByteIndex = mb_strlen($lastPregMatch[0][0]) + $lastPregMatch[0][1];
             $offsetTextMatch = substr($offsetTextMatch, $lastMatchByteIndex);
         }
         $offsetColumn = mb_strlen($offsetTextMatch, 'UTF-8');
