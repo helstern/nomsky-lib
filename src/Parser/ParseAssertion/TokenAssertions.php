@@ -1,5 +1,6 @@
 <?php namespace Helstern\Nomsky\Parser\ParseAssertion;
 
+use Helstern\Nomsky\Parser\ErrorMessages\MessagesBuilder;
 use Helstern\Nomsky\Parser\ParseException\SyntacticException;
 use Helstern\Nomsky\Tokens\TokenPredicates;
 use Helstern\Nomsky\Tokens\Token;
@@ -24,25 +25,17 @@ class TokenAssertions
     }
 
     /**
-     * @param $msg
      * @param Token $actualToken
-     * @param int $expectedType
-     * @throws SyntacticException
+     * @param $expectedType
      * @return bool
+     * @throws \Helstern\Nomsky\Parser\ParseException\SyntacticException
      */
-    public function assertSameType($msg, Token $actualToken, $expectedType)
+    public function assertValidTokenType(Token $actualToken, $expectedType)
     {
         if ($this->tokenPredicates->hasSameType($actualToken, $expectedType)) {
             return true;
         }
-
-        $positionText = sprintf(
-            'line %s, column: %s',
-            $actualToken->getPosition()->getLine(),
-            $actualToken->getPosition()->getColumn()
-        );
-        $exceptionMsg = sprintf($msg, $actualToken->getType(), $positionText, $expectedType);
-
+        $exceptionMsg = (new MessagesBuilder)->invalidTokenAtPosition($actualToken, $expectedType);
         throw new SyntacticException($actualToken, $exceptionMsg, SyntacticExceptionCodes::CODE_BASE);
     }
 
