@@ -1,8 +1,7 @@
-<?php namespace Helstern\Nomsky\Parsers\EbnfParser;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf;
 
-use Helstern\Nomsky\Lexers\EbnfLexer\TokenStreamLexerFactory;
 use Helstern\Nomsky\Parser\ParseAssertion\TokenAssertions;
-use Helstern\Nomsky\Parsers\TestResources;
+use Helstern\Nomsky\Grammars\TestResources;
 use Helstern\Nomsky\Tokens\TokenPredicates;
 
 class IsoEbnfParserTest extends \PHPUnit_Framework_TestCase
@@ -22,10 +21,10 @@ class IsoEbnfParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseEbnfGrammar()
     {
-        $expectedAstNode = '\\Helstern\Nomsky\Parsers\EbnfAst\\SyntaxNode';
+        $expectedAstNode = '\\Helstern\Nomsky\Grammars\Ebnf\Ast\\SyntaxNode';
 
         $grammarFile = self::getResourceFilePath('ebnf.iso.ebnf');
-        $lexer = (new TokenStreamLexerFactory())->fromFile($grammarFile);
+        $lexer = (new IsoEbnfLexerFactory())->fromFile($grammarFile);
 
         $assertions = new TokenAssertions(new TokenPredicates);
         $parser = new IsoEbnfParser($assertions);

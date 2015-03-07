@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Lexers\EbnfLexer;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens;
 
 class SymbolsEnum
 {

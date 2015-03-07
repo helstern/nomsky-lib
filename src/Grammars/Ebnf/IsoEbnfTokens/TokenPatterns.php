@@ -1,12 +1,12 @@
-<?php namespace Helstern\Nomsky\Lexers\EbnfLexer;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens;
 
 use Helstern\Nomsky\RegExBuilder\RegexBuilder;
 use Helstern\Nomsky\Tokens\TokenPattern\RegexAlternativesTokenPattern;
 use Helstern\Nomsky\Tokens\TokenPattern\AbstractRegexTokenPattern;
 use Helstern\Nomsky\Tokens\TokenPattern\RegexStringTokenPattern;
 
-use Helstern\Nomsky\Lexers\EbnfLexer\SymbolsEnum as Symbols;
-use Helstern\Nomsky\Lexers\EbnfLexer\TokenTypesEnum as TokenTypes;
+use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens\SymbolsEnum as Symbols;
+use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens\TokenTypesEnum as TokenTypes;
 
 class TokenPatterns
 {
@@ -70,11 +70,18 @@ class TokenPatterns
         return $tokenPatterns;
     }
 
+    /**
+     * @param RegexBuilder $regexBuilder
+     */
     public function __construct(RegexBuilder $regexBuilder)
     {
         $this->regexBuilder = $regexBuilder;
     }
 
+    /**
+     * @param int $tokenType
+     * @return RegexStringTokenPattern
+     */
     public function buildCommentPattern($tokenType)
     {
         $regexBuilder = $this->regexBuilder;
@@ -119,13 +126,20 @@ class TokenPatterns
         return $tokenPattern;
     }
 
+    /**
+     * @param int $tokenType
+     * @return RegexStringTokenPattern
+     */
     public function buildCharLiteralPattern($tokenType)
     {
         $regexBuilder = $this->regexBuilder;
         $pattern = $regexBuilder->sequence(
             Symbols::ENUM_SINGLE_QUOTE,
-            (string) $regexBuilder->alternatives('\p{L}|\s', str_repeat(Symbols::ENUM_SINGLE_QUOTE, 2))
-                ->group(),
+            (string) $regexBuilder->alternatives(
+                '\p{L}|\s',
+                str_repeat(Symbols::ENUM_SINGLE_QUOTE, 2)
+            )
+            ->group(),
             Symbols::ENUM_SINGLE_QUOTE
         );
 
@@ -158,6 +172,10 @@ class TokenPatterns
         return $tokenPattern;
     }
 
+    /**
+     * @param int $tokenType
+     * @return RegexStringTokenPattern
+     */
     public function buildSpecialSequencePattern($tokenType)
     {
         $regexBuilder = $this->regexBuilder;
@@ -227,7 +245,7 @@ class TokenPatterns
     //\(\*(?!\*\))?(?:.|\n|\r)*?\*\)
 
     /**
-     * @param $tokenType
+     * @param int $tokenType
      * @return RegexStringTokenPattern
      */
     public function buildTerminatorPattern($tokenType)

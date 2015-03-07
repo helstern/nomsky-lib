@@ -1,5 +1,6 @@
-<?php namespace Helstern\Nomsky\Lexers\EbnfLexer;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf;
 
+use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens\TokenPatterns;
 use Helstern\Nomsky\Lexer\TokenStream\FirstMatchCompositeMatcher;
 use Helstern\Nomsky\Lexer\TextSource\FileSource;
 
@@ -10,7 +11,7 @@ use Helstern\Nomsky\Tokens\TokenMatch\AnchoredPcreMatcher;
 use Helstern\Nomsky\Tokens\TokenPattern\AbstractRegexTokenPattern;
 use Helstern\Nomsky\Tokens\TokenStream\TextReaderAdapter;
 
-class TokenStreamLexerFactory
+class IsoEbnfLexerFactory
 {
     /**
      * @param $filePath

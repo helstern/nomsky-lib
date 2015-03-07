@@ -1,21 +1,21 @@
-<?php namespace Helstern\Nomsky\Parsers\EbnfParser;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf;
 
 
 use Helstern\Nomsky\Exception\SyntacticException;
-use Helstern\Nomsky\Parsers\EbnfAst\AlternativeNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\AlternativeNode;
 use Helstern\Nomsky\Parser\AstNode;
-use Helstern\Nomsky\Parsers\EbnfAst\GroupedExpressionNode;
-use Helstern\Nomsky\Parsers\EbnfAst\IdentifierNode;
-use Helstern\Nomsky\Parsers\EbnfAst\LiteralNode;
-use Helstern\Nomsky\Parsers\EbnfAst\RepeatedExpressionNode;
-use Helstern\Nomsky\Parsers\EbnfAst\OptionalExpressionNode;
-use Helstern\Nomsky\Parsers\EbnfAst\ProductionNode;
-use Helstern\Nomsky\Parsers\EbnfAst\SequenceNode;
-use Helstern\Nomsky\Parsers\EbnfAst\SyntaxNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\GroupedExpressionNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\IdentifierNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\LiteralNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\RepeatedExpressionNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalExpressionNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\ProductionNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\SequenceNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\SyntaxNode;
 use Helstern\Nomsky\Parser\ParseAssertion\TokenAssertions;
 use Helstern\Nomsky\Parser\Lexer;
 
-use Helstern\Nomsky\Lexers\EbnfLexer\TokenTypesEnum;
+use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens\TokenTypesEnum;
 
 /**
  * Class StandardEbnfParser

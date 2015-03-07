@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Parsers\EbnfAst;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\Ast;
 
 use Helstern\Nomsky\Parser\AstNode;
 use Helstern\Nomsky\Text\TextPosition;

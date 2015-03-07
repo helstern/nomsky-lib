@@ -1,5 +1,6 @@
-<?php namespace Helstern\Nomsky\Lexers\EbnfLexer;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf;
 
+use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens\TokenTypesEnum;
 use Helstern\Nomsky\Tokens\TokenDefinition;
 
 class EofTokenDefinition implements TokenDefinition

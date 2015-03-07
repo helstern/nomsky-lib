@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Parsers\EbnfAst;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\Ast;
 
 abstract class AbstractCompositeAstNode
 {
