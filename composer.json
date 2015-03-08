@@ -30,7 +30,7 @@
     }
     , "autoload-dev": {
         "psr-4": {
-            "Helstern\\Nomsky\\": ["test", "test/unit-tests"]
+            "Helstern\\Nomsky\\": ["test", "test/php-unit"]
         }
     }
 }
