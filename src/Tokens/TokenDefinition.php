@@ -1,7 +1,7 @@
 <?php namespace Helstern\Nomsky\Tokens;
 
-interface TokenDefinition {
-
+interface TokenDefinition
+{
     /**
      * @return int
      */
@@ -11,5 +11,4 @@ interface TokenDefinition {
      * @return string
      */
     public function getValue();
-
 }
