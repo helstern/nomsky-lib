@@ -3,6 +3,8 @@
 
 use Helstern\Nomsky\Exception\SyntacticException;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\AlternativeNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\CommentNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\SpecialSequenceNode;
 use Helstern\Nomsky\Parser\AstNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\GroupedExpressionNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\IdentifierNode;
@@ -106,7 +108,7 @@ class IsoEbnfParser
 
     /**
      * @param Lexer $lexer
-     * @return StringLiteralNode
+     * @return CommentNode
      * @throws \Helstern\Nomsky\Exception\SyntacticException
      */
     protected function parseComment(Lexer $lexer)
@@ -121,13 +123,13 @@ class IsoEbnfParser
         $textPosition = $token->getPosition();
         $literal = $token->getValue();
 
-        $node = new StringLiteralNode($textPosition, $literal);
+        $node = new CommentNode($textPosition, $literal);
         return $node;
     }
 
     /**
      * @param Lexer $lexer
-     * @return ProductionNode
+     * @return \Helstern\Nomsky\Grammars\Ebnf\Ast\ProductionNode
      */
     protected function parseRule(Lexer $lexer)
     {
@@ -151,8 +153,8 @@ class IsoEbnfParser
 
     /**
      * @param Lexer $lexer
+     * @return \Helstern\Nomsky\Grammars\Ebnf\Ast\IdentifierNode
      * @throws SyntacticException
-     * @return IdentifierNode
      */
     protected function parseIdentifier(Lexer $lexer)
     {
@@ -195,7 +197,7 @@ class IsoEbnfParser
 
     /**
      * @param Lexer $lexer
-     * @return GroupedExpressionNode|IdentifierNode|StringLiteralNode|RepeatedExpressionNode|OptionalExpressionNode|SequenceNode
+     * @return \Helstern\Nomsky\Grammars\Ebnf\Ast\IdentifierNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalExpressionNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\SequenceNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\SpecialSequenceNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\StringLiteralNode|null
      */
     protected function parseTerm(Lexer $lexer)
     {
@@ -223,7 +225,7 @@ class IsoEbnfParser
 
     /**
      * @param Lexer $lexer
-     * @return GroupedExpressionNode|IdentifierNode|StringLiteralNode|RepeatedExpressionNode|OptionalExpressionNode
+     * @return \Helstern\Nomsky\Grammars\Ebnf\Ast\GroupedExpressionNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\IdentifierNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalExpressionNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\RepeatedExpressionNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\SpecialSequenceNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\StringLiteralNode|null
      * @throws \Exception
      */
     protected function parseFactor(Lexer $lexer)
@@ -260,6 +262,11 @@ class IsoEbnfParser
         return $node;
     }
 
+    /**
+     * @param Lexer $lexer
+     * @return \Helstern\Nomsky\Grammars\Ebnf\Ast\StringLiteralNode
+     * @throws SyntacticException
+     */
     protected function parseStringLiteral(Lexer $lexer)
     {
         $token = $lexer->currentToken();
@@ -277,8 +284,8 @@ class IsoEbnfParser
 
     /**
      * @param Lexer $lexer
+     * @return \Helstern\Nomsky\Grammars\Ebnf\Ast\SpecialSequenceNode
      * @throws SyntacticException
-     * @return StringLiteralNode
      */
     protected function parseSpecialExpression(Lexer $lexer)
     {
@@ -291,13 +298,13 @@ class IsoEbnfParser
         $textPosition = $token->getPosition();
         $literal = $token->getValue();
 
-        $node = new StringLiteralNode($textPosition, $literal);
+        $node = new SpecialSequenceNode($textPosition, $literal);
         return $node;
     }
 
     /**
      * @param Lexer $lexer
-     * @return OptionalExpressionNode
+     * @return \Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalExpressionNode
      */
     protected function parseOptionalExpression(Lexer $lexer)
     {
@@ -317,7 +324,7 @@ class IsoEbnfParser
 
     /**
      * @param Lexer $lexer
-     * @return OptionalExpressionNode
+     * @return \Helstern\Nomsky\Grammars\Ebnf\Ast\GroupedExpressionNode
      */
     protected function parseGroupedExpression(Lexer $lexer)
     {
@@ -337,7 +344,7 @@ class IsoEbnfParser
 
     /**
      * @param Lexer $lexer
-     * @return OptionalExpressionNode
+     * @return \Helstern\Nomsky\Grammars\Ebnf\Ast\RepeatedExpressionNode
      */
     protected function parseRepeatedExpression(Lexer $lexer)
     {
