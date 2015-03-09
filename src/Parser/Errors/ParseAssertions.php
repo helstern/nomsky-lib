@@ -48,10 +48,10 @@ class ParseAssertions
     public function assertNotEOF(Token $actualToken)
     {
         if ($this->tokenPredicates->hasSameType($actualToken, 0)) {
-            return true;
+            $exceptionMsg = (new ErrorMessagesBuilder)->unexpectedEOF($actualToken);
+            throw new SyntacticException($actualToken, $exceptionMsg, SyntacticExceptionCodes::CODE_BASE);
         }
 
-        $exceptionMsg = (new ErrorMessagesBuilder)->unexpectedEOF($actualToken);
-        throw new SyntacticException($actualToken, $exceptionMsg, SyntacticExceptionCodes::CODE_BASE);
+        return true;
     }
 }
