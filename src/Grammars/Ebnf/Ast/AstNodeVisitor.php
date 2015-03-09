@@ -51,8 +51,8 @@ interface AstNodeVisitor
     public function visitIdentifierNode(IdentifierNode $node);
 
     /**
-     * @param LiteralNode $node
+     * @param StringLiteralNode $node
      * @return boolean
      */
-    public function visitLiteralNode(LiteralNode $node);
+    public function visitLiteralNode(StringLiteralNode $node);
 }
