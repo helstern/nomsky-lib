@@ -30,7 +30,7 @@ interface AstNodeVisitor
      * @param RepeatedExpressionNode $node
      * @return boolean
      */
-    public function visitOptionalExpressionListNode(RepeatedExpressionNode $node);
+    public function visitRepeatedExpressionNode(RepeatedExpressionNode $node);
 
     /**
      * @param OptionalExpressionNode $node
@@ -42,7 +42,7 @@ interface AstNodeVisitor
      * @param GroupedExpressionNode $node
      * @return boolean
      */
-    public function visitGroupNode(GroupedExpressionNode $node);
+    public function visitGroupedExpressionNode(GroupedExpressionNode $node);
 
     /**
      * @param IdentifierNode $node
@@ -54,5 +54,17 @@ interface AstNodeVisitor
      * @param StringLiteralNode $node
      * @return boolean
      */
-    public function visitLiteralNode(StringLiteralNode $node);
+    public function visitStringLiteralNode(StringLiteralNode $node);
+
+    /**
+     * @param CommentNode $node
+     * @return boolean
+     */
+    public function visitCommentNode(CommentNode $node);
+
+    /**
+     * @param SpecialSequenceNode $node
+     * @return boolean
+     */
+    public function visitSpecialSequenceNode(SpecialSequenceNode $node);
 }
