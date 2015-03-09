@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Parser;
+<?php namespace Helstern\Nomsky\Parser\Ast;
 
 use Helstern\Nomsky\Text\TextPosition;
 

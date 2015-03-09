@@ -1,6 +1,7 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\Ast;
 
-use Helstern\Nomsky\Parser\AstNode;
+use Helstern\Nomsky\Parser\Ast\AbstractCompositeAstNode;
+use Helstern\Nomsky\Parser\Ast\AstNode;
 use Helstern\Nomsky\Text\TextPosition;
 
 class GroupedExpressionNode extends AbstractCompositeAstNode implements AstNode

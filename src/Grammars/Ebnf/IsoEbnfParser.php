@@ -5,7 +5,7 @@ use Helstern\Nomsky\Exception\SyntacticException;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\AlternativeNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\CommentNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\SpecialSequenceNode;
-use Helstern\Nomsky\Parser\AstNode;
+use Helstern\Nomsky\Parser\Ast\AstNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\GroupedExpressionNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\IdentifierNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\StringLiteralNode;
