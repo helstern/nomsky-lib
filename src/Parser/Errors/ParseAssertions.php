@@ -1,6 +1,5 @@
 <?php namespace Helstern\Nomsky\Parser\Errors;
 
-use Helstern\Nomsky\Parser\Lexer;
 use Helstern\Nomsky\Parser\ParseException\SyntacticException;
 use Helstern\Nomsky\Tokens\TokenPredicates;
 use Helstern\Nomsky\Tokens\Token;
