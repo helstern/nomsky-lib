@@ -79,4 +79,22 @@ class SyntaxNode extends AbstractCompositeAstNode implements AstNode
     {
         return $this->textPosition;
     }
+
+    /**
+     * @return int
+     */
+    public function countChildren()
+    {
+        $count = 1 + count($this->productionNodes) + 1;
+
+        if (is_null($this->grammarTitle)) {
+            $count--;
+        }
+
+        if (is_null($this->grammarComment)) {
+            $count--;
+        }
+
+        return $count;
+    }
 }

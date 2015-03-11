@@ -27,4 +27,12 @@ class RepeatedExpressionNode extends AbstractCompositeAstNode implements AstNode
     {
         return $this->textPosition;
     }
+
+    /**
+     * @return int
+     */
+    public function countChildren()
+    {
+        return 1;
+    }
 }

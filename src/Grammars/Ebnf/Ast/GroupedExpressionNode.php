@@ -27,4 +27,12 @@ class GroupedExpressionNode extends AbstractCompositeAstNode implements AstNode
     {
         return array($this->childNode);
     }
+
+    /**
+     * @return int
+     */
+    public function countChildren()
+    {
+        return 1;
+    }
 }

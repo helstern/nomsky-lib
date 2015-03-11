@@ -14,11 +14,25 @@ interface AstNodeVisitor
      */
     public function visitProductionNode(ProductionNode $node);
 
+
+    /**
+     * @param AlternativeNode $node
+     * @return boolean
+     */
+    public function preVisitAlternativeNode(AlternativeNode $node);
+
     /**
      * @param AlternativeNode $node
      * @return boolean
      */
     public function visitAlternativeNode(AlternativeNode $node);
+
+    /**
+     * @param AlternativeNode $node
+     * @return boolean
+     */
+    public function postVisitAlternativeNode(AlternativeNode $node);
+
 
     /**'
      * @param SequenceNode $node
