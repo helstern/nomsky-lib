@@ -32,9 +32,6 @@ class PreVisitAction implements VisitAction
         return $this->visitReceiver;
     }
 
-    /**
-     * @return bool
-     */
     public function execute()
     {
         $this->visitor->preVisit($this->visitReceiver);

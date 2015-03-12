@@ -22,17 +22,11 @@ class PostVisitAction implements VisitAction
         $this->visitor = $visitor;
     }
 
-    /**
-     * @return AstNodeVisitor $visitor
-     */
     public function getVisitor()
     {
         return $this->visitor;
     }
 
-    /**
-     * @return AstNode
-     */
     public function getVisitReceiver()
     {
         return $this->visitReceiver;

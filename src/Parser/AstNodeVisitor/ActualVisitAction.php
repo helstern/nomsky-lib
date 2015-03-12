@@ -7,27 +7,35 @@ use Helstern\Nomsky\Parser\Ast\AstNodeVisitor;
 class ActualVisitAction implements VisitAction
 {
     /** @var AstNode */
-    protected $visitSubject;
+    protected $visitReceiver;
+
+    /** @var AstNodeVisitor */
+    protected $visitor;
 
     /**
-     * @param AstNode $visitSubject
+     * @param AstNode $visitReceiver
+     * @param AstNodeVisitor $visitor
      */
-    public function __construct(AstNode $visitSubject)
+    public function __construct(AstNode $visitReceiver, AstNodeVisitor $visitor)
     {
-        $this->visitSubject = $visitSubject;
+        $this->visitReceiver = $visitReceiver;
+        $this->visitor = $visitor;
     }
 
-    /**
-     * @return AstNode
-     */
+    public function getVisitor()
+    {
+        return $this->visitor;
+    }
+
     public function getVisitReceiver()
     {
-        return $this->visitSubject;
+        return $this->visitReceiver;
     }
 
-    public function execute(AstNodeVisitor $visitor)
+    public function execute()
     {
-        $visitor->visit($this->visitSubject);
+        $this->visitor->visit($this->visitReceiver);
+        return true;
     }
 }
 
