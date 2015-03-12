@@ -7,18 +7,18 @@ abstract class AbstractDispatchingVisitor implements AstNodeVisitor
 {
     /**
      * @param AstNode $astNode
-     * @return bool
+     * @return bool false when the dispatching failed because of wrong type of $astNode
      */
     abstract protected function dispatchPreVisit(AstNode $astNode);
     /**
      * @param AstNode $astNode
-     * @return bool
+     * @return bool false when the dispatching failed because of wrong type of $astNode
      */
     abstract protected function dispatchPostVisit(AstNode $astNode);
 
     /**
      * @param AstNode $astNode
-     * @return bool
+     * @return bool false when the dispatching failed because of wrong type of $astNode
      */
     abstract protected function dispatchVisit(AstNode $astNode);
 
