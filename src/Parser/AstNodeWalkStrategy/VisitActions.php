@@ -22,6 +22,18 @@ class VisitActions implements VisitActionFactory
 
     /**
      * @param AstNode $astNode
+     * @return NodeVisitActions
+     */
+    public function getNodeVisitActions(AstNode $astNode)
+    {
+        $visitor = $this->visitorProvider->getVisitor($astNode);
+        $nodeVisitActions = new NodeVisitActions($astNode, $visitor);
+
+        return $nodeVisitActions;
+    }
+
+    /**
+     * @param AstNode $astNode
      * @return PreVisitAction
      */
     public function createPreVisit(AstNode $astNode)
