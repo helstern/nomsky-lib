@@ -1,14 +1,7 @@
 <?php namespace Helstern\Nomsky\Parser\Ast;
 
-abstract class AbstractCompositeAstNode
+abstract class AbstractCompositeAstNode implements AstNode
 {
-    public function collectChildrenInList(\SplDoublyLinkedList $list)
-    {
-        foreach ($this->getChildren() as $child) {
-            $list->push($child);
-        }
-    }
-
     /**
      * Returns the ordered list of this node's children
      *
