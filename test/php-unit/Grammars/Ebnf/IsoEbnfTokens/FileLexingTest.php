@@ -12,13 +12,14 @@ class FileLexingTest extends \PHPUnit_Framework_TestCase
      */
     static public function getResourceFilePath($fileName)
     {
-        $resource = new TestResources(__FILE__);
+        $resource = new TestResources();
         return $resource->getResourceFilePath($fileName);
     }
 
     /**
      * @small
      * @group small
+     * @group now
      */
     public function testTokenizeNomskyIsoEbnf()
     {
@@ -47,7 +48,7 @@ class FileLexingTest extends \PHPUnit_Framework_TestCase
             'lexer failed to match any token from file '. $fileName .' (' . $filePath . ')'
         );
 
-        $expectedNrOfTokens = 942;
+        $expectedNrOfTokens = 150;
         $actualNrOfTokens = count($actualTokens);
         $this->assertEquals($expectedNrOfTokens, $actualNrOfTokens, 'Incorrect number of tokens');
 
