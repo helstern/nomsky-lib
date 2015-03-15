@@ -22,6 +22,22 @@ class RuleNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
         $this->expressionNode = $expressionNode;
     }
 
+    /**
+     * @return IdentifierNode
+     */
+    public function getIdentifierNode()
+    {
+        return $this->identifierNode;
+    }
+
+    /**
+     * @return AstNode
+     */
+    public function getExpressionNode()
+    {
+        return $this->expressionNode;
+    }
+
     public function getChildren()
     {
         return array($this->identifierNode, $this->expressionNode);

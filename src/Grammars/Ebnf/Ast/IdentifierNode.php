@@ -11,10 +11,18 @@ class IdentifierNode extends AbstractEbnfNode implements AstNode
     /** @var string */
     protected $name;
 
-    public function __construct(TextPosition $textPosition, $name)
+    public function __construct(TextPosition $textPosition, $identifierName)
     {
         $this->textPosition = $textPosition;
-        $this->name = $name;
+        $this->name = $identifierName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifierName()
+    {
+        return $this->name;
     }
 
     /**
