@@ -6,10 +6,9 @@ use Helstern\Nomsky\Parser\Ast\AstNodeVisitor;
 abstract class AbstractDispatchingVisitor implements AstNodeVisitor
 {
     /**
-     * @param AstNode $astNode
-     * @return bool false when the dispatching failed because of wrong type of $astNode
+     * @return VisitDispatcher
      */
-    abstract protected function dispatchPreVisit(AstNode $astNode);
+    abstract protected function getVisitDispatcher();
 
     /**
      * @param AstNode $astNode
@@ -18,7 +17,8 @@ abstract class AbstractDispatchingVisitor implements AstNodeVisitor
      */
     public function preVisit(AstNode $astNode)
     {
-        if ($this->dispatchPreVisit($astNode)) {
+        $visitDispatcher = $this->getVisitDispatcher();
+        if ($visitDispatcher->dispatchPreVisit($this, $astNode)) {
             return true;
         }
 
@@ -36,18 +36,13 @@ abstract class AbstractDispatchingVisitor implements AstNodeVisitor
 
     /**
      * @param AstNode $astNode
-     * @return bool false when the dispatching failed because of wrong type of $astNode
-     */
-    abstract protected function dispatchVisit(AstNode $astNode);
-
-    /**
-     * @param AstNode $astNode
      * @return bool
      * @throws NonDispatchableVisitException
      */
     public function visit(AstNode $astNode)
     {
-        if ($this->dispatchVisit($astNode)) {
+        $visitDispatcher = $this->getVisitDispatcher();
+        if ($visitDispatcher->dispatchVisit($this, $astNode)) {
             return true;
         }
 
@@ -65,18 +60,13 @@ abstract class AbstractDispatchingVisitor implements AstNodeVisitor
 
     /**
      * @param AstNode $astNode
-     * @return bool false when the dispatching failed because of wrong type of $astNode
-     */
-    abstract protected function dispatchPostVisit(AstNode $astNode);
-
-    /**
-     * @param AstNode $astNode
      * @return bool
      * @throws NonDispatchableVisitException
      */
     public function postVisit(AstNode $astNode)
     {
-        if ($this->dispatchPostVisit($astNode)) {
+        $visitDispatcher = $this->getVisitDispatcher();
+        if ($visitDispatcher->dispatchPostVisit($this, $astNode)) {
             return true;
         }
 

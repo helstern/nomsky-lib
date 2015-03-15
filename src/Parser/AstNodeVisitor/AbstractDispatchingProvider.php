@@ -9,6 +9,19 @@ abstract class AbstractDispatchingProvider implements AstNodeVisitorProvider
 {
     /**
      * @param AstNode $node
+     * @return VisitDispatcher
+     */
+    public function createVisitDispatcher(AstNode $node)
+    {
+        $visitDispatcherBuilder = new VisitDispatcherBuilder();
+        /** @var VisitDispatcher $visitDispatcher */
+        $visitDispatcher = $node->buildDoubleDispatcher($visitDispatcherBuilder);
+
+        return $visitDispatcher;
+    }
+
+    /**
+     * @param AstNode $node
      * @return AstNodeVisitor
      */
     public function getVisitor(AstNode $node)
