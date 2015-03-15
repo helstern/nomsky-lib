@@ -19,7 +19,6 @@ class FileLexingTest extends \PHPUnit_Framework_TestCase
     /**
      * @small
      * @group small
-     * @group now
      */
     public function testTokenizeNomskyIsoEbnf()
     {

@@ -16,9 +16,6 @@ class IsoEbnfParserTest extends \PHPUnit_Framework_TestCase
         return $resource->getResourceFilePath($fileName);
     }
 
-    /**
-     * @group now
-     */
     public function testParseEbnfGrammar()
     {
         $expectedAstNode = '\\Helstern\Nomsky\Grammars\Ebnf\Ast\\SyntaxNode';
