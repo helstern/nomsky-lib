@@ -10,17 +10,6 @@ abstract class AbstractDispatchingVisitor implements AstNodeVisitor
      * @return bool false when the dispatching failed because of wrong type of $astNode
      */
     abstract protected function dispatchPreVisit(AstNode $astNode);
-    /**
-     * @param AstNode $astNode
-     * @return bool false when the dispatching failed because of wrong type of $astNode
-     */
-    abstract protected function dispatchPostVisit(AstNode $astNode);
-
-    /**
-     * @param AstNode $astNode
-     * @return bool false when the dispatching failed because of wrong type of $astNode
-     */
-    abstract protected function dispatchVisit(AstNode $astNode);
 
     /**
      * @param AstNode $astNode
@@ -41,6 +30,18 @@ abstract class AbstractDispatchingVisitor implements AstNodeVisitor
 
     /**
      * @param AstNode $astNode
+     */
+    protected function nonDispatchablePreVisit(AstNode $astNode)
+    {}
+
+    /**
+     * @param AstNode $astNode
+     * @return bool false when the dispatching failed because of wrong type of $astNode
+     */
+    abstract protected function dispatchVisit(AstNode $astNode);
+
+    /**
+     * @param AstNode $astNode
      * @return bool
      * @throws NonDispatchableVisitException
      */
@@ -55,6 +56,18 @@ abstract class AbstractDispatchingVisitor implements AstNodeVisitor
         $exception = $this->createNonDispatchableVisitException($astNode);
         throw $exception;
     }
+
+    /**
+     * @param AstNode $astNode
+     */
+    protected function nonDispatchableVisit(AstNode $astNode)
+    {}
+
+    /**
+     * @param AstNode $astNode
+     * @return bool false when the dispatching failed because of wrong type of $astNode
+     */
+    abstract protected function dispatchPostVisit(AstNode $astNode);
 
     /**
      * @param AstNode $astNode
@@ -75,6 +88,12 @@ abstract class AbstractDispatchingVisitor implements AstNodeVisitor
 
     /**
      * @param AstNode $astNode
+     */
+    protected function nonDispatchablePostVisit(AstNode $astNode)
+    {}
+
+    /**
+     * @param AstNode $astNode
      * @return NonDispatchableVisitException
      */
     protected function createNonDispatchableVisitException(AstNode $astNode)
@@ -83,21 +102,4 @@ abstract class AbstractDispatchingVisitor implements AstNodeVisitor
         $exception = new NonDispatchableVisitException($astNode, $msg);
         return $exception;
     }
-    /**
-     * @param AstNode $astNode
-     */
-    protected function nonDispatchablePostVisit(AstNode $astNode)
-    {}
-
-    /**
-     * @param AstNode $astNode
-     */
-    protected function nonDispatchableVisit(AstNode $astNode)
-    {}
-
-    /**
-     * @param AstNode $astNode
-     */
-    protected function nonDispatchablePreVisit(AstNode $astNode)
-    {}
 }
