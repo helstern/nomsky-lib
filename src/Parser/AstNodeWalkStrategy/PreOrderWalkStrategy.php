@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Parser\AstNodeWalkStrategy;
 
-use Helstern\Nomsky\Parser\Ast\AbstractCompositeAstNode;
+use Helstern\Nomsky\Parser\Ast\CompositeAstNode;
 use Helstern\Nomsky\Parser\Ast\AstNode;
 use Helstern\Nomsky\Parser\Ast\AstNodeVisitorProvider;
 use Helstern\Nomsky\Parser\Ast\AstNodeWalkStrategy;
@@ -34,7 +34,7 @@ class PreOrderWalkStrategy implements AstNodeWalkStrategy
     public function calculateWalkList(AstNode $parent)
     {
         $list = null;
-        if ($parent instanceof AbstractCompositeAstNode) {
+        if ($parent instanceof CompositeAstNode) {
             $list = $this->buildParentNodeList($parent);
         } else {
             $list = $this->buildChildlessNodeList($parent);
@@ -44,11 +44,11 @@ class PreOrderWalkStrategy implements AstNodeWalkStrategy
     }
 
     /**
-     * @param AbstractCompositeAstNode $parent
+     * @param CompositeAstNode $parent
      * @param \SplDoublyLinkedList $list
      * @return bool
      */
-    protected function addChildrenActionsToList(AbstractCompositeAstNode $parent, \SplDoublyLinkedList $list)
+    protected function addChildrenActionsToList(CompositeAstNode $parent, \SplDoublyLinkedList $list)
     {
         $addToListResult = false;
 
@@ -62,10 +62,10 @@ class PreOrderWalkStrategy implements AstNodeWalkStrategy
     }
 
     /**
-     * @param AbstractCompositeAstNode $parent
+     * @param CompositeAstNode $parent
      * @return \SplDoublyLinkedList
      */
-    protected function buildParentNodeList(AbstractCompositeAstNode $parent)
+    protected function buildParentNodeList(CompositeAstNode $parent)
     {
         $visits = $this->visits();
 
