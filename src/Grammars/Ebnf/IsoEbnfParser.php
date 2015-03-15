@@ -11,7 +11,7 @@ use Helstern\Nomsky\Grammars\Ebnf\Ast\IdentifierNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\StringLiteralNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\RepeatedExpressionNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalExpressionNode;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\ProductionNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\RuleNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\SequenceNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\SyntaxNode;
 use Helstern\Nomsky\Parser\Errors\ParseAssertions;
@@ -129,7 +129,7 @@ class IsoEbnfParser
 
     /**
      * @param Lexer $lexer
-     * @return \Helstern\Nomsky\Grammars\Ebnf\Ast\ProductionNode
+     * @return \Helstern\Nomsky\Grammars\Ebnf\Ast\RuleNode
      */
     protected function parseRule(Lexer $lexer)
     {
@@ -147,7 +147,7 @@ class IsoEbnfParser
         $lexer->nextToken();
 
         $textPosition = $identifierNode->getTextPosition();
-        $node = new ProductionNode($textPosition, $identifierNode, $expressionNode);
+        $node = new RuleNode($textPosition, $identifierNode, $expressionNode);
         return $node;
     }
 

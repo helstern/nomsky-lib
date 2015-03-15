@@ -9,8 +9,8 @@ class SyntaxNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
     /** @var TextPosition */
     protected $textPosition;
 
-    /** @var array | ProductionNode[] */
-    protected $productionNodes;
+    /** @var array | RuleNode[] */
+    protected $ruleNodes;
 
     /** @var StringLiteralNode|null */
     protected $grammarTitle;
@@ -25,7 +25,7 @@ class SyntaxNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
         StringLiteralNode $grammarComment = null
     ) {
         $this->textPosition = $textPosition;
-        $this->productionNodes = $productionNodes;
+        $this->ruleNodes = $productionNodes;
         $this->grammarTitle = $grammarTitle;
         $this->grammarComment = $grammarComment;
     }
@@ -47,11 +47,11 @@ class SyntaxNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
     }
 
     /**
-     * @return array|ProductionNode[]
+     * @return array|RuleNode[]
      */
-    public function getProductionNodes()
+    public function getRuleNodes()
     {
-        return $this->productionNodes;
+        return $this->ruleNodes;
     }
 
     public function getChildren()
@@ -62,7 +62,7 @@ class SyntaxNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
             $children = [$this->grammarTitle];
         }
 
-        $children = array_merge($children, $this->productionNodes);
+        $children = array_merge($children, $this->ruleNodes);
 
         if (is_null($this->grammarComment)) {
             return $children;
@@ -85,7 +85,7 @@ class SyntaxNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
      */
     public function countChildren()
     {
-        $count = 1 + count($this->productionNodes) + 1;
+        $count = 1 + count($this->ruleNodes) + 1;
 
         if (is_null($this->grammarTitle)) {
             $count--;

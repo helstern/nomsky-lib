@@ -9,10 +9,10 @@ interface AstNodeVisitor
     public function visitSyntaxNode(SyntaxNode $node);
 
     /**
-     * @param ProductionNode $node
+     * @param RuleNode $node
      * @return boolean
      */
-    public function visitProductionNode(ProductionNode $node);
+    public function visitRuleNode(RuleNode $node);
 
 
     /**

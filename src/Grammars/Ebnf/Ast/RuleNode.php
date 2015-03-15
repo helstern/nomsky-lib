@@ -4,7 +4,7 @@ use Helstern\Nomsky\Parser\Ast\CompositeAstNode;
 use Helstern\Nomsky\Parser\Ast\AstNode;
 use Helstern\Nomsky\Text\TextPosition;
 
-class ProductionNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
+class RuleNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
 {
     /** @var TextPosition */
     protected $textPosition;
