@@ -3,7 +3,7 @@
 use Helstern\Nomsky\Parser\Ast\AstNode;
 use Helstern\Nomsky\Text\TextPosition;
 
-class CommentNode implements AstNode
+class CommentNode extends AbstractEbnfNode implements AstNode
 {
     /** @var TextPosition */
     protected $textPosition;

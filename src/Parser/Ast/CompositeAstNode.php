@@ -1,16 +1,16 @@
 <?php namespace Helstern\Nomsky\Parser\Ast;
 
-abstract class AbstractCompositeAstNode implements AstNode
+interface CompositeAstNode extends AstNode
 {
     /**
      * Returns the ordered list of this node's children
      *
      * @return AstNode[]
      */
-    abstract public function getChildren();
+    public function getChildren();
 
     /**
      * @return int
      */
-    abstract public function countChildren();
+    public function countChildren();
 }

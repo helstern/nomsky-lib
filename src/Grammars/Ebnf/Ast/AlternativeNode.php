@@ -1,11 +1,10 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\Ast;
 
-use Helstern\Nomsky\Parser\Ast\AbstractCompositeAstNode;
+use Helstern\Nomsky\Parser\Ast\CompositeAstNode;
 use Helstern\Nomsky\Parser\Ast\AstNode;
-use Helstern\Nomsky\Parser\Ast\VisitAction;
 use Helstern\Nomsky\Text\TextPosition;
 
-class AlternativeNode extends AbstractCompositeAstNode implements AstNode
+class AlternativeNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
 {
     /** @var TextPosition */
     protected $textPosition;
@@ -44,29 +43,5 @@ class AlternativeNode extends AbstractCompositeAstNode implements AstNode
     public function countChildren()
     {
         return 1 + count($this->otherChildren);
-    }
-
-    /**
-     * @return VisitAction
-     */
-    public function createPreVisitAction()
-    {
-        // TODO: Implement createPreVisitAction() method.
-    }
-
-    /**
-     * @return VisitAction
-     */
-    public function createVisitAction()
-    {
-        // TODO: Implement createVisitAction() method.
-    }
-
-    /**
-     * @return VisitAction
-     */
-    public function createPostVisitAction()
-    {
-        // TODO: Implement createPostVisitAction() method.
     }
 }

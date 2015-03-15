@@ -1,10 +1,10 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\Ast;
 
-use Helstern\Nomsky\Parser\Ast\AbstractCompositeAstNode;
+use Helstern\Nomsky\Parser\Ast\CompositeAstNode;
 use Helstern\Nomsky\Parser\Ast\AstNode;
 use Helstern\Nomsky\Text\TextPosition;
 
-class GroupedExpressionNode extends AbstractCompositeAstNode implements AstNode
+class GroupedExpressionNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
 {
     /** @var TextPosition */
     protected $textPosition;

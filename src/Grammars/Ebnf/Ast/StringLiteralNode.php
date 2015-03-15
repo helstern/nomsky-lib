@@ -3,11 +3,15 @@
 use Helstern\Nomsky\Parser\Ast\AstNode;
 use Helstern\Nomsky\Text\TextPosition;
 
-class StringLiteralNode implements AstNode
+class StringLiteralNode extends AbstractEbnfNode implements AstNode
 {
     /** @var TextPosition */
     protected $textPosition;
 
+    /**
+     * @param TextPosition $textPosition
+     * @param string $rawString
+     */
     public function __construct(TextPosition $textPosition, $rawString)
     {
         $this->textPosition = $textPosition;
