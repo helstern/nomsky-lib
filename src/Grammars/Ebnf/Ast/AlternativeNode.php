@@ -29,7 +29,8 @@ class AlternativeNode extends AbstractEbnfNode implements AstNode, CompositeAstN
 
     public function getChildren()
     {
-        return array($this->firstChild) + $this->otherChildren;
+        $children = array_merge(array($this->firstChild),$this->otherChildren);
+        return $children;
     }
 
     public function getTextPosition()
