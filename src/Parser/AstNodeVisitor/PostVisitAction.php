@@ -34,7 +34,7 @@ class PostVisitAction implements VisitAction
 
     public function execute()
     {
-        $this->visitor->visit($this->visitReceiver);
+        $this->visitor->postVisit($this->visitReceiver);
         return true;
     }
 
