@@ -21,6 +21,9 @@ class TextReaderAdapter implements TokenStream
     /** @var Token */
     protected $token;
 
+    /** @var TextMatch */
+    protected $tokenMatch;
+
     /** @var Token */
     protected $eofToken;
 
@@ -41,7 +44,7 @@ class TextReaderAdapter implements TokenStream
         $this->tokenMatchReader = $nextTokenReader;
         $this->eofTokenDefinition = $eofTokenDefinition;
 
-        $previousPosition = new TextPosition(0, 0, 0);
+        $previousPosition = new TextPosition(0, 1, 1);
         $token = $this->readNextToken($previousPosition);
         $this->token = $token;
     }
@@ -55,38 +58,42 @@ class TextReaderAdapter implements TokenStream
         $whitespaceMatch = $this->matchWhitespace();
 
         $tokenMatch = $this->tokenMatchReader->match($this->textReader);
+        $this->tokenMatch = $tokenMatch;
+
         if (is_null($tokenMatch)) {
             return $this->createEOFToken();
         }
 
+        $offsetPosition = $this->calculateTextMatchOffset($whitespaceMatch);
+        $tokenPosition = $previousPosition->offsetRight($offsetPosition);
+        $token = $this->createToken($tokenMatch, $tokenPosition);
+
         $this->textReader->skip($tokenMatch->getByteLength());
 
-        $offsetPosition = $this->calculateOffsetPosition($whitespaceMatch, $tokenMatch);
-        $tokenPosition = $previousPosition->offsetRight($offsetPosition);
-
-        $token = $this->createToken($tokenMatch, $tokenPosition);
         return $token;
     }
 
     /**
-     * @param TextMatch $whitespaceMatch
-     * @param TextMatch $tokenMatch
+     * @param \Helstern\Nomsky\Text\TextMatch $textMatch
      * @return TextPosition
      */
-    protected function calculateOffsetPosition(TextMatch $whitespaceMatch, TextMatch $tokenMatch)
+    protected function calculateTextMatchOffset(TextMatch $textMatch)
     {
-        $offsetTextMatch = $whitespaceMatch->getText() . $tokenMatch->getText();
-        $offsetByte = $whitespaceMatch->getByteLength() + $tokenMatch->getByteLength();
+        $offsetTextMatch = $textMatch->getText();
+        $offsetByte = $textMatch->getByteLength();
 
+        $startColumn = 0;
         $offsetLines = (int) preg_match_all("#(\r\n|\n|\r)#m", $offsetTextMatch, $newLineMatches, PREG_OFFSET_CAPTURE);
         if ($offsetLines > 0) {
             /** @var array $lastPregMatch */
             $lastPregMatch = end($newLineMatches);
             $lastMatchByteIndex = mb_strlen($lastPregMatch[0][0]) + $lastPregMatch[0][1];
             $offsetTextMatch = substr($offsetTextMatch, $lastMatchByteIndex);
+
+            $startColumn = 1;
         }
         $offsetColumn = mb_strlen($offsetTextMatch, 'UTF-8');
-        $offsetPosition = new TextPosition($offsetByte, $offsetColumn, $offsetLines);
+        $offsetPosition = new TextPosition($offsetByte, $startColumn + $offsetColumn, $offsetLines);
         return $offsetPosition;
     }
 
@@ -136,8 +143,9 @@ class TextReaderAdapter implements TokenStream
             return false;
         }
 
-        $previousPosition = $this->token->getPosition();
-        $nextToken = $this->readNextToken($previousPosition);
+        $nextPosition = $this->nextTextPosition();
+        $nextToken = $this->readNextToken($nextPosition);
+
         if ($this->isEOFToken($nextToken)) {
             $this->eofToken = $nextToken;
             $this->token = null;
@@ -147,6 +155,18 @@ class TextReaderAdapter implements TokenStream
 
         $this->token = $nextToken;
         return true;
+    }
+
+    /**
+     * @return TextPosition
+     */
+    protected function nextTextPosition()
+    {
+        $offsetPosition = $this->calculateTextMatchOffset($this->tokenMatch);
+        $tokenPosition  = $this->token->getPosition();
+        $nextPosition   = $tokenPosition->offsetRight($offsetPosition);
+
+        return $nextPosition;
     }
 
     /**
