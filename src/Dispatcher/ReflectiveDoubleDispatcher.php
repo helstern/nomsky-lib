@@ -30,13 +30,18 @@ class ReflectiveDoubleDispatcher implements DoubleDispatcher
 
     /**
      * @param object $object
+     * @throws \Exception
      * @return \ReflectionMethod
      * @throw \ReflectionException
      */
     protected function createReflectionMethod($object)
     {
-        $reflectionMethod = new \ReflectionMethod($object, $this->dispatchMethodName);
-        return $reflectionMethod;
+        try {
+            $reflectionMethod = new \ReflectionMethod($object, $this->dispatchMethodName);
+            return $reflectionMethod;
+        } catch (\ReflectionException $e) {
+            throw $e;
+        }
     }
 
     /**
