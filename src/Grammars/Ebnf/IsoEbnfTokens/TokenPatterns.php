@@ -49,7 +49,7 @@ class TokenPatterns
         $tokenPatterns = [];
         //longer patterns
         $tokenPatterns[] = $instance->buildStringLiteralPattern(TokenTypes::ENUM_STRING_LITERAL);
-        $tokenPatterns[] = $instance->buildIdentifierPattern(TokenTypes::ENUM_STRING_LITERAL);
+        $tokenPatterns[] = $instance->buildIdentifierPattern(TokenTypes::ENUM_IDENTIFIER);
         $tokenPatterns[] = $instance->buildSpecialSequencePattern(TokenTypes::ENUM_SPECIAL_SEQUENCE);
         $tokenPatterns[] = $instance->buildCommentPattern(TokenTypes::ENUM_COMMENT);
         $tokenPatterns[] = $instance->buildDefinitionListStartPattern(TokenTypes::ENUM_DEFINITION_LIST_START);
