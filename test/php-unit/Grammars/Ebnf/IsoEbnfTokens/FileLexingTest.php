@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Lexers\EbnfLexer;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens;
 
 use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfLexerFactory;
 use Helstern\Nomsky\Grammars\TestResources;
