@@ -9,12 +9,12 @@ abstract class AbstractEbnfNode implements AstNode
     private function getLocalClassName()
     {
         $className = get_class($this);
-        $localClassNameStart = strrpos($className, '//');
+        $localClassNameStart = strrpos($className, '\\');
         if (false === $localClassNameStart) {
             return $className;
         }
 
-        $localClassName = substr($className, $localClassNameStart);
+        $localClassName = substr($className, $localClassNameStart + strlen('\\'));
         return $localClassName;
     }
 
