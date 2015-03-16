@@ -20,7 +20,7 @@ class VisitDispatcherBuilder implements DoubleDispatcherBuilder
     }
 
     /**
-     * @return VisitDispatcherBuilder
+     * @return VisitDispatcher
      */
     public function build()
     {
@@ -29,7 +29,7 @@ class VisitDispatcherBuilder implements DoubleDispatcherBuilder
         $dispatcher     = $this->createVisitDispatcher($argumentType);
         $postDispatcher = $this->createPostVisitDispatcher($argumentType);
 
-        $visitDispatcher = new VisitDispatcherBuilder($preDispatcher, $dispatcher, $postDispatcher);
+        $visitDispatcher = new VisitDispatcher($preDispatcher, $dispatcher, $postDispatcher);
         return $visitDispatcher;
     }
 
