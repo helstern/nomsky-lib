@@ -45,6 +45,8 @@ class TextPosition {
     }
 
     /**
+     * Creates a new TextPosition which is offset right with $offset
+     *
      * @param TextPosition $offset
      * @return TextPosition
      */
