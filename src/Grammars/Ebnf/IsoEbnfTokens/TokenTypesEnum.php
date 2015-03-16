@@ -70,12 +70,12 @@ class TokenTypesEnum {
     /**
      * "[^"]+"
      */
-    const ENUM_STRING_LITERAL = 105;
+    const ENUM_STRING_LITERAL = 110;
 
     /**
      * \(\*\s*\*\)|\(\*(?!\*\))(?:.|\n|\r)*?\*\)
      */
-    const ENUM_COMMENT = 110;
+    const ENUM_COMMENT = 115;
 
     //composite tokens
 
