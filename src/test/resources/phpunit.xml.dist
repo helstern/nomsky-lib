@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.2/phpunit.xsd"
-         bootstrap="test/bootstrap.phpunit.php"
+         bootstrap="../php/bootstrap.phpunit.php"
          backupGlobals="false"
          verbose="true">
 
-  <testsuites>
+    <testsuites>
 
-      <testsuite name="large">
-          <directory suffix=".phpt">test/integration</directory>
-      </testsuite>
+        <testsuite name="small">
+          <directory suffix="Test.php">test/php-unit</directory>
+        </testsuite>
 
-    <testsuite name="small">
-      <directory suffix="Test.php">test/php-unit</directory>
-    </testsuite>
+    </testsuites>
 
-  </testsuites>
+    <logging>
+        <log type="coverage-clover" target="../../../target/site/phpunit-code-coverage/clover-coverage.xml"/>
+    </logging>
 
-  <logging>
-    <log type="coverage-html" target="build/code-coverage/html"/>
-  </logging>
-
-  <filter>
-    <whitelist processUncoveredFilesFromWhitelist="true">
-      <directory suffix=".php">src</directory>
-      <exclude>
-       <file>src</file>
-      </exclude>
-    </whitelist>
-  </filter>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+          <directory suffix=".php">src</directory>
+          <exclude>
+           <file>src</file>
+          </exclude>
+        </whitelist>
+    </filter>
 
 </phpunit>
 
