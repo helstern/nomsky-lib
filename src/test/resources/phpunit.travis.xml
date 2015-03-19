@@ -8,7 +8,7 @@
     <testsuites>
 
         <testsuite name="small">
-          <directory suffix="Test.php">test/php-unit</directory>
+            <directory suffix="Test.php">../php</directory>
         </testsuite>
 
     </testsuites>
