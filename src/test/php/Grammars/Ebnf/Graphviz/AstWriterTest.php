@@ -60,7 +60,7 @@ class AstWriterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @group now
+     * @group milestone
      */
     public function testWriteDotFile()
     {
