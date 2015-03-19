@@ -1,8 +1,12 @@
 # Created by .gitignore support plugin (hsz.mobi)
 
 # Composer files
-composer.phar
-vendor/
+composer/*
+!composer/composer.json
+!composer/composer.lock
+
+# local files
+*.local.*
 
 #IDE files
 *.iml

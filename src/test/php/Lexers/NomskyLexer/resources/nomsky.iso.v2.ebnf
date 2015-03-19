@@ -1,0 +1,61 @@
+
+"EBNF defined in itself." {
+
+  syntax     = [ syntax_title ] , "{" , { rule } , "}" , [ syntax_comment ] .
+  rule       = identifier , ( "=" | ":" | ":==" ) , expression , ( "." | ";" ) .
+  expression = term { "|" , term } .
+  term       = factor { ',' , factor } .
+  factor     = identifier
+             | literal
+             | range
+             | "[" , expression , "]"
+             | "(" , expression , ")"
+             | "{" , expression , "}" .
+
+  identifier = LETTER , { LETTER | DECIMAL_DIGIT | "_" } .
+  syntax_title      = string_literal .
+  syntax_comment    = string_literal .
+
+  character_range   = character_literal, '..', character_literal
+
+  character_literal = '"', CHARACTER, '"' | "'", CHARACTER, "'"
+  string_literal    = '"', {CHARACTER}, '"' | "'", {CHARACTER}, "'"
+  comment_literal   = '(*', {CHARACTER}, '*)'
+
+
+  special_sequence = '?', {character}, '?'
+
+  (* lexical rules *)
+
+  LETTER        = "a" .. "z" | "A" .. "Z" .
+
+  DECIMAL_DIGIT  = "0" .. "9" .
+
+  CHARACTER  = LETTER | DIGIT | "+" | "-" | "*" | "/" | "[" | "]" | "{" | "}" | "(" | ")" | "<" | ">" | "=" | "|" | "." | "," | ";" .
+
+  RANGE_OPERATOR = '..' .
+
+  CONCATENATE = ',' .
+
+  DEFINITION_LIST_START = '=' | ':==' | ':' .
+
+  DEFINITION_SEPARATOR = '|' .
+
+  START_REPEAT = '{' .
+
+  END_REPEAT = '}' .
+
+  START_OPTION = '[' .
+
+  END_OPTION = ']' .
+
+  START_GROUP = '(' .
+
+  END_GROUP = ')' .
+
+  TERMINATOR = '.' | ';' .
+
+  SINGLE_QUOTE = "'" .
+
+  DOUBLE_QUOTE = '"' .
+}

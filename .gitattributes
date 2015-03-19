@@ -23,7 +23,7 @@ vagrantfile     text
 # grammar files
 *.gr    text    eol=lf
 *.ebnf  text    eol=lf
-
+*.yml   text    eol=lf
 
 # Explicitly declare files that will always have CRLF line endings on checkout.
 # Example: *.sln text eol=crlf
