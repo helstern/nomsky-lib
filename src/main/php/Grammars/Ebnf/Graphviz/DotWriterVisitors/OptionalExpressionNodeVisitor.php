@@ -28,7 +28,7 @@ class OptionalExpressionNodeVisitor extends AbstractDispatchingVisitor implement
      * @param OptionalExpressionNode $astNode
      * @return string
      */
-    protected function buildDOTNodeId(OptionalExpressionNode $astNode)
+    protected function buildDOTIdentifier(OptionalExpressionNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $idNumber = $nodeCounter->getNodeCount();
@@ -36,30 +36,54 @@ class OptionalExpressionNodeVisitor extends AbstractDispatchingVisitor implement
         return '"' . 'optional_expression' . '[' .$idNumber . ']' . '"';
     }
 
+    /**
+     * @param OptionalExpressionNode $astNode
+     * @return bool
+     */
     public function preVisitOptionalExpressionNode(OptionalExpressionNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $nodeCounter->increment($astNode);
+
+        return true;
     }
 
+    /**
+     * @param OptionalExpressionNode $astNode
+     * @return bool
+     */
     public function visitOptionalExpressionNode(OptionalExpressionNode $astNode)
     {
         $dotWriter = $this->collaborators->dotWriter();
+        $formatter = $this->collaborators->formatter();
 
-        $nodeId    = $this->buildDOTNodeId($astNode);
+        $parents = $this->collaborators->parentNodeIds();
+        $increment = $parents->count();
+        $formatter->indent($increment, $dotWriter);
+
+        $nodeId    = $this->buildDOTIdentifier($astNode);
         $parents = $this->collaborators->parentNodeIds();
         $parentId = $parents->top();
 
+        $dotWriter->writeEdgeStatement($parentId, $nodeId);
+        $formatter->whitespace(1, $dotWriter); //formatting options
+        $dotWriter->writeStatementTerminator();
+
         $parents->push($nodeId);
 
-        $dotWriter->writeEdgeStatement($parentId, $nodeId);
-        $dotWriter->writeStatementTerminator();
+        return true;
     }
 
+    /**
+     * @param OptionalExpressionNode $astNode
+     * @return bool
+     */
     public function postVisitOptionalExpressionNode(OptionalExpressionNode $astNode)
     {
         $parents = $this->collaborators->parentNodeIds();
         $parents->pop();
+
+        return true;
     }
 
     /**

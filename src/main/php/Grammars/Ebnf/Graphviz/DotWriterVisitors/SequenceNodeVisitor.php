@@ -28,7 +28,7 @@ class SequenceNodeVisitor extends AbstractDispatchingVisitor implements AstNodeV
      * @param SequenceNode $astNode
      * @return string
      */
-    protected function buildDOTNodeId(SequenceNode $astNode)
+    protected function buildDOTIdentifier(SequenceNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $idNumber = $nodeCounter->getNodeCount();
@@ -36,32 +36,56 @@ class SequenceNodeVisitor extends AbstractDispatchingVisitor implements AstNodeV
         return '"' . 'sequence' . '[' .$idNumber . ']' . '"';
     }
 
+    /**
+     * @param SequenceNode $astNode
+     * @return bool
+     */
     public function preVisitSequenceNode(SequenceNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $nodeCounter->increment($astNode);
+
+        return true;
     }
 
+    /**
+     * @param SequenceNode $astNode
+     * @return bool
+     */
     public function visitSequenceNode(SequenceNode $astNode)
     {
         $dotWriter = $this->collaborators->dotWriter();
+        $formatter = $this->collaborators->formatter();
 
-        $nodeId    = $this->buildDOTNodeId($astNode);
+        $parents = $this->collaborators->parentNodeIds();
+        $increment = $parents->count();
+        $formatter->indent($increment, $dotWriter);
+
+        $nodeId    = $this->buildDOTIdentifier($astNode);
         $parents = $this->collaborators->parentNodeIds();
         $parentId = $parents->top();
 
         $dotWriter->writeEdgeStatement($parentId, $nodeId);
+        $formatter->whitespace(1, $dotWriter); //formatting options
         $dotWriter->writeStatementTerminator();
 
         if (0 < $astNode->countChildren()) {
             $parents->push($nodeId);
         }
+
+        return true;
     }
 
+    /**
+     * @param SequenceNode $astNode
+     * @return bool
+     */
     public function postVisitSequenceNode(SequenceNode $astNode)
     {
         $parents = $this->collaborators->parentNodeIds();
         $parents->pop();
+
+        return true;
     }
 
     /**

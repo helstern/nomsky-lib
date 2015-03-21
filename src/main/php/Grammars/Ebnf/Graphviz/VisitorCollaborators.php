@@ -46,4 +46,13 @@ class VisitorCollaborators
         return $this->nodeCounter;
     }
 
+    /**
+     * @return Formatter
+     */
+    public function formatter()
+    {
+        $formatter = new Formatter();
+        return $formatter;
+    }
+
 }

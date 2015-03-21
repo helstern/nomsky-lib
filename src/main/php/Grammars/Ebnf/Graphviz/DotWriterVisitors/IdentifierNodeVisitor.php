@@ -28,7 +28,7 @@ class IdentifierNodeVisitor extends AbstractDispatchingVisitor implements AstNod
      * @param IdentifierNode $astNode
      * @return string
      */
-    protected function buildDOTNodeId(IdentifierNode $astNode)
+    protected function buildDOTIdentifier(IdentifierNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $idNumber = $nodeCounter->getNodeCount();
@@ -38,27 +38,49 @@ class IdentifierNodeVisitor extends AbstractDispatchingVisitor implements AstNod
         return '"' . $identifierName . '[' .$idNumber . ']' . '"' ;
     }
 
+    /**
+     * @param IdentifierNode $astNode
+     * @return bool
+     */
     public function preVisitIdentifierNode(IdentifierNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $nodeCounter->increment($astNode);
+
+        return true;
     }
 
+    /**
+     * @param IdentifierNode $astNode
+     * @return bool
+     */
     public function visitIdentifierNode(IdentifierNode $astNode)
     {
         $dotWriter = $this->collaborators->dotWriter();
+        $formatter = $this->collaborators->formatter();
 
-        $nodeId    = $this->buildDOTNodeId($astNode);
+        $parents = $this->collaborators->parentNodeIds();
+        $increment = $parents->count();
+        $formatter->indent($increment, $dotWriter);
+
+        $nodeId    = $this->buildDOTIdentifier($astNode);
         $parents = $this->collaborators->parentNodeIds();
         $parentId = $parents->top();
 
         $dotWriter->writeEdgeStatement($parentId, $nodeId);
+        $formatter->whitespace(1, $dotWriter); //formatting options
         $dotWriter->writeStatementTerminator();
+
+        return true;
     }
 
+    /**
+     * @param IdentifierNode $astNode
+     * @return bool
+     */
     public function postVisitIdentifierNode(IdentifierNode $astNode)
     {
-
+        return true;
     }
 
     /**

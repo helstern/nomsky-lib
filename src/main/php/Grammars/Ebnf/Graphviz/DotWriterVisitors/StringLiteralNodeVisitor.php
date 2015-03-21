@@ -28,7 +28,7 @@ class StringLiteralNodeVisitor extends AbstractDispatchingVisitor implements Ast
      * @param StringLiteralNode $astNode
      * @return string
      */
-    protected function buildDOTNodeId(StringLiteralNode $astNode)
+    protected function buildDOTIdentifier(StringLiteralNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $idNumber = $nodeCounter->getNodeCount();
@@ -36,27 +36,49 @@ class StringLiteralNodeVisitor extends AbstractDispatchingVisitor implements Ast
         return '"' . 'string_literal' . '[' .$idNumber . ']' . '"';
     }
 
+    /**
+     * @param StringLiteralNode $astNode
+     * @return bool
+     */
     public function preVisitStringLiteralNode(StringLiteralNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $nodeCounter->increment($astNode);
+
+        return true;
     }
 
+    /**
+     * @param StringLiteralNode $astNode
+     * @return bool
+     */
     public function visitStringLiteralNode(StringLiteralNode $astNode)
     {
         $dotWriter = $this->collaborators->dotWriter();
+        $formatter = $this->collaborators->formatter();
 
-        $nodeId    = $this->buildDOTNodeId($astNode);
+        $parents = $this->collaborators->parentNodeIds();
+        $increment = $parents->count();
+        $formatter->indent($increment, $dotWriter);
+
+        $nodeId    = $this->buildDOTIdentifier($astNode);
         $parents = $this->collaborators->parentNodeIds();
         $parentId = $parents->top();
 
         $dotWriter->writeEdgeStatement($parentId, $nodeId);
+        $formatter->whitespace(1, $dotWriter); //formatting options
         $dotWriter->writeStatementTerminator();
+
+        return true;
     }
 
+    /**
+     * @param StringLiteralNode $astNode
+     * @return bool
+     */
     public function postVisitStringLiteralNode(StringLiteralNode $astNode)
     {
-
+        return true;
     }
 
     /**
