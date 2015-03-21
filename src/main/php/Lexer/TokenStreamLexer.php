@@ -44,6 +44,10 @@ class TokenStreamLexer implements Lexer
         return true;
     }
 
+    /**
+     * @return Token
+     * @throws \RuntimeException
+     */
     public function peekToken()
     {
         if ($this->token->getType() == $this->eofTokenDefinition->getType()) {

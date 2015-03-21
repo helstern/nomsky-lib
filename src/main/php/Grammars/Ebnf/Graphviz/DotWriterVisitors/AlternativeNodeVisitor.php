@@ -28,7 +28,7 @@ class AlternativeNodeVisitor extends AbstractDispatchingVisitor implements AstNo
      * @param AlternativeNode $astNode
      * @return string
      */
-    protected function buildDOTNodeId(AlternativeNode $astNode)
+    protected function buildDOTIdentifier(AlternativeNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $idNumber = $nodeCounter->getNodeCount();
@@ -36,30 +36,56 @@ class AlternativeNodeVisitor extends AbstractDispatchingVisitor implements AstNo
         return '"' . 'alternative' . '[' . $idNumber . ']' . '"' ;
     }
 
+    /**
+     * @param AlternativeNode $astNode
+     * @return bool
+     */
     public function preVisitAlternativeNode(AlternativeNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $nodeCounter->increment($astNode);
+
+        return true;
     }
 
+    /**
+     * @param AlternativeNode $astNode
+     * @return bool
+     */
     public function visitAlternativeNode(AlternativeNode $astNode)
     {
         $dotWriter = $this->collaborators->dotWriter();
+        $formatter = $this->collaborators->formatter();
 
-        $nodeId    = $this->buildDOTNodeId($astNode);
         $parents = $this->collaborators->parentNodeIds();
+
+        $increment = $parents->count();
+        $formatter->indent($increment, $dotWriter);
+
         $parentId = $parents->top();
-
-        $parents->push($nodeId);
-
+        $nodeId    = $this->buildDOTIdentifier($astNode);
         $dotWriter->writeEdgeStatement($parentId, $nodeId);
+
+        $formatter->whitespace(1, $dotWriter); //formatting options
         $dotWriter->writeStatementTerminator();
+
+        if (0 < $astNode->countChildren()) {
+            $parents->push($nodeId);
+        }
+
+        return true;
     }
 
+    /**
+     * @param AlternativeNode $astNode
+     * @return bool
+     */
     public function postVisitAlternativeNode(AlternativeNode $astNode)
     {
         $parents = $this->collaborators->parentNodeIds();
         $parents->pop();
+
+        return true;
     }
 
     /**

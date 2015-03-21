@@ -28,7 +28,7 @@ class CommentNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVi
      * @param CommentNode $astNode
      * @return string
      */
-    protected function buildDOTNodeId(CommentNode $astNode)
+    protected function buildDOTIdentifier(CommentNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $idNumber = $nodeCounter->getNodeCount();
@@ -36,27 +36,49 @@ class CommentNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVi
         return '"' . 'comment' . '[' .$idNumber .  ']' . '"';
     }
 
+    /**
+     * @param CommentNode $astNode
+     * @return bool
+     */
     public function preVisitCommentNode(CommentNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $nodeCounter->increment($astNode);
+
+        return true;
     }
 
+    /**
+     * @param CommentNode $astNode
+     * @return bool
+     */
     public function visitCommentNode(CommentNode $astNode)
     {
         $dotWriter = $this->collaborators->dotWriter();
+        $formatter = $this->collaborators->formatter();
 
-        $nodeId    = $this->buildDOTNodeId($astNode);
+        $parents = $this->collaborators->parentNodeIds();
+        $increment = $parents->count();
+        $formatter->indent($increment, $dotWriter);
+
+        $nodeId    = $this->buildDOTIdentifier($astNode);
         $parents = $this->collaborators->parentNodeIds();
         $parentId = $parents->top();
 
         $dotWriter->writeEdgeStatement($parentId, $nodeId);
+        $formatter->whitespace(1, $dotWriter); //formatting options
         $dotWriter->writeStatementTerminator();
+
+        return true;
     }
 
+    /**
+     * @param CommentNode $astNode
+     * @return bool
+     */
     public function postVisitCommentNode(CommentNode $astNode)
     {
-
+        return true;
     }
 
     /**

@@ -28,35 +28,53 @@ class SyntaxNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVis
      * @param SyntaxNode $astNode
      * @return string
      */
-    protected function buildDOTNodeId(SyntaxNode $astNode)
+    protected function buildDOTIdentifier(SyntaxNode $astNode)
     {
         return '"' . 'syntax' . '"';
     }
 
+    /**
+     * @param SyntaxNode $astNode
+     * @return bool
+     */
     public function preVisitSyntaxNode(SyntaxNode $astNode)
     {
         $dotWriter = $this->collaborators->dotWriter();
-        $dotWriter->startDigraph();
+        $dotWriter->startGraph();
 
         $nodeCounter = $this->collaborators->nodeCounter();
         $nodeCounter->increment($astNode);
+
+        return true;
     }
 
+    /**
+     * @param SyntaxNode $astNode
+     * @return bool
+     */
     public function visitSyntaxNode(SyntaxNode $astNode)
     {
         $dotWriter = $this->collaborators->dotWriter();
 
-        $nodeId    = $this->buildDOTNodeId($astNode);
+        $nodeId    = $this->buildDOTIdentifier($astNode);
         $dotWriter->writeNode($nodeId);
 
+        $formatter = $this->collaborators->formatter();
+        $formatter->whitespace(1, $dotWriter); //formatting options
         $dotWriter->writeStatementTerminator();
 
         if (0 < $astNode->countChildren()) {
             $parents = $this->collaborators->parentNodeIds();
             $parents->push($nodeId);
         }
+
+        return true;
     }
 
+    /**
+     * @param SyntaxNode $astNode
+     * @return bool
+     */
     public function postVisitSyntaxNode(SyntaxNode $astNode)
     {
         $dotWriter = $this->collaborators->dotWriter();
@@ -64,6 +82,8 @@ class SyntaxNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVis
 
         $parents = $this->collaborators->parentNodeIds();
         $parents->pop();
+
+        return true;
     }
 
     /**
