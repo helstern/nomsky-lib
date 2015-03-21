@@ -28,7 +28,7 @@ class RepeatedExpressionNodeVisitor extends AbstractDispatchingVisitor implement
      * @param RepeatedExpressionNode $astNode
      * @return string
      */
-    protected function buildDOTNodeId(RepeatedExpressionNode $astNode)
+    protected function buildDOTIdentifier(RepeatedExpressionNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $idNumber = $nodeCounter->getNodeCount();
@@ -36,30 +36,53 @@ class RepeatedExpressionNodeVisitor extends AbstractDispatchingVisitor implement
         return '"' . 'repeated_expression' . '[' .$idNumber . ']' . '"';
     }
 
+    /**
+     * @param RepeatedExpressionNode $astNode
+     * @return bool
+     */
     public function preVisitRepeatedExpressionNode(RepeatedExpressionNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $nodeCounter->increment($astNode);
+
+        return true;
     }
 
+    /**
+     * @param RepeatedExpressionNode $astNode
+     * @return bool
+     */
     public function visitRepeatedExpressionNode(RepeatedExpressionNode $astNode)
     {
         $dotWriter = $this->collaborators->dotWriter();
+        $formatter = $this->collaborators->formatter();
 
-        $nodeId    = $this->buildDOTNodeId($astNode);
         $parents = $this->collaborators->parentNodeIds();
+        $increment = $parents->count();
+        $formatter->indent($increment, $dotWriter);
+
         $parentId = $parents->top();
+        $nodeId    = $this->buildDOTIdentifier($astNode);
+
+        $dotWriter->writeEdgeStatement($parentId, $nodeId);
+        $formatter->whitespace(1, $dotWriter); //formatting options
+        $dotWriter->writeStatementTerminator();
 
         $parents->push($nodeId);
 
-        $dotWriter->writeEdgeStatement($parentId, $nodeId);
-        $dotWriter->writeStatementTerminator();
+        return true;
     }
 
+    /**
+     * @param RepeatedExpressionNode $astNode
+     * @return bool
+     */
     public function postVisitRepeatedExpressionNode(RepeatedExpressionNode $astNode)
     {
         $parents = $this->collaborators->parentNodeIds();
         $parents->pop();
+
+        return true;
     }
 
     /**

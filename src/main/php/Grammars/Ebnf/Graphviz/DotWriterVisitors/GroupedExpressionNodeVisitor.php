@@ -28,7 +28,7 @@ class GroupedExpressionNodeVisitor extends AbstractDispatchingVisitor implements
      * @param GroupedExpressionNode $astNode
      * @return string
      */
-    protected function buildDOTNodeId(GroupedExpressionNode $astNode)
+    protected function buildDOTIdentifier(GroupedExpressionNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $idNumber = $nodeCounter->getNodeCount();
@@ -36,30 +36,56 @@ class GroupedExpressionNodeVisitor extends AbstractDispatchingVisitor implements
         return '"' . 'grouped_expression' . '[' .$idNumber . ']' . '"';
     }
 
+    /**
+     * @param GroupedExpressionNode $astNode
+     * @return bool
+     */
     public function preVisitGroupedExpressionNode(GroupedExpressionNode $astNode)
     {
         $nodeCounter = $this->collaborators->nodeCounter();
         $nodeCounter->increment($astNode);
+
+        return true;
     }
 
+    /**
+     * @param GroupedExpressionNode $astNode
+     * @return bool
+     */
     public function visitGroupedExpressionNode(GroupedExpressionNode $astNode)
     {
         $dotWriter = $this->collaborators->dotWriter();
+        $formatter = $this->collaborators->formatter();
 
-        $nodeId    = $this->buildDOTNodeId($astNode);
+        $parents = $this->collaborators->parentNodeIds();
+        $increment = $parents->count();
+        $formatter->indent($increment, $dotWriter);
+
+        $nodeId    = $this->buildDOTIdentifier($astNode);
         $parents = $this->collaborators->parentNodeIds();
         $parentId = $parents->top();
 
-        $parents->push($nodeId);
-
         $dotWriter->writeEdgeStatement($parentId, $nodeId);
+        $formatter->whitespace(1, $dotWriter); //formatting options
         $dotWriter->writeStatementTerminator();
+
+        if (0 < $astNode->countChildren()) {
+            $parents->push($nodeId);
+        }
+
+        return true;
     }
 
+    /**
+     * @param GroupedExpressionNode $astNode
+     * @return bool
+     */
     public function postVisitGroupedExpressionNode(GroupedExpressionNode $astNode)
     {
         $parents = $this->collaborators->parentNodeIds();
         $parents->pop();
+
+        return true;
     }
 
     /**

@@ -5,6 +5,9 @@ class DotWriter
     /** @var DotFile */
     protected $dotFile;
 
+    /**
+     * @param DotFile $dotFile
+     */
     public function __construct(DotFile $dotFile)
     {
         $this->dotFile = $dotFile;
@@ -13,7 +16,7 @@ class DotWriter
     /**
      * @return DotWriter
      */
-    public function startDigraph()
+    public function startGraph()
     {
         $this->dotFile->add('digraph {');
         $lineTerminator = $this->dotFile->getLineTerminator();
@@ -57,6 +60,18 @@ class DotWriter
     }
 
     /**
+     * @param int $size
+     * @return DotWriter
+     */
+    public function writeWhitespace($size = 1)
+    {
+        $indentString = str_repeat(' ', $size);
+        $this->dotFile->add($indentString);
+
+        return $this;
+    }
+
+    /**
      * @param string $lhs
      * @param string $rhs
      *
@@ -93,5 +108,4 @@ class DotWriter
 
         return $this;
     }
-
 }
