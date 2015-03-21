@@ -1,7 +1,4 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf;
-
-use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens\TokenTypesEnum;
-use Helstern\Nomsky\Tokens\TokenDefinition;
+<?php namespace Helstern\Nomsky\Tokens;
 
 class EofTokenDefinition implements TokenDefinition
 {
@@ -10,7 +7,7 @@ class EofTokenDefinition implements TokenDefinition
      */
     public function getType()
     {
-        return TokenTypesEnum::ENUM_EOF;
+        return DefaultTokenTypesEnum::ENUM_EOF;
     }
 
     /**
