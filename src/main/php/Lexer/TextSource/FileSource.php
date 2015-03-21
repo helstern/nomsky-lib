@@ -8,6 +8,9 @@ class FileSource implements TextSource
     /** @var  \SplFileInfo */
     protected $fileInfo;
 
+    /**
+     * @param \SplFileInfo $fileInfo
+     */
     public function __construct(\SplFileInfo $fileInfo)
     {
         $this->fileInfo = $fileInfo;
