@@ -7,6 +7,7 @@ use Helstern\Nomsky\Lexer\TextSource\FileSource;
 use Helstern\Nomsky\Lexer\TokenStreamLexer;
 use Helstern\Nomsky\Text\TextSource;
 
+use Helstern\Nomsky\Tokens\EofTokenDefinition;
 use Helstern\Nomsky\Tokens\TokenMatch\AnchoredPcreMatcher;
 use Helstern\Nomsky\Tokens\TokenPattern\AbstractRegexTokenPattern;
 use Helstern\Nomsky\Tokens\TokenStream\TextReaderAdapter;

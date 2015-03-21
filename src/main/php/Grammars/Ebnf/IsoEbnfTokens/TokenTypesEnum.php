@@ -2,9 +2,6 @@
 
 class TokenTypesEnum {
 
-    /** end of file */
-    const ENUM_EOF = 0;
-
     /**
      * ,
      */
