@@ -27,6 +27,16 @@ class LocalDotFile implements DotFile
         return $fileObject;
     }
 
+    /**
+     * @param $text
+     * @return int
+     */
+    protected function writeToFile($text)
+    {
+        $bytes = $this->fileObject->fwrite($text);
+        return $bytes;
+    }
+
     public function close()
     {
         $this->fileObject = null;
@@ -45,7 +55,7 @@ class LocalDotFile implements DotFile
         $this->assertOpen();
 
         $lineTerminator = $this->getLineTerminator();
-        $bytes = $this->fileObject->fwrite($lineTerminator);
+        $bytes = $this->writeToFile($lineTerminator);
 
         return $bytes;
     }
@@ -54,7 +64,7 @@ class LocalDotFile implements DotFile
     {
         $this->assertOpen();
 
-        $lineBytes = $this->fileObject->fwrite($line);
+        $lineBytes = $this->writeToFile($line);
         $terminatorBytes = $this->addLineTerminator();
 
         return $lineBytes + $terminatorBytes;
@@ -64,7 +74,7 @@ class LocalDotFile implements DotFile
     {
         $this->assertOpen();
 
-        $textBytes = $this->fileObject->fwrite($text);
+        $textBytes = $this->writeToFile($text);
         return $textBytes;
     }
 
