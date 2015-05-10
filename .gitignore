@@ -5,8 +5,25 @@ composer/*
 !composer/composer.json
 !composer/composer.lock
 
-# local files
-*.local.*
+# project files
+*.box
+*.local
+!target/
+target/*
+
+!target/puppet/
+target/puppet/*
+
+!target/vagrant/
+target/vagrant/*
+
+!target/vagrant/boxes/
+target/vagrant/boxes/*
+!target/vagrant/boxes/.gitkeep
+
+!target/vagrant/machines/
+target/vagrant/machines/*
+!target/vagrant/machines/.gitkeep
 
 #IDE files
 *.iml
