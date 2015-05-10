@@ -19,7 +19,7 @@
       :guest_path => '/puppet',
       :with_hiera => with_hiera,
       :puppet => {
-        :manifests => true,
+        :use_default_manifests => true,
         :module_extra_dirs => [guest_path_puppet_modules]
       }
   )
