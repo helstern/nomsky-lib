@@ -53,10 +53,11 @@ def configuration(provider)
 
 end
 
-PROJECT_HOST_DIR          = File.dirname(__FILE__)
+PROJECT_HOST_DIR          = ENV.has_key?('VAGRANT_PROJECT_DIR') ? ENV['VAGRANT_PROJECT_DIR'] : File.dirname(__FILE__)
 
 VAGRANTFILE_API_VERSION   = '2'
 VAGRANT_ENV               = ENV.has_key?('VAGRANT_ENV') ? ENV['VAGRANT_ENV'] : 'default'
+
 VAGRANT_PROVIDER          = ENV.has_key?('VAGRANT_PROVIDER') ? ENV['VAGRANT_PROVIDER'] : 'virtualbox'
 VAGRANT_SOURCE_DIR        = expand_system_path(PROJECT_HOST_DIR, 'src', 'infrastructure', 'vagrant')
 VAGRANT_TARGET_DIR        = expand_system_path(PROJECT_HOST_DIR, 'target', 'vagrant')
