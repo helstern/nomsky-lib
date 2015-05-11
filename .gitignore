@@ -1,32 +1,53 @@
 # Created by .gitignore support plugin (hsz.mobi)
 
-# Composer files
-composer/*
-!composer/composer.json
-!composer/composer.lock
+# ignore everything by default
+/*
 
-# project files
+# LICENCE and README
+!/LICENCE
+!/README.md
+
+# do not ignore git files
+!/.gitignore
+!/.gitattributes
+
+# do not ignore vagrant file
+!/vagrantfile
+
+# do not ignore travis
+!/.travis.yml
+
+# do not ignore init script
+!/init.sh
+
+# do not ignore the main module
+!nomsky
+!nomsky/
+
+# main module files
+
+# composer
+nomsky/composer
+!nomsky/composer/composer.json
+!nomsky/composer/composer.lock
+
 *.box
-*.local
-!target/
-target/*
+#!nomsky/target/
+nomsky/target/*
 
-!target/puppet/
-target/puppet/*
+!nomsky/target/vagrant/
+nomsky/target/vagrant/*
 
-!target/vagrant/
-target/vagrant/*
+!nomsky/target/vagrant/boxes/
+nomsky/target/vagrant/boxes/*
+!nomsky/target/vagrant/boxes/.gitkeep
 
-!target/vagrant/boxes/
-target/vagrant/boxes/*
-!target/vagrant/boxes/.gitkeep
+!nomsky/target/vagrant/machines/
+nomsky/target/vagrant/machines/*
+!nomsky/target/vagrant/machines/.gitkeep
 
-!target/vagrant/machines/
-target/vagrant/machines/*
-!target/vagrant/machines/.gitkeep
-
-#IDE files
-*.iml
+# IDE files, which should be ignored by the first rule
+#*.iml
 
 # phpunit files
 phpunit.local.xml
