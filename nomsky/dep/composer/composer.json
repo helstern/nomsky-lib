@@ -18,7 +18,7 @@
 
     , "autoload": {
         "psr-4": {
-            "Helstern\\Nomsky\\": "../src/main/php"
+            "Helstern\\Nomsky\\": "../../src/main/php"
         }
     }
 
@@ -27,7 +27,7 @@
     }
     , "autoload-dev": {
         "psr-4": {
-            "Helstern\\Nomsky\\": ["../src/test/php"]
+            "Helstern\\Nomsky\\": ["../../src/test/php"]
         }
     }
     , "config": {

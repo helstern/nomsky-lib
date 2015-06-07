@@ -1,17 +1,11 @@
 #!/bin/bash -ex
 
 # directories
-SOURCE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SOURCE_DIR="$( cd ../../../"$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_DIR="${SOURCE_DIR}"
 
-DEPTH=2
-until [ $DEPTH -le 0 ] ; do
-    let DEPTH-=1
-    PROJECT_DIR="$(dirname ${PROJECT_DIR})"
-done
-
 #absolute path to phpunit
-PHPUNIT="$PROJECT_DIR/composer/bin/phpunit"
+PHPUNIT="$PROJECT_DIR/dep/composer/bin/phpunit"
 
 #absolute path to configuration
 PHPUNIT_CONFIGURATION_DIR="$PROJECT_DIR/src/test/resources/"

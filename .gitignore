@@ -19,6 +19,7 @@
 
 # do not ignore init script
 !/init.sh
+!/vagrant-env.sh
 
 # do not ignore the main module
 !nomsky
@@ -27,9 +28,9 @@
 # main module files
 
 # composer
-nomsky/composer
-!nomsky/composer/composer.json
-!nomsky/composer/composer.lock
+nomsky/dep
+!nomsky/dep/composer/composer.json
+!nomsky/dep/composer/composer.lock
 
 *.box
 #!nomsky/target/
