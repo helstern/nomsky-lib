@@ -28,9 +28,9 @@
 # main module files
 
 # composer
-nomsky/dep
-!nomsky/dep/composer/composer.json
-!nomsky/dep/composer/composer.lock
+nomsky/depend/
+!nomsky/depend/composer/composer.json
+!nomsky/depend/composer/composer.lock
 
 *.box
 #!nomsky/target/
