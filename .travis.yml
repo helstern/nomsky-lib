@@ -9,7 +9,7 @@ before_script:
  - cd composer && composer install && cd ../
 
 script:
- - composer/bin/phpunit --configuration=./src/test/resources/phpunit.travis.xml
+ - composer/bin/phpunit --configuration=./src/ci/travis/phpunit.travis.xml
 
 after_script:
  - php src/cli/code-coverage-checker.clover.php target/site/phpunit-code-coverage/clover-coverage.xml 80
