@@ -17,15 +17,15 @@ class TokenStreamLexer implements Lexer
 
     /**
      * @param TokenStream $tokenStream
-     * @param TokenDefinition $eofTokenEqualityTester
+     * @param TokenDefinition $eofDefinition
      */
-    public function __construct(TokenStream $tokenStream, TokenDefinition $eofTokenEqualityTester)
+    public function __construct(TokenStream $tokenStream, TokenDefinition $eofDefinition)
     {
         $this->tokenStream = $tokenStream;
         $this->token = $tokenStream->current();
         $tokenStream->next();
 
-        $this->eofTokenDefinition = $eofTokenEqualityTester;
+        $this->eofTokenDefinition = $eofDefinition;
     }
 
     public function currentToken()

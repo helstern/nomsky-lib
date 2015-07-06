@@ -33,16 +33,16 @@ class TextReaderAdapter implements TokenStream
     /**
      * @param TextReader $sourceReader
      * @param CompositeTokenStringMatcher $nextTokenReader
-     * @param TokenDefinition $eofTokenDefinition
+     * @param TokenDefinition $eofDefinition
      */
     public function __construct(
         TextReader $sourceReader,
         CompositeTokenStringMatcher $nextTokenReader,
-        TokenDefinition $eofTokenDefinition
+        TokenDefinition $eofDefinition
     ) {
         $this->textReader = $sourceReader;
         $this->tokenMatchReader = $nextTokenReader;
-        $this->eofTokenDefinition = $eofTokenDefinition;
+        $this->eofTokenDefinition = $eofDefinition;
 
         $previousPosition = new TextPosition(0, 1, 1);
         $token = $this->readNextToken($previousPosition);
