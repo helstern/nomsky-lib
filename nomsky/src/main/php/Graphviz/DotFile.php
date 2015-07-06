@@ -16,7 +16,7 @@ interface DotFile
      * @param string $line
      * @return int
      */
-    public function addAndTerminateLine($line);
+    public function addLineAndTerminator($line);
 
     /**
      * @param string $text

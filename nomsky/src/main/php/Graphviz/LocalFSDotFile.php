@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Graphviz;
 
-class LocalDotFile implements DotFile
+class LocalFSDotFile implements DotFile
 {
     /** @var \SplFileInfo */
     protected $fileInfo;
@@ -60,7 +60,7 @@ class LocalDotFile implements DotFile
         return $bytes;
     }
 
-    public function addAndTerminateLine($line)
+    public function addLineAndTerminator($line)
     {
         $this->assertOpen();
 
