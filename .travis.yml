@@ -9,7 +9,7 @@ before_script:
  - cd nomsky/depend/composer && composer install && cd ../../../
 
 script:
- - nomsky/depend/composer/bin/phpunit --configuration=.nomsky/src/ci/travis/phpunit.travis.xml
+ - nomsky/depend/composer/bin/phpunit --configuration=./nomsky/src/ci/travis/phpunit.travis.xml
 
 after_script:
  - php nomsky/src/ci/scripts/code-coverage-checker.clover.php nomsky/target/site/phpunit-code-coverage/clover-coverage.xml 80
