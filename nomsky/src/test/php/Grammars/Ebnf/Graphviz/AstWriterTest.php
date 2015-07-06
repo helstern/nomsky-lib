@@ -4,6 +4,7 @@ use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfLexerFactory;
 use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfParser;
 use Helstern\Nomsky\Grammars\TestOutput;
 use Helstern\Nomsky\Grammars\TestResources;
+use Helstern\Nomsky\Graphviz\LocalFSDotFile;
 use Helstern\Nomsky\Parser\Errors\ParseAssertions;
 use Helstern\Nomsky\Tokens\TokenPredicates;
 
@@ -32,6 +33,19 @@ class AstWriterTest extends \PHPUnit_Framework_TestCase
         }
 
         return $fileInfo;
+    }
+
+    /**
+     * @param $fileName
+     * @param bool $deleteExisting
+     *
+     * @return LocalFSDotFile
+     */
+    static public function createLocalFSDotFile($fileName, $deleteExisting = true) {
+        $outputFileInfo = self::createOutputFile($fileName, (bool) $deleteExisting);
+        $dotFile = new LocalFSDotFile($outputFileInfo);
+
+        return $dotFile;
     }
 
     /**
@@ -71,10 +85,10 @@ class AstWriterTest extends \PHPUnit_Framework_TestCase
         $parser = new IsoEbnfParser($assertions);
 
         $syntaxNode = $parser->parse($lexer);
-        $outputFileInfo = self::createOutputFile('ebnf.iso.graphviz', $deleteExisting = true);
+        $dotFile = self::createLocalFSDotFile('ebnf.iso.graphviz', $deleteExisting = true);
 
         $astWriter = new AstWriter();
-        $astWriter->write($syntaxNode, $outputFileInfo);
+        $astWriter->write($syntaxNode, $dotFile);
 
         $actualFile = self::getOutputFileContents('ebnf.iso.graphviz');
         $this->assertNotEmpty($actualFile);
