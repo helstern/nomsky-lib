@@ -1,7 +1,7 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\OptionalsEliminator;
+<?php namespace Helstern\Nomsky\Grammar\Converter\OptionalsEliminator;
 
-use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\NonTerminalNamingStrategy;
-use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\OptionalsEliminator;
+use Helstern\Nomsky\Grammar\Transformations\EliminateOptionals\NonTerminalNamingStrategy;
+use Helstern\Nomsky\Grammar\Transformations\EliminateOptionals\OptionalsEliminator;
 use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
@@ -9,7 +9,7 @@ use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
 use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 
-use Helstern\Nomsky\Grammar\Converters;
+use Helstern\Nomsky\Grammar\Converter;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
 

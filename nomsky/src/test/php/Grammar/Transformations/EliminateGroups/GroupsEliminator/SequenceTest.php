@@ -1,11 +1,11 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\GroupsEliminator;
+<?php namespace Helstern\Nomsky\Grammar\Converter\GroupsEliminator;
 
-use Helstern\Nomsky\Grammar\Converters\EliminateGroups\GroupsEliminator;
+use Helstern\Nomsky\Grammar\Transformations\EliminateGroups\GroupsEliminator;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
-use Helstern\Nomsky\Grammar\Converters;
+use Helstern\Nomsky\Grammar\Converter;
 
 use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
 

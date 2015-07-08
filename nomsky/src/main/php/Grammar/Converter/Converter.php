@@ -34,6 +34,7 @@ class Converter
             $intermediaryProductionsList = array_splice($tmpList, 0);
         }
 
-        return $intermediaryProductionsList;
+        $convertedProductions = array_reverse($intermediaryProductionsList);
+        return $convertedProductions;
     }
 }

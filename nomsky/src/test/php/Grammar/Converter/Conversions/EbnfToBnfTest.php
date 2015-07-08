@@ -1,5 +1,6 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters;
+<?php namespace Helstern\Nomsky\Grammar\Converter\Conversions;
 
+use Helstern\Nomsky\Grammar\Converter\Conversions;
 use Helstern\Nomsky\Grammar\DefaultGrammar;
 use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
 use Helstern\Nomsky\Grammar\Expressions\OptionalList;
@@ -29,8 +30,8 @@ class EbnfToBnfTest extends \PHPUnit_Framework_TestCase
         $testGrammars = $this->getTestGrammars();
         $ebnfGrammar  = $testGrammars->ebnfSimpleTestBooleanLogicGrammar();
 
-        $converter = new EbnfToBnf();
-        $bnfProductions = $converter->convert($ebnfGrammar);
+        $converter = new Conversions();
+        $bnfProductions = $converter->ebnfToBnf($ebnfGrammar);
 
         $this->assertNotEmpty($bnfProductions, 'expected some bnf productions, received none');
     }
@@ -70,8 +71,8 @@ class EbnfToBnfTest extends \PHPUnit_Framework_TestCase
         $productions[] = new DefaultProduction($leftSide, $rightSide);
         $ebnfGrammar = new DefaultGrammar('simple test boolean logic', $productions);
 
-        $converter = new EbnfToBnf();
-        $actualBnfProductions = $converter->convert($ebnfGrammar);
+        $converter = new Conversions();
+        $actualBnfProductions = $converter->ebnfToBnf($ebnfGrammar);
 
         $namingStrategy = $expressionUtils->createNonTerminalNamingStrategy();
         $generatedNames = array(

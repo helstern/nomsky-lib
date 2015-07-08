@@ -1,6 +1,6 @@
-<?php namespace Helstern\Nomsky\Grammar\Converters\EliminateOptionals\OptionalsEliminator;
+<?php namespace Helstern\Nomsky\Grammar\Transformations\EliminateOptionals\OptionalsEliminator;
 
-use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\OptionalsEliminator;
+use Helstern\Nomsky\Grammar\Transformations\EliminateOptionals\OptionalsEliminator;
 
 use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
 use Helstern\Nomsky\Grammar\Expressions\Alternative;
@@ -10,7 +10,7 @@ use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
 use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 
-use Helstern\Nomsky\Grammar\Converters;
+use Helstern\Nomsky\Grammar\Converter;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
 use Helstern\Nomsky\Grammar\Production\DefaultProduction;
@@ -34,7 +34,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param Expression $e
-     * @param \Helstern\Nomsky\Grammar\Converters\EliminateOptionals\OptionalsEliminator $visitor
+     * @param \Helstern\Nomsky\Grammar\Transformations\EliminateOptionals\OptionalsEliminator $visitor
      * @return ExpressionIterable|null
      */
     public function walkAndVisitExpression(Expression $e, OptionalsEliminator $visitor)
