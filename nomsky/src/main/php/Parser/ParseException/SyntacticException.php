@@ -2,14 +2,14 @@
 
 use Exception;
 use Helstern\Nomsky\Text\TextPosition;
-use Helstern\Nomsky\Tokens\Token;
+use Helstern\Nomsky\Tokens\StringToken;
 
 class SyntacticException extends \Exception
 {
-    /** @var Token */
+    /** @var StringToken */
     protected $illegalToken;
 
-    public function __construct(Token $illegalToken, $message, $code = 0)
+    public function __construct(StringToken $illegalToken, $message, $code = 0)
     {
         parent::__construct($message, $code);
         $this->illegalToken = $illegalToken;

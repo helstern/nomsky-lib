@@ -1,11 +1,11 @@
 <?php namespace Helstern\Nomsky\Parser;
 
-use Helstern\Nomsky\Tokens\Token;
+use Helstern\Nomsky\Tokens\StringToken;
 
 interface Lexer
 {
     /**
-     * @return null|Token
+     * @return null|StringToken
      */
     public function currentToken();
 
@@ -15,7 +15,7 @@ interface Lexer
     public function nextToken();
 
     /**
-     * @return Token
+     * @return StringToken
      * @throw \Exception
      */
     public function peekToken();

@@ -2,11 +2,11 @@
 
 use Helstern\Nomsky\Parser\Ast\CompositeAstNode;
 use Helstern\Nomsky\Parser\Ast\AstNode;
-use Helstern\Nomsky\Text\TextPosition;
+use Helstern\Nomsky\Parser\TokenPosition;
 
 class RuleNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
 {
-    /** @var TextPosition */
+    /** @var TokenPosition */
     protected $textPosition;
 
     /** @var IdentifierNode */
@@ -15,7 +15,7 @@ class RuleNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
     /** @var AstNode */
     protected $expressionNode;
 
-    public function __construct(TextPosition $textPosition, IdentifierNode $identifier, AstNode $expressionNode)
+    public function __construct(TokenPosition $textPosition, IdentifierNode $identifier, AstNode $expressionNode)
     {
         $this->textPosition = $textPosition;
         $this->identifierNode = $identifier;

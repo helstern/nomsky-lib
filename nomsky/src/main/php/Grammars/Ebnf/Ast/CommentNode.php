@@ -1,14 +1,14 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\Ast;
 
 use Helstern\Nomsky\Parser\Ast\AstNode;
-use Helstern\Nomsky\Text\TextPosition;
+use Helstern\Nomsky\Parser\TokenPosition;
 
 class CommentNode extends AbstractEbnfNode implements AstNode
 {
-    /** @var TextPosition */
+    /** @var TokenPosition */
     protected $textPosition;
 
-    public function __construct(TextPosition $textPosition, $rawComment)
+    public function __construct(TokenPosition $textPosition, $rawComment)
     {
         $this->textPosition = $textPosition;
         $this->string = $rawComment;
