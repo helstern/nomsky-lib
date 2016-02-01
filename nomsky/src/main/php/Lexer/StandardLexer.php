@@ -1,5 +1,6 @@
 <?php namespace Helstern\Nomsky\Lexer;
 
+use Helstern\Nomsky\Parser\EOFToken;
 use Helstern\Nomsky\Parser\Lexer;
 use Helstern\Nomsky\Parser\TokenPosition;
 use Helstern\Nomsky\Tokens\StringToken;
@@ -28,7 +29,7 @@ class StandardLexer implements Lexer
     private $readEnd = false;
 
     /** @var boolean */
-    private $peekConsume = false;
+    private $peekConsume = true;
 
     /**
      * @param array|TokenMatchReader[] $tokenMatchers
@@ -52,7 +53,7 @@ class StandardLexer implements Lexer
 
 
     /**
-     * @return null|StringToken
+     * @return EOFToken|StringToken
      */
     public function currentToken()
     {
@@ -76,22 +77,29 @@ class StandardLexer implements Lexer
         // reach end
         $nextChar = $this->textReader->readCharacter();
         if (is_null($nextChar)) {
-            $this->token = null;
+            $this->token = new EOFToken(new TokenPosition(0, 0, 0));
             $this->readEnd = true;
-            return false;
+            return true;
         }
 
         //read next token
         $token = $this->readNextToken();
-
-        if (is_null($token)) {
-            $this->token = null;
-            $this->readEnd = true;
-            return false;
+        if (! is_null($token)) {
+            $this->token = $token;
+            return true;
         }
 
-        $this->token = $token;
-        return true;
+        $this->token = null;
+        $this->readEnd = true;
+
+        // reach end or not a match
+        $nextChar = $this->textReader->readCharacter();
+        if (is_null($nextChar)) {
+            $this->token = new EOFToken(new TokenPosition(0, 0, 0));
+            return true;
+        }
+        return false;
+
     }
 
     /**

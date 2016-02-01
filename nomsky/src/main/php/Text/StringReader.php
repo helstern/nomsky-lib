@@ -8,14 +8,20 @@ class StringReader implements TextReader
     /** @var string */
     protected $readText;
 
+    /** @var string */
     protected $remainingText;
+
+    /** @var int */
+    protected $remainingLength;
 
     public function __construct($text)
     {
         if (empty($text)) {
             $this->remainingText = null;
+            $this->remainingLength = 0;
         } else {
             $this->remainingText = $text;
+            $this->remainingLength = strlen($text);
         }
     }
 
@@ -45,9 +51,29 @@ class StringReader implements TextReader
 
     public function skip($bytes)
     {
+        if ($this->remainingLength == 0) {
+            throw new \DomainException('can not skip past end');
+        }
+
+        if ($this->remainingLength < $bytes) {
+            throw new \DomainException('reader error');
+        }
+
+        if ($this->remainingLength == $bytes) {
+            $this->readText .= $this->remainingText;
+            $this->remainingText = null;
+            $this->remainingLength = 0;
+            return;
+        }
+
         $skippedText = substr($this->remainingText, 0, $bytes);
         $this->readText .= $skippedText;
 
-        $this->remainingText = substr($this->remainingText, $bytes);
+        $remainingText = substr($this->remainingText, $bytes);
+        if ($remainingText === false) {
+            throw new \DomainException('reader error');
+        }
+        $this->remainingText = $remainingText;
+        $this->remainingLength = $this->remainingLength - $bytes;
     }
 }

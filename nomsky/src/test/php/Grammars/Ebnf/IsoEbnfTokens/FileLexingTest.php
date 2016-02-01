@@ -2,7 +2,7 @@
 
 use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfLexerFactory;
 use Helstern\Nomsky\Grammars\TestResources;
-use Helstern\Nomsky\Tokens\StringToken;
+use Helstern\Nomsky\Parser\Token;
 
 class FileLexingTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +29,7 @@ class FileLexingTest extends \PHPUnit_Framework_TestCase
         $actualTokens = [];
 
         $token = $lexer->currentToken();
-        while ($token instanceof StringToken) {
+        while ($token instanceof Token) {
             $actualTokens[] = array(
                 'value' => $token->getValue(),
                 'type' => $token->getType()
