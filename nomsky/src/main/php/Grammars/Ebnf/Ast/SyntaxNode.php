@@ -2,11 +2,11 @@
 
 use Helstern\Nomsky\Parser\Ast\CompositeAstNode;
 use Helstern\Nomsky\Parser\Ast\AstNode;
-use Helstern\Nomsky\Text\TextPosition;
+use Helstern\Nomsky\Parser\CharPosition;
 
 class SyntaxNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
 {
-    /** @var TextPosition */
+    /** @var CharPosition */
     protected $textPosition;
 
     /** @var array | RuleNode[] */
@@ -19,7 +19,7 @@ class SyntaxNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
     protected $grammarComment;
 
     public function __construct(
-        TextPosition $textPosition,
+        CharPosition $textPosition,
         array $productionNodes,
         StringLiteralNode $grammarTitle = null,
         StringLiteralNode $grammarComment = null
@@ -73,7 +73,7 @@ class SyntaxNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
     }
 
     /**
-     * @return TextPosition
+     * @return CharPosition
      */
     public function getTextPosition()
     {

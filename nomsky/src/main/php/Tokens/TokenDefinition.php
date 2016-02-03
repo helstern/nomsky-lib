@@ -1,14 +1,29 @@
 <?php namespace Helstern\Nomsky\Tokens;
 
-interface TokenDefinition
+use Helstern\Nomsky\Text\PcrePattern;
+
+class TokenDefinition
 {
-    /**
-     * @return int
-     */
-    public function getType();
+    private $tokenType;
+
+    private $pcrePattern;
+
+    public function __construct($tokenType, PcrePattern $pattern)
+    {
+        $this->tokenType = $tokenType;
+        $this->pcrePattern = $pattern;
+    }
+
+    public function getType()
+    {
+        return $this->tokenType;
+    }
 
     /**
-     * @return string
+     * @return PcrePattern
      */
-    public function getValue();
+    public function getPattern()
+    {
+        return $this->pcrePattern;
+    }
 }

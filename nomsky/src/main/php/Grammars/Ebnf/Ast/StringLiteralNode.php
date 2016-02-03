@@ -1,18 +1,18 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\Ast;
 
 use Helstern\Nomsky\Parser\Ast\AstNode;
-use Helstern\Nomsky\Text\TextPosition;
+use Helstern\Nomsky\Parser\CharPosition;
 
 class StringLiteralNode extends AbstractEbnfNode implements AstNode
 {
-    /** @var TextPosition */
+    /** @var CharPosition */
     protected $textPosition;
 
     /**
-     * @param TextPosition $textPosition
+     * @param CharPosition $textPosition
      * @param string $rawString
      */
-    public function __construct(TextPosition $textPosition, $rawString)
+    public function __construct(CharPosition $textPosition, $rawString)
     {
         $this->textPosition = $textPosition;
         $this->string = $rawString;

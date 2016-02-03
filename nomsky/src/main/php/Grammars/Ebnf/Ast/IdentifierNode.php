@@ -1,17 +1,17 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\Ast;
 
 use Helstern\Nomsky\Parser\Ast\AstNode;
-use Helstern\Nomsky\Text\TextPosition;
+use Helstern\Nomsky\Parser\CharPosition;
 
 class IdentifierNode extends AbstractEbnfNode implements AstNode
 {
-    /** @var TextPosition */
+    /** @var CharPosition */
     protected $textPosition;
 
     /** @var string */
     protected $name;
 
-    public function __construct(TextPosition $textPosition, $identifierName)
+    public function __construct(CharPosition $textPosition, $identifierName)
     {
         $this->textPosition = $textPosition;
         $this->name = $identifierName;
@@ -26,7 +26,7 @@ class IdentifierNode extends AbstractEbnfNode implements AstNode
     }
 
     /**
-     * @return TextPosition
+     * @return CharPosition
      */
     public function getTextPosition()
     {

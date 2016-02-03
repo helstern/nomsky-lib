@@ -1,9 +1,10 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens;
 
-use Helstern\Nomsky\RegExBuilder\RegexBuilder;
-use Helstern\Nomsky\Tokens\TokenPattern\RegexAlternativesTokenPattern;
-use Helstern\Nomsky\Tokens\TokenPattern\AbstractRegexTokenPattern;
-use Helstern\Nomsky\Tokens\TokenPattern\RegexStringTokenPattern;
+use Helstern\Nomsky\Lexer\TokenMatchReader;
+use Helstern\Nomsky\Text\RegexAlternativesPattern;
+use Helstern\Nomsky\Text\RegexPattern;
+use Helstern\Nomsky\Regex\RegexBuilder;
+use Helstern\Nomsky\Text\TokenMatchPcreReader;
 
 use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens\SymbolsEnum as Symbols;
 use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens\TokenTypesEnum as TokenTypes;
@@ -16,7 +17,7 @@ class TokenPatterns
     /**
      * @param TokenTypes $tokens
      * @throws \RuntimeException
-     * @return array|AbstractRegexTokenPattern[]
+     * @return array|TokenMatchReader[]
      */
     static public function regexPatterns(TokenTypes $tokens = null)
     {
@@ -79,8 +80,9 @@ class TokenPatterns
     }
 
     /**
-     * @param int $tokenType
-     * @return RegexStringTokenPattern
+     * @param string $tokenType
+     *
+     * @return TokenMatchPcreReader
      */
     public function buildCommentPattern($tokenType)
     {
@@ -95,22 +97,24 @@ class TokenPatterns
         $nonEmptyCommentPattern = $regexBuilder->sequence(
             (string) $regexBuilder->pattern(Symbols::ENUM_START_COMMENT)->quote()
             , (string) $regexBuilder->negativeLookAhead(Symbols::ENUM_END_COMMENT)->quote()
-            , (string) $regexBuilder->alternatives('.', '\n', '\r')->group()->repeatZeroOrMore()->lazy()
+            , (string) $regexBuilder->alternatives('.', '\n', '\r')->nonCapturingGroup()->repeatZeroOrMore()->lazy()
             , (string) $regexBuilder->pattern(Symbols::ENUM_END_COMMENT)->quote()
         );
 
         $stringPattern = (string) $regexBuilder->alternatives(
             (string) $emptyCommentPattern
             , (string) $nonEmptyCommentPattern
-        )->group();
+        )->nonCapturingGroup();
 
-        $tokenPattern = $this->createStringPattern($tokenType, $stringPattern);
-        return $tokenPattern;
+        $pcreMatcher = (new RegexPattern($stringPattern))->anchorAtStart()->dotAll()->utf8()->matchOne();
+        $matcher = new TokenMatchPcreReader($tokenType, $pcreMatcher);
+        return $matcher;
     }
 
     /**
-     * @param int $tokenType
-     * @return RegexStringTokenPattern
+     * @param string $tokenType
+     *
+     * @return TokenMatchPcreReader
      */
     public function buildIdentifierPattern($tokenType)
     {
@@ -119,37 +123,41 @@ class TokenPatterns
             ->add('[aA-zZ]')
             ->add(
             //(string) $regexBuilder->alternatives('[aA-zZ]', '[0-9]')->implode()->group()->repeat()->group()
-                (string) $regexBuilder->alternatives('[aA-zZ]', '[0-9]', '[-]')->group()->repeatOnceOrMore()
+                (string) $regexBuilder->alternatives('[aA-zZ]', '[0-9]', '[-]')->nonCapturingGroup()->repeatOnceOrMore()
             );
 
-        $tokenPattern = $this->createStringPattern($tokenType, $stringPattern);
-        return $tokenPattern;
+        $pcreMatcher = (new RegexPattern($stringPattern))->anchorAtStart()->dotAll()->utf8()->matchOne();
+        $matcher = new TokenMatchPcreReader($tokenType, $pcreMatcher);
+        return $matcher;
     }
 
     /**
-     * @param int $tokenType
-     * @return RegexStringTokenPattern
+     * @param string $tokenType
+     *
+     * @return TokenMatchPcreReader
      */
     public function buildCharLiteralPattern($tokenType)
     {
         $regexBuilder = $this->regexBuilder;
-        $pattern = $regexBuilder->sequence(
+        $stringPattern =  (string) $regexBuilder->sequence(
             Symbols::ENUM_SINGLE_QUOTE,
             (string) $regexBuilder->alternatives(
                 '\p{L}|\s',
                 str_repeat(Symbols::ENUM_SINGLE_QUOTE, 2)
             )
-            ->group(),
+            ->nonCapturingGroup(),
             Symbols::ENUM_SINGLE_QUOTE
         );
 
-        $tokenPattern = $this->createStringPattern($tokenType, (string) $pattern);
-        return $tokenPattern;
+        $pcreMatcher = (new RegexPattern($stringPattern))->anchorAtStart()->dotAll()->utf8()->matchOne();
+        $matcher = new TokenMatchPcreReader($tokenType, $pcreMatcher);
+        return $matcher;
     }
 
     /**
-     * @param int $tokenType
-     * @return RegexAlternativesTokenPattern
+     * @param string $tokenType
+     *
+     * @return TokenMatchPcreReader
      */
     public function buildStringLiteralPattern($tokenType)
     {
@@ -157,24 +165,26 @@ class TokenPatterns
         $alternatives = [
             (string) $regexBuilder->sequence(
                 Symbols::ENUM_SINGLE_QUOTE,
-                (string) $regexBuilder->alternatives("[^']", str_repeat(Symbols::ENUM_SINGLE_QUOTE, 2))
-                    ->group()
+                (string) $regexBuilder->alternatives("[^']", "''")
+                    ->nonCapturingGroup()
                     ->repeatOnceOrMore(),
                 Symbols::ENUM_SINGLE_QUOTE
             )
-            , (string) $regexBuilder->alternatives('[^"]', str_repeat(Symbols::ENUM_DOUBLE_QUOTE, 2))
-                ->group()
+            , (string) $regexBuilder->alternatives('[^"]', '""')
+                ->nonCapturingGroup()
                 ->repeatOnceOrMore()
                 ->delimit(Symbols::ENUM_DOUBLE_QUOTE)
         ];
 
-        $tokenPattern = $this->createAlternativesTokenPattern($tokenType, $alternatives);
-        return $tokenPattern;
+        $pcreMatcher = (new RegexAlternativesPattern($alternatives))->anchorAtStart()->dotAll()->utf8()->matchOne();
+        $matcher = new TokenMatchPcreReader($tokenType, $pcreMatcher);
+        return $matcher;
     }
 
     /**
-     * @param int $tokenType
-     * @return RegexStringTokenPattern
+     * @param string $tokenType
+     *
+     * @return TokenMatchPcreReader
      */
     public function buildSpecialSequencePattern($tokenType)
     {
@@ -195,16 +205,17 @@ class TokenPatterns
         $stringPattern = (string) $regexBuilder->alternatives(
             (string) $emptyCommentPattern
             , (string) $nonEmptyCommentPattern
-        )->group();
+        )->nonCapturingGroup();
 
-        $tokenPattern = $this->createStringPattern($tokenType, $stringPattern);
-        return $tokenPattern;
-
+        $pcreMatcher = (new RegexPattern($stringPattern))->anchorAtStart()->dotAll()->utf8()->matchOne();
+        $matcher = new TokenMatchPcreReader($tokenType, $pcreMatcher);
+        return $matcher;
     }
 
     /**
-     * @param int $tokenType
-     * @return RegexStringTokenPattern
+     * @param string $tokenType
+     *
+     * @return TokenMatchPcreReader
      */
     public function buildDecimalDigitPattern($tokenType)
     {
@@ -215,8 +226,9 @@ class TokenPatterns
     }
 
     /**
-     * @param int $tokenType
-     * @return RegexStringTokenPattern
+     * @param string $tokenType
+     *
+     * @return TokenMatchPcreReader
      */
     public function buildLetterPattern($tokenType)
     {
@@ -227,8 +239,9 @@ class TokenPatterns
     }
 
     /**
-     * @param int $tokenType
-     * @return RegexStringTokenPattern
+     * @param string $tokenType
+     *
+     * @return TokenMatchPcreReader
      */
     public function buildDefinitionListStartPattern($tokenType)
     {
@@ -237,16 +250,18 @@ class TokenPatterns
             , Symbols::ENUM_DEFINE_ALT_ONE
         ];
 
-        $tokenPattern = $this->createAlternativesTokenPattern($tokenType, $alternatives);
-        return $tokenPattern;
+        $pcreMatcher = (new RegexAlternativesPattern($alternatives))->anchorAtStart()->dotAll()->utf8()->matchOne();
+        $matcher = new TokenMatchPcreReader($tokenType, $pcreMatcher);
+        return $matcher;
     }
 
 
     //\(\*(?!\*\))?(?:.|\n|\r)*?\*\)
 
     /**
-     * @param int $tokenType
-     * @return RegexStringTokenPattern
+     * @param string $tokenType
+     *
+     * @return TokenMatchPcreReader
      */
     public function buildTerminatorPattern($tokenType)
     {
@@ -257,47 +272,40 @@ class TokenPatterns
             , (string) $regexBuilder->pattern(Symbols::ENUM_TERMINATOR_ALT_ONE)->quote()
         ];
 
-        $tokenPattern = $this->createAlternativesTokenPattern($tokenType, $alternatives);
-        return $tokenPattern;
+        $pcreMatcher = (new RegexAlternativesPattern($alternatives))->anchorAtStart()->dotAll()->utf8()->matchOne();
+        $matcher = new TokenMatchPcreReader($tokenType, $pcreMatcher);
+        return $matcher;
     }
 
     /**
-     * @param int $tokenType
+     * @param string $tokenType
      * @param string $stringPattern
+     *
+     * @return TokenMatchPcreReader
      * @throws \RuntimeException
-     * @return RegexStringTokenPattern
      */
     protected function createStringPattern($tokenType, $stringPattern)
     {
-        $tokenPattern = new RegexStringTokenPattern((int) $tokenType, $stringPattern);
-        return $tokenPattern;
+        $pcreMatcher = (new RegexPattern($stringPattern))->anchorAtStart()->dotAll()->utf8()->matchOne();
+        $matcher = new TokenMatchPcreReader($tokenType, $pcreMatcher);
+
+        return $matcher;
     }
 
-
     /**
-     * @param int $tokenType
+     * @param string $tokenType
      * @param string $unquotedStringPattern
+     *
+     * @return TokenMatchPcreReader
      * @throws \RuntimeException
-     * @return RegexStringTokenPattern
      */
     protected function createQuotedPattern($tokenType, $unquotedStringPattern)
     {
         $regexBuilder = $this->regexBuilder;
-        $quotedPattern = (string) $regexBuilder->pattern($unquotedStringPattern)->quote();
+        $stringPattern = (string) $regexBuilder->pattern($unquotedStringPattern)->quote();
 
-        $tokenPattern = new RegexStringTokenPattern((int) $tokenType, $quotedPattern);
-        return $tokenPattern;
-    }
-
-    /**
-     * @param int $tokenType
-     * @param array $stringPatterns
-     * @throws \RuntimeException
-     * @return RegexAlternativesTokenPattern
-     */
-    protected function createAlternativesTokenPattern($tokenType, array $stringPatterns)
-    {
-        $tokenPattern = new RegexAlternativesTokenPattern((int) $tokenType, $stringPatterns);
-        return $tokenPattern;
+        $pcreMatcher = (new RegexPattern($stringPattern))->anchorAtStart()->dotAll()->utf8()->matchOne();
+        $matcher = new TokenMatchPcreReader($tokenType, $pcreMatcher);
+        return $matcher;
     }
 }

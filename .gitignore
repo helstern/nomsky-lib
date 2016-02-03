@@ -17,8 +17,8 @@
 # do not ignore travis
 !/.travis.yml
 
-# do not ignore init script
-!/init.sh
+# do not ignore the makefile script
+!/Makefile
 !/vagrant-env.sh
 
 # do not ignore the main module

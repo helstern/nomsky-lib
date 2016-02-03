@@ -2,7 +2,7 @@
 
 use Helstern\Nomsky\Grammars\Ebnf\Ast\SyntaxNode;
 use Helstern\Nomsky\Grammars\Ebnf\Graphviz\DotWriterVisitors\Visitors;
-use Helstern\Nomsky\Graphviz\LocalDotFile;
+use Helstern\Nomsky\Graphviz\DotFile;
 use Helstern\Nomsky\Parser\Ast\StackBasedAstWalker;
 use Helstern\Nomsky\Parser\AstNodeWalkStrategy\PreOrderWalkStrategy;
 
@@ -10,12 +10,12 @@ class AstWriter
 {
     /**
      * @param SyntaxNode $astNode
-     * @param \SplFileInfo $fileInfo
+     * @param DotFile $dotFile
+     *
      * @return bool
      */
-    public function write(SyntaxNode $astNode, \SplFileInfo $fileInfo)
+    public function write(SyntaxNode $astNode,DotFile $dotFile)
     {
-        $dotFile = new LocalDotFile($fileInfo);
         $visitorProvider = new Visitors($dotFile);
 
         $walkStrategy = new PreOrderWalkStrategy($visitorProvider);

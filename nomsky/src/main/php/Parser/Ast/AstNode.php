@@ -2,7 +2,7 @@
 
 use Helstern\Nomsky\Dispatcher\DoubleDispatcher;
 use Helstern\Nomsky\Dispatcher\DoubleDispatcherBuilder;
-use Helstern\Nomsky\Text\TextPosition;
+use Helstern\Nomsky\Parser\CharPosition;
 
 interface AstNode
 {
@@ -13,7 +13,7 @@ interface AstNode
     public function buildDoubleDispatcher(DoubleDispatcherBuilder $dispatcherBuilder);
 
     /**
-     * @return TextPosition
+     * @return CharPosition
      */
     public function getTextPosition();
 }

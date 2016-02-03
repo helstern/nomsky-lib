@@ -3,21 +3,23 @@
 class TokenPredicates
 {
     /**
-     * @param Token $token
+     * @param StringToken $token
      * @param int $type
-     * @return bool
+     *
+*@return bool
      */
-    public function hasSameType(Token $token, $type)
+    public function hasSameType(StringToken $token, $type)
     {
         return $token->getType() === $type;
     }
 
     /**
-     * @param Token $token
+     * @param StringToken $token
      * @param array $typeList
-     * @return bool
+     *
+*@return bool
      */
-    public function hasAnyType(Token $token, array $typeList)
+    public function hasAnyType(StringToken $token, array $typeList)
     {
         do {
             $hasAnyType = $this->hasSameType($token, current($typeList));
@@ -28,23 +30,25 @@ class TokenPredicates
     }
 
     /**
-     * @param Token $token
+     * @param StringToken $token
      * @param int $type
      * @param string $value
-     * @return bool
+     *
+*@return bool
      */
-    public function hasSameTypeAndValue(Token $token, $type, $value)
+    public function hasSameTypeAndValue(StringToken $token, $type, $value)
     {
         return $token->getType() === $type && $token->getValue() === $value;
     }
 
     /**
-     * @param Token $token
+     * @param StringToken $token
      * @param int $type
      * @param array $values
-     * @return bool
+     *
+*@return bool
      */
-    public function hasSameTypeAndAnyValue(Token $token, $type, array $values)
+    public function hasSameTypeAndAnyValue(StringToken $token, $type, array $values)
     {
         do {
             $hasSameTypeAndValue = $this->hasSameTypeAndValue($token, $type, current($values));

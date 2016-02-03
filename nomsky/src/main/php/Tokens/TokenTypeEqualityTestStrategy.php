@@ -22,10 +22,11 @@ class TokenTypeEqualityTestStrategy implements TokenEqualityTestStrategy
     }
 
     /**
-     * @param Token $token
-     * @return int
+     * @param StringToken $token
+     *
+*@return int
      */
-    public function extractActualValue(Token $token)
+    public function extractActualValue(StringToken $token)
     {
         return $token->getType();
     }
