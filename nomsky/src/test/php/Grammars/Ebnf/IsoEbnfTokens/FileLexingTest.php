@@ -2,7 +2,7 @@
 
 use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfLexerFactory;
 use Helstern\Nomsky\Grammars\TestResources;
-use Helstern\Nomsky\Tokens\Token;
+use Helstern\Nomsky\Parser\Token;
 
 class FileLexingTest extends \PHPUnit_Framework_TestCase
 {

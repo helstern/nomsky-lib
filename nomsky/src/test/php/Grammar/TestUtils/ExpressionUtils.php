@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\TestUtils;
 
-use Helstern\Nomsky\Grammar\Converters\EliminateOptionals\IncrementalNamingStrategy;
+use Helstern\Nomsky\Grammar\Transformations\EliminateOptionals\IncrementalNamingStrategy;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Alternative;

@@ -1,15 +1,16 @@
 <?php namespace Helstern\Nomsky\Parser\Errors;
 
-use Helstern\Nomsky\Tokens\Token;
+use Helstern\Nomsky\Tokens\StringToken;
 
 class ErrorMessagesBuilder
 {
     /**
-     * @param Token $invalidToken
+     * @param StringToken $invalidToken
      * @param $expectedType
-     * @return string
+     *
+*@return string
      */
-    public function invalidTokenAtPosition(Token $invalidToken, $expectedType)
+    public function invalidTokenAtPosition(StringToken $invalidToken, $expectedType)
     {
         $msgTemplate = 'invalid token type %s at line %s, column %s. expected token type %s';
         $msg = sprintf(
@@ -24,10 +25,11 @@ class ErrorMessagesBuilder
     }
 
     /**
-     * @param Token $eofToken
-     * @return string
+     * @param StringToken $eofToken
+     *
+*@return string
      */
-    public function unexpectedEOF(Token $eofToken)
+    public function unexpectedEOF(StringToken $eofToken)
     {
         $msgTemplate = 'unexpected end-of-file at at line %s, column %s';
         $msg = sprintf(

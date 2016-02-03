@@ -3,10 +3,11 @@
 interface TokenEqualityTestStrategy
 {
     /**
-     * @param Token $token
-     * @return mixed
+     * @param StringToken $token
+     *
+*@return mixed
      */
-    public function extractActualValue(Token $token);
+    public function extractActualValue(StringToken $token);
 
     /**
      * @return mixed
