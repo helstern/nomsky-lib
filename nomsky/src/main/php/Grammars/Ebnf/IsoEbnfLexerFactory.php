@@ -21,7 +21,7 @@ class IsoEbnfLexerFactory
         $reader = $source->createReader();
         $tokenMatchers = TokenPatterns::regexPatterns();
 
-        $lexer = new StandardLexer($tokenMatchers, new LongestMatchWinsStrategy(), $reader, new WhitespaceMatcher());
+        $lexer = new StandardLexer($tokenMatchers, new WhitespaceMatcher(), new LongestMatchWinsStrategy(), $reader);
         return $lexer;
     }
 }

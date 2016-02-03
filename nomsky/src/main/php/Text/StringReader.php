@@ -27,7 +27,7 @@ class StringReader implements TextReader
 
     public function readCharacter()
     {
-        if (is_null($this->remainingText)) {
+        if ($this->remainingLength == 0) {
             return null;
         }
 

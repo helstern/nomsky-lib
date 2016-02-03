@@ -13,7 +13,7 @@ interface Token
     public function getValue();
 
     /**
-     * @return TokenPosition
+     * @return CharPosition
      */
     public function getPosition();
 }

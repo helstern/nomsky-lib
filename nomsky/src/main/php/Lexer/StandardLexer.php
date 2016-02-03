@@ -2,22 +2,30 @@
 
 use Helstern\Nomsky\Parser\EOFToken;
 use Helstern\Nomsky\Parser\Lexer;
-use Helstern\Nomsky\Parser\TokenPosition;
+use Helstern\Nomsky\Parser\CharPosition;
 use Helstern\Nomsky\Tokens\StringToken;
 
+/**
+ * the lexer's current token is either a whitespace, a token or e-o-f
+ * the lexer's current token is null if end of file is not reached and no whitespace token or other token matched
+ *
+ */
 class StandardLexer implements Lexer
 {
+    /** @var array */
+    private $tokenMatchersList;
+
+    /** @var TextMatcher */
+    private $whitespaceMatcher;
+
     /** @var TokenMatchStrategy */
     private $matchStrategy;
 
     /** @var TextReader */
     private $textReader;
 
-    /** @var array */
-    private $tokenMatchers;
-
-    /** @var TextMatcher */
-    private $whitespaceMatcher;
+    /** @var CharPosition position of the text reader cursror*/
+    private $textPosition;
 
     /** @var StringToken */
     private $token;
@@ -25,32 +33,36 @@ class StandardLexer implements Lexer
     /** @var StringToken */
     private $peekToken;
 
-    /** @var boolean */
-    private $readEnd = false;
+    /** @var boolean status variable that indicates if a token has matched */
+    private $hasTokenMatch = false;
 
     /** @var boolean */
-    private $peekConsume = true;
+    private $hasPeekToken = false;
 
     /**
-     * @param array|TokenMatchReader[] $tokenMatchers
+     * @param array|TokenMatchReader[] $tokenMatchersList
      * @param TokenMatchStrategy $matchStrategy
      * @param TextReader $textReader
      * @param TextMatcher $whitespaceMatcher
      */
     public function __construct(
-        array $tokenMatchers,
+        array $tokenMatchersList,
+        TextMatcher $whitespaceMatcher,
         TokenMatchStrategy $matchStrategy,
-        TextReader $textReader,
-        TextMatcher $whitespaceMatcher
+        TextReader $textReader
     ) {
-        $this->tokenMatchers = $tokenMatchers;
+        $this->tokenMatchersList = $tokenMatchersList;
+        $this->whitespaceMatcher = $whitespaceMatcher;
         $this->matchStrategy = $matchStrategy;
         $this->textReader = $textReader;
-        $this->whitespaceMatcher = $whitespaceMatcher;
 
-        $this->token = $this->readFirstToken();
+        $this->textPosition = new CharPosition(0, 0, 0);
+        $token = $this->readNextToken();
+        if (!is_null($token)) {
+            $this->token = $token;
+            $this->hasTokenMatch = true;
+        }
     }
-
 
     /**
      * @return EOFToken|StringToken
@@ -65,68 +77,49 @@ class StandardLexer implements Lexer
      */
     public function nextToken()
     {
-        if (! is_null($this->peekToken)) {
-            $this->consumePeekToken();
-            return true;
-        }
-
-        if ($this->readEnd) {
+        if (! $this->hasTokenMatch || $this->token instanceof EOFToken) {
             return false;
         }
 
-        // reach end
-        $nextChar = $this->textReader->readCharacter();
-        if (is_null($nextChar)) {
-            $this->token = new EOFToken(new TokenPosition(0, 0, 0));
-            $this->readEnd = true;
+        if ($this->hasPeekToken) {
+            $this->consumePeekToken();
             return true;
         }
 
         //read next token
         $token = $this->readNextToken();
-        if (! is_null($token)) {
-            $this->token = $token;
-            return true;
+        if (is_null($token)) {
+            $this->token = null;
+            $this->hasTokenMatch = false;
+            return false;
         }
 
-        $this->token = null;
-        $this->readEnd = true;
-
-        // reach end or not a match
-        $nextChar = $this->textReader->readCharacter();
-        if (is_null($nextChar)) {
-            $this->token = new EOFToken(new TokenPosition(0, 0, 0));
-            return true;
-        }
-        return false;
-
+        $this->token = $token;
+        return true;
     }
 
     /**
-     * @return StringToken
+     * @return StringToken|null
      * @throws \Exception
      * @throws \RuntimeException
      */
     public function peekToken()
     {
-        if (false == $this->peekConsume) {
+        if ($this->hasPeekToken) {
             return $this->peekToken;
         }
 
-        if ($this->readEnd) {
-            throw new \Exception();
-        }
-
-        $nextChar = $this->textReader->readCharacter();
-        if (is_null($nextChar)) {
-            throw new \RuntimeException('Can not peek over EOF');
+        if ($this->token instanceof EOFToken) {
+            throw new \Exception('Can not peek over EOF');
         }
 
         //read next token
         $token = $this->readNextToken();
         $this->peekToken = $token;
 
-        $this->peekConsume = false;
+        //if $token is null what should happen? throw exception
+
+        $this->hasPeekToken = true;
         return $token;
     }
 
@@ -134,21 +127,7 @@ class StandardLexer implements Lexer
     {
         $this->token = $this->peekToken;
         $this->peekToken = null;
-        $this->peekConsume = true;
-    }
-
-    /**
-     * @return StringToken|null
-     */
-    private function readFirstToken()
-    {
-        $startPosition = new TokenPosition(0, 1, 1);
-        $token = $this->readToken($startPosition);
-
-        if (is_null($token)) {
-            $this->readEnd = true;
-        }
-        return $token;
+        $this->hasPeekToken = false;
     }
 
     /**
@@ -157,30 +136,35 @@ class StandardLexer implements Lexer
     private function readNextToken()
     {
         //read next token
-        $position = $this->token->getPosition();
+        $position = $this->textPosition;
         $token = $this->readToken($position);
+
+        if (is_null($token)) { // check if token is null because end-of-file was reached
+            $nextChar = $this->textReader->readCharacter();
+            if (is_null($nextChar)) {
+                return new EOFToken($this->textPosition);
+            }
+        }
 
         return $token;
     }
 
     /**
-     * @param TokenPosition $from
+     * @param CharPosition $from
      *
      * @return StringToken|null
      */
-    private function readToken(TokenPosition $from)
+    private function readToken(CharPosition $from)
     {
-        /** @var TokenPosition $position */
+        /** @var CharPosition $position */
         $position = null;
 
         $whitespaceMatch = $this->matchWhitespace();
         if (is_null($whitespaceMatch)) {
             $position = $from;
         } else {
-            $position = $this->calculatePosition($whitespaceMatch, $from);
-            $advanceBytes = $whitespaceMatch->getByteLength();
-            //advance the reader
-            $this->textReader->skip($advanceBytes);
+            $position = $this->calculateReaderPosition($whitespaceMatch, $from);
+            $this->advanceReader($whitespaceMatch);
         }
 
         $tokenMatch = $this->matchToken();
@@ -188,10 +172,8 @@ class StandardLexer implements Lexer
             return null;
         }
 
-        $position = $this->calculatePosition($tokenMatch, $position);
-        $advanceBytes = $tokenMatch->getByteLength();
-        //advance the reader
-        $this->textReader->skip($advanceBytes);
+        $this->calculateReaderPosition($tokenMatch, $position);
+        $this->advanceReader($tokenMatch);
 
         $token = $this->createToken($tokenMatch, $position);
         return $token;
@@ -199,11 +181,11 @@ class StandardLexer implements Lexer
 
     /**
      * @param TokenMatch $tokenMatch
-     * @param TokenPosition $tokenPosition
+     * @param CharPosition $tokenPosition
      *
-*@return StringToken
+     * @return StringToken
      */
-    private function createToken(TokenMatch $tokenMatch, TokenPosition $tokenPosition)
+    private function createToken(TokenMatch $tokenMatch, CharPosition $tokenPosition)
     {
         $tokenType = $tokenMatch->getTokenType();
         $tokenValue = $tokenMatch->getText();
@@ -218,7 +200,7 @@ class StandardLexer implements Lexer
      */
     private function matchToken()
     {
-        $match = $this->matchStrategy->match($this->textReader, $this->tokenMatchers);
+        $match = $this->matchStrategy->match($this->textReader, $this->tokenMatchersList);
         return $match;
     }
 
@@ -237,24 +219,39 @@ class StandardLexer implements Lexer
     }
 
     /**
-     * @param TokenMatch $textMatch
+     * @param TokenMatch $lastMatch
      *
-     * @param TokenPosition $previous
-     *
-     * @return TokenPosition
+     * @return bool
      */
-    private function calculatePosition(TokenMatch $textMatch, TokenPosition $previous)
+    private function advanceReader(TokenMatch $lastMatch)
+    {
+        //advance the reader
+        $advanceBytes = $lastMatch->getByteLength();
+        $this->textReader->skip($advanceBytes);
+        return true;
+    }
+
+    /**
+     * Calculates the reader position after the match and updates the internal property
+     *
+     * @param TokenMatch $textMatch
+     * @param CharPosition $previous
+     *
+     * @return CharPosition
+     */
+    private function calculateReaderPosition(TokenMatch $textMatch, CharPosition $previous)
     {
         $offsetPosition = $this->calculatePositionOffset($textMatch);
         $nextPosition   = $previous->offsetRight($offsetPosition);
 
+        $this->textPosition = $nextPosition;
         return $nextPosition;
     }
 
     /**
      * @param TokenMatch $textMatch
      *
-*@return TokenPosition
+     * @return CharPosition
      */
     private function calculatePositionOffset(TokenMatch $textMatch)
     {
@@ -272,7 +269,7 @@ class StandardLexer implements Lexer
             $startColumn = 1;
         }
         $offsetColumn = mb_strlen($offsetTextMatch, 'UTF-8');
-        $offsetPosition = new TokenPosition($offsetByte, $startColumn + $offsetColumn, $offsetLines);
+        $offsetPosition = new CharPosition($offsetByte, $startColumn + $offsetColumn, $offsetLines);
         return $offsetPosition;
     }
 }

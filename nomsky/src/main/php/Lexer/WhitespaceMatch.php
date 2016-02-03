@@ -1,5 +1,7 @@
 <?php namespace Helstern\Nomsky\Lexer;
 
+use Helstern\Nomsky\Tokens\DefaultTokenTypesEnum;
+
 class WhitespaceMatch implements TokenMatch
 {
     /** @var  string */
@@ -27,7 +29,7 @@ class WhitespaceMatch implements TokenMatch
      */
     public function getTokenType()
     {
-        return ' ';
+        return DefaultTokenTypesEnum::ENUM_WS;
     }
 
     /**

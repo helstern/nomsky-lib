@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Tokens;
 
-use Helstern\Nomsky\Parser\TokenPosition;
+use Helstern\Nomsky\Parser\CharPosition;
 use Helstern\Nomsky\Parser\Token;
 
 class StringToken implements Token
@@ -11,15 +11,15 @@ class StringToken implements Token
     /** @var string */
     protected $text;
 
-    /** @var TokenPosition */
+    /** @var CharPosition */
     protected $position;
 
     /**
      * @param string $type
      * @param string $text
-     * @param TokenPosition $firstCharacterPosition
+     * @param CharPosition $firstCharacterPosition
      */
-    public function __construct($type, $text, TokenPosition $firstCharacterPosition)
+    public function __construct($type, $text, CharPosition $firstCharacterPosition)
     {
         $this->type = $type;
         $this->text = $text;

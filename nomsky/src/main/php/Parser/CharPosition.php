@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Parser;
 
-class TokenPosition {
+class CharPosition {
 
     /** @var  int */
     protected $column;
@@ -47,11 +47,11 @@ class TokenPosition {
     /**
      * Creates a new TextPosition which is offset right with $offset
      *
-     * @param TokenPosition $offset
+     * @param CharPosition $offset
      *
-*@return TokenPosition
+*@return CharPosition
      */
-    public function offsetRight(TokenPosition $offset)
+    public function offsetRight(CharPosition $offset)
     {
         $offsetLine = $offset->getLine();
         if ($offsetLine > 0) {
@@ -68,6 +68,6 @@ class TokenPosition {
 
         $newByteIndex = $this->getByteIndex() + $offset->getByteIndex();
 
-        return new TokenPosition($newByteIndex, $newColumn, $newLine);
+        return new CharPosition($newByteIndex, $newColumn, $newLine);
     }
 }

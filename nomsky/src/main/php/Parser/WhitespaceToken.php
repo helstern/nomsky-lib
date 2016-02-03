@@ -2,8 +2,13 @@
 
 use Helstern\Nomsky\Tokens\DefaultTokenTypesEnum;
 
-class EOFToken implements Token
+class WhitespaceToken implements Token
 {
+    /**
+     * @var string
+     */
+    private $value;
+
     /**
      * @var CharPosition
      */
@@ -12,8 +17,9 @@ class EOFToken implements Token
     /**
      * @param CharPosition $position
      */
-    public function __construct(CharPosition $position)
+    public function __construct($value, CharPosition $position)
     {
+        $this->value = $value;
         $this->position = $position;
     }
 
@@ -22,7 +28,7 @@ class EOFToken implements Token
      */
     public function getType()
     {
-        return DefaultTokenTypesEnum::ENUM_EOF;
+        return DefaultTokenTypesEnum::ENUM_WS;
     }
 
     /**
@@ -30,7 +36,7 @@ class EOFToken implements Token
      */
     public function getValue()
     {
-        return '';
+        return $this->value;
     }
 
     /**

@@ -2,17 +2,17 @@
 
 use Helstern\Nomsky\Parser\Ast\CompositeAstNode;
 use Helstern\Nomsky\Parser\Ast\AstNode;
-use Helstern\Nomsky\Parser\TokenPosition;
+use Helstern\Nomsky\Parser\CharPosition;
 
 class GroupedExpressionNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
 {
-    /** @var TokenPosition */
+    /** @var CharPosition */
     protected $textPosition;
 
     /** @var AstNode */
     protected $childNode;
 
-    public function __construct(TokenPosition $textPosition, AstNode $childNode)
+    public function __construct(CharPosition $textPosition, AstNode $childNode)
     {
         $this->textPosition = $textPosition;
         $this->childNode = $childNode;
