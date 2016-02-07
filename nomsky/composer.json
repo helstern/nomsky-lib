@@ -31,6 +31,6 @@
         }
     }
     , "config": {
-        "vendor-dir" : "."
+        "vendor-dir" : "../composer"
     }
 }
