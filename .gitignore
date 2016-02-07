@@ -1,51 +1,19 @@
 # Created by .gitignore support plugin (hsz.mobi)
 
-# ignore everything by default
-/*
+# IDE configuration files
+*.idea
+*.iml
 
-# LICENCE and README
-!/LICENCE
-!/README.md
 
-# do not ignore git files
-!/.gitignore
-!/.gitattributes
-
-# do not ignore vagrant file
-!/vagrantfile
-
-# do not ignore travis
-!/.travis.yml
-
-# do not ignore the makefile script
-!/Makefile
-!/vagrant-env.sh
-
-# do not ignore the main module
-!nomsky
-!nomsky/
-
-# main module files
-
-# composer
-nomsky/depend/
-!nomsky/depend/composer/composer.json
-!nomsky/depend/composer/composer.lock
-
-*.box
-#!nomsky/target/
-nomsky/target/*
-
-!nomsky/target/vagrant/
-nomsky/target/vagrant/*
-
-!nomsky/target/vagrant/boxes/
-nomsky/target/vagrant/boxes/*
-!nomsky/target/vagrant/boxes/.gitkeep
-
-!nomsky/target/vagrant/machines/
-nomsky/target/vagrant/machines/*
-!nomsky/target/vagrant/machines/.gitkeep
+target/*
+!target/vagrant/
+target/vagrant/*
+!target/vagrant/boxes/
+target/vagrant/boxes/*
+!target/vagrant/boxes/.gitkeep
+!target/vagrant/machines/
+target/vagrant/machines/*
+!target/vagrant/machines/.gitkeep
 
 # IDE files, which should be ignored by the first rule
 #*.iml
