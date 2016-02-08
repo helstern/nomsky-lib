@@ -2,13 +2,13 @@
 
 # declare arguments
 ARG_ENV="${ARG_ENV}"
-ENV_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd)
+ENV_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )/../src/env" && pwd)
 
 function help() {
 cat <<HELP
 Best way to iset the environment is:
 
-ARG_ENV=<env name> source nomsky/src/env/env-set.sh
+ARG_ENV=<env name> source bin/env-set.sh
 
 HELP
 }

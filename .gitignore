@@ -5,6 +5,7 @@
 *.iml
 
 
+# target folder
 target/*
 !target/vagrant/
 target/vagrant/*
@@ -18,5 +19,6 @@ target/vagrant/machines/*
 # IDE files, which should be ignored by the first rule
 #*.iml
 
-# phpunit files
-phpunit.local.xml
+# local files
+*.local
+*.local*

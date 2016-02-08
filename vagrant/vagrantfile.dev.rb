@@ -7,32 +7,28 @@ def box_config_virtualbox
   host_only_interfaces = `vboxmanage list hostonlyifs`
   host_only_interface  = host_only_interfaces.lines.first[/(?<=Name:).*$/].strip!
 
-  configuration = {
+  {
       :hostOnlyInterfaceName   => bridged_interface,
       :bridgedInterfaceName    => host_only_interface
   }
-
-  configuration
 
 end
 
 # @return [Hash]
 def box_config_libvirt
 
-  configuration = {
+  {
       :vm_host          => 'vm-server-one',
       :vm_storage_pool  => 'boot-scratch',
       :vm_host_username => 'manager'
   }
-
-  configuration
 
 end
 
 # @return [Hash]
 def box_config_project
 
-  configuration = {
+  {
       :box                     => 'ubuntu-server-14.04',
       :hostname                => 'nomsky-dev.local',
       :machine_name            => 'nomsky-dev',
@@ -58,7 +54,5 @@ def box_config_project
 
       :environment             => '04-production'
   }
-
-  configuration
 
 end

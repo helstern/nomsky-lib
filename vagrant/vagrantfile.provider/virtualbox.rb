@@ -2,7 +2,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) { |config|
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
   #
   config.vm.provider :virtualbox do |vb|
 
@@ -13,7 +12,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) { |config|
     # Set boot sequence
     vb.customize ['modifyvm', :id, '--boot1', 'disk']
     # Set 1gb of ram
-    vb.customize ['modifyvm', :id, '--memory', '1024']
+    vb.customize ['modifyvm', :id, '--memory', '512']
 
     # Display configuration
     # set video memory

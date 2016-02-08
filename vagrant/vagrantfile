@@ -56,15 +56,15 @@ end
 PROJECT_HOST_DIR          = ENV.has_key?('VAGRANT_PROJECT_DIR') ? ENV['VAGRANT_PROJECT_DIR'] : File.dirname(__FILE__)
 
 VAGRANTFILE_API_VERSION   = '2'
-VAGRANT_ENV               = ENV.has_key?('VAGRANT_ENV') ? ENV['VAGRANT_ENV'] : 'default'
+VAGRANT_ENV               = ENV.has_key?('VAGRANT_ENV') ? ENV['VAGRANT_ENV'] : 'dev'
 
 VAGRANT_PROVIDER          = ENV.has_key?('VAGRANT_PROVIDER') ? ENV['VAGRANT_PROVIDER'] : 'virtualbox'
-VAGRANT_SOURCE_DIR        = expand_system_path(PROJECT_HOST_DIR, 'src', 'infrastructure', 'vagrant')
+VAGRANT_SOURCE_DIR        = expand_system_path(PROJECT_HOST_DIR, 'vagrant')
 VAGRANT_TARGET_DIR        = expand_system_path(PROJECT_HOST_DIR, 'target', 'vagrant')
 
-PUPPET_PROJECT_MANIFESTS_PATH     = expand_system_path(PROJECT_HOST_DIR, 'src', 'infrastructure', 'puppet', 'manifests')
-PUPPET_PROJECT_MODULES_PATH       = expand_system_path(PROJECT_HOST_DIR, 'src', 'infrastructure', 'puppet', 'modules')
-PUPPET_PROJECT_HIERA              = expand_system_path(PROJECT_HOST_DIR, 'src', 'infrastructure', 'hiera')
+PUPPET_PROJECT_MANIFESTS_PATH     = expand_system_path(PROJECT_HOST_DIR, 'src', 'provision', 'puppet', 'manifests')
+PUPPET_PROJECT_MODULES_PATH       = expand_system_path(PROJECT_HOST_DIR, 'src', 'provision', 'puppet', 'modules')
+PUPPET_PROJECT_HIERA              = expand_system_path(PROJECT_HOST_DIR, 'src', 'provision', 'hiera')
 PUPPET_PROVISIONER_PATH           = expand_system_path(PROJECT_HOST_DIR, '..', 'provision-puppet')
 
 # project configuration file

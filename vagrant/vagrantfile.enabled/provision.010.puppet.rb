@@ -13,7 +13,7 @@
   end
 
   guest_path_project = $box_configuration.fetch(:guest_path_project)
-  guest_path_puppet_modules = [guest_path_project, 'src', 'infrastructure', 'puppet', 'modules'].join('/')
+  guest_path_puppet_modules = [guest_path_project, 'src', 'provision', 'puppet', 'modules'].join('/')
   configurator = PuppetStandaloneConfigurator.new(
       :provisioner_id => 'puppet',
       :guest_path => '/puppet',

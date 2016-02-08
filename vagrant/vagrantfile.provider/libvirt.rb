@@ -2,10 +2,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.network :public_network, :mode => 'bridge', :type => 'bridge', :dev => 'br0'
 
-  # Provider-specific configuration so you can fine-tune various
-  # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
-  #
   config.vm.provider :libvirt do |libvirt|
 
     # connection information
