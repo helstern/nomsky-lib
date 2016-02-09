@@ -12,9 +12,12 @@ target/vagrant/*
 !target/vagrant/boxes/
 target/vagrant/boxes/*
 !target/vagrant/boxes/.gitkeep
-!target/vagrant/machines/
-target/vagrant/machines/*
-!target/vagrant/machines/.gitkeep
+
+# vagrant folder
+
+!vagrant/machines/
+vagrant/machines/*
+!vagrant/machines/.gitkeep
 
 # IDE files, which should be ignored by the first rule
 #*.iml
