@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 # declare arguments
+SCRIPT_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
 ARG_ENV="${ARG_ENV}"
-ENV_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )/../src/env" && pwd)
 
 function help() {
 cat <<HELP
 Best way to iset the environment is:
 
-ARG_ENV=<env name> source bin/env-set.sh
+ARG_ENV=<env file path> source bin/env-set.sh
 
 HELP
 }
@@ -52,16 +52,14 @@ if [ -z "${ARG_ENV}" ]; then
     exit 1
 fi
 
-ENV_FILE="${ENV_DIR}/${ARG_ENV}.env"
-if [ ! -f "${ENV_FILE}" ]; then
-    echo "this environment file does not exist: ${ENV_FILE}" 1>&2
+if ! test -f "${ARG_ENV}" ; then
+    echo "this environment file does not exist: ${ARG_ENV}" 1>&2
     exit 1
 fi
 
 OIFS=$IFS # save the field separator
 IFS=$'\n'
-for line in $(cat "${ENV_FILE}"); do
+for line in $(cat "${ARG_ENV}"); do
     export "${line}"
 done
-
-IFS=$OIFS # restore the field separator
+IFS=${OIFS} # restore the field separator

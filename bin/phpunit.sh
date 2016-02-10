@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # directories
-SOURCE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )../" && pwd )"
-PROJECT_DIR="${SOURCE_DIR}"
+SOURCE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_DIR="$( cd "${SOURCE_DIR}/.." && pwd )"
 
 #phpunit
 PHPUNIT="$PROJECT_DIR/composer/bin/phpunit"
@@ -15,7 +15,7 @@ PHPUNIT_DEFAULT_CONFIGURATION_FILE="$PROJECT_DIR/src/test/config/phpunit.local.x
 
 ARG_XDEBUG=''
 PHPUNIT_ARGS=''
-PHPUNIT_CONF="--configuration $PHPUNIT_DEFAULT_CONFIGURATION_FILE"
+PHPUNIT_ARGS_CONF="--configuration $PHPUNIT_DEFAULT_CONFIGURATION_FILE"
 # parse options (flags, flags with arguments, long options) and input
 function parse_arguments() {
     while [ $# -gt 0 ]
@@ -33,14 +33,15 @@ function parse_arguments() {
                 ARG_XDEBUG='xdebug'
             ;;
             --configuration|-c)
-                PHPUNITARGS="${PHPUNITARGS} ${1}"
-                PHPUNIT_CONF=""
+                PHPUNITARGS="${PHPUNITARGS} --configuration ${2}"
+                PHPUNIT_ARGS_CONF=""
+                shift
             ;;
             --help)
                 ${PHPUNIT} --help
                 exit 0
             ;;
-            -*)
+            *)
                 PHPUNIT_ARGS="${PHPUNITARGS} ${1}"
             ;;
         esac
@@ -50,8 +51,8 @@ function parse_arguments() {
 
 parse_arguments "$@"
 
-if test -n "${PHPUNIT_CONF}"; then
-    PHPUNIT_ARGS="${PHPUNIT_CONF} ${PHPUNIT_ARGS}"
+if test -n "${PHPUNIT_ARGS_CONF}"; then
+    PHPUNIT_ARGS="${PHPUNIT_ARGS_CONF} ${PHPUNIT_ARGS}"
 fi
 
 if test -n "${ARG_XDEBUG}"; then

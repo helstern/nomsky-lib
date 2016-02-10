@@ -1,11 +1,12 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -x
 
 # directories
 SOURCE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PROJECT_DIR="$( cd "$( dirname "${SOURCE_DIR}" )../" && pwd )"
+PROJECT_DIR="$( cd "${SOURCE_DIR}/.." && pwd )"
 
-#phpunit
-VAGRANT_DIR="$PROJECT_DIR/vagrant"
+# vagrant
+VAGRANT_DIR="${PROJECT_DIR}/vagrant"
+VAGRANT_CONFIG_DIR="${VAGRANT_DIR}/config"
 
 ARG_ENV=''
 VAGRANT_ARGS=''
@@ -22,7 +23,7 @@ function parse_arguments() {
                 fi
                 shift
             ;;
-            -*)
+            *)
                 VAGRANT_ARGS="${VAGRANT_ARGS} ${1}"
             ;;
         esac
@@ -33,11 +34,11 @@ function parse_arguments() {
 parse_arguments "$@"
 
 if test -n "${ARG_ENV}"; then
-    ARG_ENV=$("${VAGRANT_DIR}/config/${ARG_ENV}.env") source env-set.sh
+    ARG_ENV="${VAGRANT_CONFIG_DIR}/${ARG_ENV}.env" source "${SOURCE_DIR}/env-set.sh" --
 else
     echo 'env can not be empty' 1>&2
     exit 1
 fi
 
 cd ${VAGRANT_DIR}
-vagrant "${VAGRANT_ARGS}"
+vagrant ${VAGRANT_ARGS}

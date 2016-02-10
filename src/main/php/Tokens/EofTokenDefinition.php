@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Tokens;
 
-class EofTokenDefinition implements DeprecatedTokenDefinition
+class EofTokenDefinition
 {
     /**
      * @return int

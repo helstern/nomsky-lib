@@ -1,8 +1,10 @@
 <?php namespace Helstern\Nomsky\Text;
 
-use Helstern\Nomsky\Lexer\TextMatch;
-
-class StringMatch implements TextMatch
+/**
+ * @package Helstern\Nomsky\Text
+ * @deprecated
+ */
+class StringMatch
 {
     /** @var  string */
     protected $text;

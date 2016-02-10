@@ -6,10 +6,10 @@ php:
  - 5.5
 
 before_script:
- - cd nomsky/depend/composer && composer install && cd ../../../
+ - composer install
 
 script:
- - nomsky/depend/composer/bin/phpunit --configuration=./nomsky/src/ci/travis/phpunit.travis.xml
+ - bash bin/phpunit --configuration=./src/ci/travis/config/phpunit.xml
 
 after_script:
- - php nomsky/src/ci/scripts/code-coverage-checker.clover.php nomsky/target/site/phpunit-code-coverage/clover-coverage.xml 80
+ - php bin/coverage-checker.clover.php target/site/phpunit-code-coverage/clover-coverage.xml 80

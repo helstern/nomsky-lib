@@ -1,3 +1,3 @@
 <?php
 
-require __DIR__ . '/../../../depend/composer/autoload.php';
+require __DIR__ . '/../../../composer/autoload.php';
