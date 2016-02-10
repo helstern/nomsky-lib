@@ -19,9 +19,11 @@ target/vagrant/boxes/*
 vagrant/machines/*
 !vagrant/machines/.gitkeep
 
-# IDE files, which should be ignored by the first rule
-#*.iml
-
 # local files
 *.local
 *.local*
+
+# dependencies
+composer/*
+dependencies/
+
