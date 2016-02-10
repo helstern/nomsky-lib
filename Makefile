@@ -1,6 +1,8 @@
 SHELL=/bin/bash
+DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 PHPFLAGS=
 PHPENV=
+
 
 ifdef XDEBUG_CONFIG
 	PHPFLAGS += -d xdebug.remote_enable=1
@@ -11,16 +13,26 @@ ifdef PHP_IDE_CONFIG
 endif
 
 initialize:
-	test -d 'provision-puppet/.git' || git clone git@github.com:helstern/provisioning-with-puppet.git provision-puppet
+	test -d "$(DIR)/../provision-puppet/.git" || git clone git@github.com:helstern/provisioning-with-puppet.git "$(DIR)/../provision-puppet"
+	$(MAKE) -$(MAKEFLAGS) vagrant-initialize
 
 validate:
 	php -v
 
 compile: validate
-	cd nomsky/depend/composer; php ./composer.phar install
+	php ./bin/composer.phar install
 
 test: compile
-	$(PHPENV) php $(PHPFLAGS) nomsky/depend/composer/bin/phpunit --configuration=nomsky/src/test/resources/phpunit.local.xml
+	bash bin/phpunit.sh --configuration src/test/config/phpunit.xml.dist
+
+vagrant-initialize:
+	bash "$(DIR)/vagrant/bin/make-env.sh" --env libvirt.local --project_dir "$(DIR)" --default-provider libvirt
+	$(MAKE) ARGS=provision vagrant
+
+vagrant:
+	bash bin/vagrant.sh ${ARGS} --env libvirt.local
+
+.PHONY: initialize vagrant
 
 
 

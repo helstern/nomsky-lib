@@ -1,0 +1,84 @@
+# @param [Array] path_segments
+# @return [String]
+def expand_system_path (*path_segments)
+  fail('expecting an Array as parameter') unless path_segments.instance_of?(::Array)
+  path = path_segments.join(File::SEPARATOR)
+  File.expand_path(path)
+end
+
+# @param [Array] path_segments
+def load_system_file(*path_segments)
+  path = expand_system_path(*path_segments)
+  require path
+end
+
+def require_system_file(*path_segments)
+  path = expand_system_path(*path_segments)
+  require path
+end
+
+def foreach_system_file(*dir_segments, &block)
+  path = expand_system_path(*dir_segments)
+  Dir.foreach(path, &block)
+end
+
+# @param [String] boxname
+# @return [File]
+def vagrant_base_box_file(boxname)
+  path = expand_system_path(VAGRANT_TARGET_DIR, 'boxes', boxname.to_s)
+  File.new(path)
+end
+
+def vagrant_env_file(env)
+  ['vagrantfile', env, 'rb'].join('.')
+end
+
+def load_vagrant_env(env)
+  vagrant_env_file = vagrant_env_file(env)
+  load_system_file(VAGRANT_SOURCE_DIR, vagrant_env_file)
+end
+
+# @param [String] provider
+# @return [Hash]
+def configuration(provider)
+
+  cfg_project = box_config_project
+  if provider == 'libvirt'
+    cfg_provider = box_config_libvirt
+  else
+    cfg_provider = box_config_virtualbox
+  end
+
+  cfg_project.merge(cfg_provider)
+
+end
+
+PROJECT_HOST_DIR          = ENV.has_key?('VAGRANT_PROJECT_DIR') ? ENV['VAGRANT_PROJECT_DIR'] : File.dirname(__FILE__)
+
+VAGRANTFILE_API_VERSION   = '2'
+VAGRANT_ENV               = ENV.has_key?('VAGRANT_ENV') ? ENV['VAGRANT_ENV'] : 'dev'
+
+VAGRANT_PROVIDER          = ENV.has_key?('VAGRANT_PROVIDER') ? ENV['VAGRANT_PROVIDER'] : 'virtualbox'
+VAGRANT_SOURCE_DIR        = expand_system_path(PROJECT_HOST_DIR, 'vagrant')
+VAGRANT_TARGET_DIR        = expand_system_path(PROJECT_HOST_DIR, 'target', 'vagrant')
+
+PUPPET_PROJECT_MANIFESTS_PATH     = expand_system_path(PROJECT_HOST_DIR, 'src', 'provision', 'puppet', 'manifests')
+PUPPET_PROJECT_MODULES_PATH       = expand_system_path(PROJECT_HOST_DIR, 'src', 'provision', 'puppet', 'modules')
+PUPPET_PROJECT_HIERA              = expand_system_path(PROJECT_HOST_DIR, 'src', 'provision', 'hiera')
+PUPPET_PROVISIONER_PATH           = expand_system_path(PROJECT_HOST_DIR, '..', 'provision-puppet')
+
+# project configuration file
+load_vagrant_env(VAGRANT_ENV)
+$box_configuration = configuration(VAGRANT_PROVIDER)
+
+# require provisioner classes
+require_system_file(PUPPET_PROVISIONER_PATH, 'vagrant', 'require.rb')
+
+# vagrant other configuration
+foreach_system_file(VAGRANT_SOURCE_DIR, 'vagrantfile.enabled') do |filename|
+  next if %w(. ..).include?(filename)
+
+  puts "loading #{filename}"
+  file_path = [VAGRANT_SOURCE_DIR, 'vagrantfile.enabled', filename].join(File::SEPARATOR)
+  load File.expand_path(file_path)
+end
