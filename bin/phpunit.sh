@@ -8,14 +8,11 @@ PROJECT_DIR="$( cd "${SOURCE_DIR}/.." && pwd )"
 PHPUNIT="$PROJECT_DIR/composer/bin/phpunit"
 
 #absolute path to configuration
-PHPUNIT_CONFIGURATION_DIR="$PROJECT_DIR/src/test/config/phpunit.xml.dist"
-
-# default phpunit options
-PHPUNIT_DEFAULT_CONFIGURATION_FILE="$PROJECT_DIR/src/test/config/phpunit.local.xml"
+PHPUNIT_CONFIGURATION="$PROJECT_DIR/src/test/config/phpunit.xml.dist"
 
 ARG_XDEBUG=''
 PHPUNIT_ARGS=''
-PHPUNIT_ARGS_CONF="--configuration $PHPUNIT_DEFAULT_CONFIGURATION_FILE"
+PHPUNIT_ARGS_CONF="--configuration ${PHPUNIT_CONFIGURATION}"
 # parse options (flags, flags with arguments, long options) and input
 function parse_arguments() {
     while [ $# -gt 0 ]
