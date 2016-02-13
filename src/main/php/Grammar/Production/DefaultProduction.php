@@ -16,12 +16,16 @@ use Helstern\Nomsky\Grammar\Symbol\Predicate\AnySymbolPredicate;
 
 class DefaultProduction implements Production
 {
-    /** @var \Helstern\Nomsky\Grammar\Symbol\Symbol  */
+    /** @var Symbol */
     protected $nonTerminal;
 
     /** @var ExpressionIterable  */
     protected $expression;
 
+    /**
+     * @param Symbol $nonTerminal
+     * @param ExpressionIterable $expression
+     */
     public function __construct(Symbol $nonTerminal, ExpressionIterable $expression)
     {
         $this->nonTerminal = $nonTerminal;

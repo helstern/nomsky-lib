@@ -225,7 +225,8 @@ class IsoEbnfParser
 
     /**
      * @param Lexer $lexer
-     * @return \Helstern\Nomsky\Grammars\Ebnf\Ast\GroupedExpressionNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\IdentifierNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalExpressionNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\RepeatedExpressionNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\SpecialSequenceNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\StringLiteralNode|null
+     *
+*@return GroupedExpressionNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\IdentifierNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalExpressionNode|RepeatedExpressionNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\SpecialSequenceNode|\Helstern\Nomsky\Grammars\Ebnf\Ast\StringLiteralNode|null
      * @throws \Exception
      */
     protected function parseFactor(Lexer $lexer)
@@ -324,7 +325,8 @@ class IsoEbnfParser
 
     /**
      * @param Lexer $lexer
-     * @return \Helstern\Nomsky\Grammars\Ebnf\Ast\GroupedExpressionNode
+     *
+     * @return GroupedExpressionNode
      */
     protected function parseGroupedExpression(Lexer $lexer)
     {
@@ -344,7 +346,8 @@ class IsoEbnfParser
 
     /**
      * @param Lexer $lexer
-     * @return \Helstern\Nomsky\Grammars\Ebnf\Ast\RepeatedExpressionNode
+     *
+     * @return RepeatedExpressionNode
      */
     protected function parseRepeatedExpression(Lexer $lexer)
     {
