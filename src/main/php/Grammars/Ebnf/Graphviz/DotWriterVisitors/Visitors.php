@@ -15,7 +15,7 @@ use Helstern\Nomsky\Grammars\Ebnf\Graphviz\NodeCounter;
 use Helstern\Nomsky\Grammars\Ebnf\Graphviz\VisitorCollaborators;
 use Helstern\Nomsky\Graphviz\DotFile;
 use Helstern\Nomsky\Graphviz\DotWriter;
-use Helstern\Nomsky\Parser\Ast\AstNodeVisitorProvider;
+use Helstern\Nomsky\Parser\AstNodeVisitStrategy\AstNodeVisitorProvider;
 use Helstern\Nomsky\Parser\AstNodeVisitor\AbstractDispatchingProvider;
 
 class Visitors extends AbstractDispatchingProvider implements AstNodeVisitorProvider

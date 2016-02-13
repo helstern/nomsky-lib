@@ -1,7 +1,6 @@
-<?php namespace Helstern\Nomsky\Parser\AstNodeWalkStrategy;
+<?php namespace Helstern\Nomsky\Parser\AstNodeVisitStrategy;
 
 use Helstern\Nomsky\Parser\Ast\AstNode;
-use Helstern\Nomsky\Parser\Ast\AstNodeVisitorProvider;
 use Helstern\Nomsky\Parser\Ast\VisitActionFactory;
 use Helstern\Nomsky\Parser\AstNodeVisitor\ActualVisitAction;
 use Helstern\Nomsky\Parser\AstNodeVisitor\PostVisitAction;

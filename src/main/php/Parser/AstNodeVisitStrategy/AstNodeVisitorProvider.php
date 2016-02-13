@@ -1,4 +1,7 @@
-<?php namespace Helstern\Nomsky\Parser\Ast;
+<?php namespace Helstern\Nomsky\Parser\AstNodeVisitStrategy;
+
+use Helstern\Nomsky\Parser\Ast\AstNode;
+use Helstern\Nomsky\Parser\Ast\AstNodeVisitor;
 
 interface AstNodeVisitorProvider
 {

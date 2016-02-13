@@ -3,7 +3,7 @@
 use Helstern\Nomsky\Dispatcher\DoubleDispatcher;
 use Helstern\Nomsky\Parser\Ast\AstNode;
 use Helstern\Nomsky\Parser\Ast\AstNodeVisitor;
-use Helstern\Nomsky\Parser\Ast\AstNodeVisitorProvider;
+use Helstern\Nomsky\Parser\AstNodeVisitStrategy\AstNodeVisitorProvider;
 
 abstract class AbstractDispatchingProvider implements AstNodeVisitorProvider
 {

@@ -1,11 +1,10 @@
-<?php namespace Helstern\Nomsky\Parser\AstNodeWalkStrategy;
+<?php namespace Helstern\Nomsky\Parser\AstNodeVisitStrategy;
 
 use Helstern\Nomsky\Parser\Ast\CompositeAstNode;
 use Helstern\Nomsky\Parser\Ast\AstNode;
-use Helstern\Nomsky\Parser\Ast\AstNodeVisitorProvider;
 use Helstern\Nomsky\Parser\Ast\AstNodeWalkStrategy;
 
-class PreOrderWalkStrategy implements AstNodeWalkStrategy
+class PreOrderVisitStrategy implements AstNodeWalkStrategy
 {
     /** @var AstNodeVisitorProvider */
     protected $astNodeVisitorProvider;

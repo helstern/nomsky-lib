@@ -12,7 +12,7 @@ use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators\OptionalExpressionN
 use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators\RuleNodeVisitor;
 use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators\SequenceNodeVisitor;
 use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators\StringLiteralNodeVisitor;
-use Helstern\Nomsky\Parser\Ast\AstNodeVisitorProvider;
+use Helstern\Nomsky\Parser\AstNodeVisitStrategy\AstNodeVisitorProvider;
 use Helstern\Nomsky\Parser\AstNodeVisitor\AbstractDispatchingProvider;
 
 class Visitors extends AbstractDispatchingProvider implements AstNodeVisitorProvider

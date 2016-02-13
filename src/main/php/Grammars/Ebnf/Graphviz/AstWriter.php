@@ -4,7 +4,7 @@ use Helstern\Nomsky\Grammars\Ebnf\Ast\SyntaxNode;
 use Helstern\Nomsky\Grammars\Ebnf\Graphviz\DotWriterVisitors\Visitors;
 use Helstern\Nomsky\Graphviz\DotFile;
 use Helstern\Nomsky\Parser\Ast\StackBasedAstWalker;
-use Helstern\Nomsky\Parser\AstNodeWalkStrategy\PreOrderWalkStrategy;
+use Helstern\Nomsky\Parser\AstNodeVisitStrategy\PreOrderVisitStrategy;
 
 class AstWriter
 {
@@ -18,7 +18,7 @@ class AstWriter
     {
         $visitorProvider = new Visitors($dotFile);
 
-        $walkStrategy = new PreOrderWalkStrategy($visitorProvider);
+        $walkStrategy = new PreOrderVisitStrategy($visitorProvider);
         $walker = new StackBasedAstWalker($walkStrategy);
 
         $walkResult = $walker->walk($astNode);
