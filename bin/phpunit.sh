@@ -30,8 +30,8 @@ function parse_arguments() {
                 ARG_XDEBUG='xdebug'
             ;;
             --configuration|-c)
-                PHPUNITARGS="${PHPUNITARGS} --configuration ${2}"
-                PHPUNIT_ARGS_CONF=""
+                PHPUNIT_ARGS="${PHPUNIT_ARGS} --configuration ${2}"
+                PHPUNIT_ARGS_CONF=''
                 shift
             ;;
             --help)
@@ -39,7 +39,7 @@ function parse_arguments() {
                 exit 0
             ;;
             *)
-                PHPUNIT_ARGS="${PHPUNITARGS} ${1}"
+                PHPUNIT_ARGS="${PHPUNIT_ARGS} ${1}"
             ;;
         esac
         shift
@@ -53,9 +53,7 @@ if test -n "${PHPUNIT_ARGS_CONF}"; then
 fi
 
 if test -n "${ARG_XDEBUG}"; then
-    ARG_ENV=xdebug source env-set.sh
-    PHPUNIT_ARGS="-d xdebug.remote_enable=1 ${PHPUNIT_ARGS}"
-
+    PHPUNIT_ARGS="-d xdebug.remote_enable=1 -d xdebug.remote_connect_back=1 ${PHPUNIT_ARGS}"
 fi
 
-${PHPUNIT} ${PHPUNITARGS}
+${PHPUNIT} ${PHPUNIT_ARGS}
