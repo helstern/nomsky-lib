@@ -1,27 +1,37 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\Graphviz\DotWriterVisitors;
 
 use Helstern\Nomsky\Grammars\Ebnf\Ast\SyntaxNode;
-use Helstern\Nomsky\Grammars\Ebnf\Graphviz\VisitorCollaborators;
-use Helstern\Nomsky\Parser\Ast\AstNodeVisitor;
-use Helstern\Nomsky\Parser\AstNodeVisitor\AbstractDispatchingVisitor;
-use Helstern\Nomsky\Parser\AstNodeVisitor\VisitDispatcher;
+use Helstern\Nomsky\Grammars\Ebnf\Graphviz\Formatter;
+use Helstern\Nomsky\Grammars\Ebnf\Graphviz\VisitContext;
+use Helstern\Nomsky\Graphviz\DotWriter;
 
-class SyntaxNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVisitor
+class SyntaxNodeVisitor
 {
-    /** @var VisitorCollaborators */
-    protected $collaborators;
-
-    /** @var VisitDispatcher  */
-    protected $visitDispatcher;
+    /**
+     * @var VisitContext
+     */
+    private $visitContext;
 
     /**
-     * @param VisitorCollaborators $collaborators
-     * @param VisitDispatcher $visitDispatcher
+     * @var DotWriter
      */
-    public function __construct(VisitorCollaborators $collaborators, VisitDispatcher $visitDispatcher)
+    private $dotWriter;
+
+    /**
+     * @var Formatter
+     */
+    private $formatter;
+
+    /**
+     * @param VisitContext $visitContext
+     * @param DotWriter $dotWriter
+     * @param Formatter $formatter
+     */
+    public function __construct(VisitContext $visitContext, DotWriter $dotWriter, Formatter $formatter)
     {
-        $this->collaborators = $collaborators;
-        $this->visitDispatcher = $visitDispatcher;
+        $this->visitContext = $visitContext;
+        $this->dotWriter = $dotWriter;
+        $this->formatter = $formatter;
     }
 
     /**
@@ -30,7 +40,7 @@ class SyntaxNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVis
      */
     protected function buildDOTIdentifier(SyntaxNode $astNode)
     {
-        return '"' . 'syntax' . '"';
+        return '"syntax"';
     }
 
     /**
@@ -39,11 +49,8 @@ class SyntaxNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVis
      */
     public function preVisitSyntaxNode(SyntaxNode $astNode)
     {
-        $dotWriter = $this->collaborators->dotWriter();
-        $dotWriter->startGraph();
-
-        $nodeCounter = $this->collaborators->nodeCounter();
-        $nodeCounter->increment($astNode);
+        $this->dotWriter->startGraph();
+        $this->visitContext->incrementNodeCount($astNode);
 
         return true;
     }
@@ -54,18 +61,14 @@ class SyntaxNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVis
      */
     public function visitSyntaxNode(SyntaxNode $astNode)
     {
-        $dotWriter = $this->collaborators->dotWriter();
-
         $nodeId    = $this->buildDOTIdentifier($astNode);
-        $dotWriter->writeNode($nodeId);
+        $this->dotWriter->writeNode($nodeId);
 
-        $formatter = $this->collaborators->formatter();
-        $formatter->whitespace(1, $dotWriter); //formatting options
-        $dotWriter->writeStatementTerminator();
+        $this->formatter->whitespace(1, $this->dotWriter); //formatting options
+        $this->dotWriter->writeStatementTerminator();
 
         if (0 < $astNode->countChildren()) {
-            $parents = $this->collaborators->parentNodeIds();
-            $parents->push($nodeId);
+            $this->visitContext->pushParentId($nodeId);
         }
 
         return true;
@@ -77,21 +80,9 @@ class SyntaxNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVis
      */
     public function postVisitSyntaxNode(SyntaxNode $astNode)
     {
-        $dotWriter = $this->collaborators->dotWriter();
-        $dotWriter->closeGraph();
-
-        $parents = $this->collaborators->parentNodeIds();
-        $parents->pop();
+        $this->dotWriter->closeGraph();
+        $this->visitContext->popParentId();
 
         return true;
-    }
-
-    /**
-     * @return VisitDispatcher
-     */
-    protected function getVisitDispatcher()
-    {
-        $visitDispatcher = $this->visitDispatcher;
-        return $visitDispatcher;
     }
 }

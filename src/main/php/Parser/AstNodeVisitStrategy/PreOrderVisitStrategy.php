@@ -1,29 +1,41 @@
 <?php namespace Helstern\Nomsky\Parser\AstNodeVisitStrategy;
 
+use Helstern\Nomsky\Parser\Ast\AstNodeVisitor;
 use Helstern\Nomsky\Parser\Ast\CompositeAstNode;
 use Helstern\Nomsky\Parser\Ast\AstNode;
 use Helstern\Nomsky\Parser\Ast\AstNodeWalkStrategy;
+use Helstern\Nomsky\Parser\Ast\VisitActionFactory;
 
 class PreOrderVisitStrategy implements AstNodeWalkStrategy
 {
     /** @var AstNodeVisitorProvider */
-    protected $astNodeVisitorProvider;
+    private $visitorProvider;
+
+    /**
+     * @var AstNodeVisitorProvider
+     */
+    private $visits;
 
     /**
      * @param AstNodeVisitorProvider $astNodeVisitorProvider
+     *
+     * @return PreOrderVisitStrategy
      */
-    public function __construct(AstNodeVisitorProvider $astNodeVisitorProvider)
+    public static function newDefaultInstance(AstNodeVisitorProvider $astNodeVisitorProvider)
     {
-        $this->astNodeVisitorProvider = $astNodeVisitorProvider;
+        return new self($astNodeVisitorProvider, new VisitActions());
     }
 
     /**
-     * @return VisitActions
+     * @param AstNodeVisitorProvider $astNodeVisitorProvider
+     * @param VisitActionFactory $visits
      */
-    public function visits()
-    {
-        $visitsFactory = new VisitActions($this->astNodeVisitorProvider);
-        return $visitsFactory;
+    public function __construct(
+        AstNodeVisitorProvider $astNodeVisitorProvider,
+        VisitActionFactory $visits
+    ) {
+        $this->visitorProvider = $astNodeVisitorProvider;
+        $this->visits = $visits;
     }
 
     /**
@@ -32,12 +44,44 @@ class PreOrderVisitStrategy implements AstNodeWalkStrategy
      */
     public function calculateWalkList(AstNode $parent)
     {
+        $visitor = $this->visitorProvider->getVisitor($parent);
+        if (is_null($visitor)) {
+            return [];
+        }
+
         $list = null;
         if ($parent instanceof CompositeAstNode) {
-            $list = $this->buildParentNodeList($parent);
+            $list = $this->buildParentNodeList($parent, $visitor);
         } else {
-            $list = $this->buildChildlessNodeList($parent);
+            $list = $this->buildChildlessNodeList($parent, $visitor);
         }
+
+        return $list;
+    }
+
+    /**
+     * @param CompositeAstNode $parent
+     * @param AstNodeVisitor $visitor
+     *
+     * @return \SplDoublyLinkedList
+     */
+    private function buildParentNodeList(CompositeAstNode $parent, AstNodeVisitor $visitor)
+    {
+        $list = new \SplDoublyLinkedList();
+        $list->setIteratorMode(\SplDoublyLinkedList::IT_MODE_LIFO | \SplDoublyLinkedList::IT_MODE_KEEP);
+
+        $actionsHead = [
+            $this->visits->createPreVisit($parent, $visitor),
+            $this->visits->createActualVisit($parent, $visitor)
+        ];
+        foreach ($actionsHead as $action) {
+            $list->push($action);
+        }
+
+        $this->addChildrenActionsToList($parent, $list);
+
+        $tailAction = $this->visits->createPostVisit($parent, $visitor);
+        $list->push($tailAction);
 
         return $list;
     }
@@ -47,7 +91,7 @@ class PreOrderVisitStrategy implements AstNodeWalkStrategy
      * @param \SplDoublyLinkedList $list
      * @return bool
      */
-    protected function addChildrenActionsToList(CompositeAstNode $parent, \SplDoublyLinkedList $list)
+    private function addChildrenActionsToList(CompositeAstNode $parent, \SplDoublyLinkedList $list)
     {
         $addToListResult = false;
 
@@ -61,47 +105,23 @@ class PreOrderVisitStrategy implements AstNodeWalkStrategy
     }
 
     /**
-     * @param CompositeAstNode $parent
-     * @return \SplDoublyLinkedList
-     */
-    protected function buildParentNodeList(CompositeAstNode $parent)
-    {
-        $visits = $this->visits();
-
-        $list = new \SplDoublyLinkedList();
-        $list->setIteratorMode(\SplDoublyLinkedList::IT_MODE_LIFO | \SplDoublyLinkedList::IT_MODE_KEEP);
-
-        $headActions = [$visits->createPreVisit($parent), $visits->createActualVisit($parent)];
-        foreach ($headActions as $action) {
-            $list->push($action);
-        }
-
-        $this->addChildrenActionsToList($parent, $list);
-
-        $tailAction = $visits->createPostVisit($parent);
-        $list->push($tailAction);
-
-        return $list;
-    }
-
-    /**
      * @param AstNode $node
+     * @param AstNodeVisitor $visitor
+     *
      * @return \SplDoublyLinkedList
      */
-    protected function buildChildlessNodeList(AstNode $node)
+    private function buildChildlessNodeList(AstNode $node, AstNodeVisitor $visitor)
     {
         $list = new \SplDoublyLinkedList();
         $list->setIteratorMode(\SplDoublyLinkedList::IT_MODE_LIFO | \SplDoublyLinkedList::IT_MODE_KEEP);
 
-        $visits = $this->visits();
-
-        $visit = $visits->createPreVisit($node);
+        $visit = $this->visits->createPreVisit($node, $visitor);
         $list->push($visit);
 
-        $visit = $visits->createActualVisit($node);
+        $visit = $this->visits->createActualVisit($node, $visitor);
         $list->push($visit);
 
-        $visit = $visits->createPostVisit($node);
+        $visit = $this->visits->createPostVisit($node, $visitor);
         $list->push($visit);
 
         return $list;

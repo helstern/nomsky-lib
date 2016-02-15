@@ -1,39 +1,37 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\Graphviz\DotWriterVisitors;
 
 use Helstern\Nomsky\Grammars\Ebnf\Ast\AlternativeNode;
-use Helstern\Nomsky\Grammars\Ebnf\Graphviz\VisitorCollaborators;
-use Helstern\Nomsky\Parser\Ast\AstNodeVisitor;
-use Helstern\Nomsky\Parser\AstNodeVisitor\AbstractDispatchingVisitor;
-use Helstern\Nomsky\Parser\AstNodeVisitor\VisitDispatcher;
+use Helstern\Nomsky\Grammars\Ebnf\Graphviz\Formatter;
+use Helstern\Nomsky\Grammars\Ebnf\Graphviz\VisitContext;
+use Helstern\Nomsky\Graphviz\DotWriter;
 
-class AlternativeNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVisitor
+class AlternativeNodeVisitor extends AbstractVisitor
 {
-    /** @var VisitorCollaborators */
-    protected $collaborators;
-
-    /** @var VisitDispatcher  */
-    protected $visitDispatcher;
+    /**
+     * @var VisitContext
+     */
+    private $visitContext;
 
     /**
-     * @param VisitorCollaborators $collaborators
-     * @param VisitDispatcher $visitDispatcher
+     * @var DotWriter
      */
-    public function __construct(VisitorCollaborators $collaborators, VisitDispatcher $visitDispatcher)
-    {
-        $this->collaborators = $collaborators;
-        $this->visitDispatcher = $visitDispatcher;
-    }
+    private $dotWriter;
 
     /**
-     * @param AlternativeNode $astNode
-     * @return string
+     * @var Formatter
      */
-    protected function buildDOTIdentifier(AlternativeNode $astNode)
-    {
-        $nodeCounter = $this->collaborators->nodeCounter();
-        $idNumber = $nodeCounter->getNodeCount();
+    private $formatter;
 
-        return '"' . 'alternative' . '[' . $idNumber . ']' . '"' ;
+    /**
+     * @param VisitContext $visitContext
+     * @param DotWriter $dotWriter
+     * @param Formatter $formatter
+     */
+    public function __construct(VisitContext $visitContext, DotWriter $dotWriter, Formatter $formatter)
+    {
+        $this->visitContext = $visitContext;
+        $this->dotWriter = $dotWriter;
+        $this->formatter = $formatter;
     }
 
     /**
@@ -42,9 +40,7 @@ class AlternativeNodeVisitor extends AbstractDispatchingVisitor implements AstNo
      */
     public function preVisitAlternativeNode(AlternativeNode $astNode)
     {
-        $nodeCounter = $this->collaborators->nodeCounter();
-        $nodeCounter->increment($astNode);
-
+        $this->visitContext->incrementNodeCount($astNode);
         return true;
     }
 
@@ -54,23 +50,18 @@ class AlternativeNodeVisitor extends AbstractDispatchingVisitor implements AstNo
      */
     public function visitAlternativeNode(AlternativeNode $astNode)
     {
-        $dotWriter = $this->collaborators->dotWriter();
-        $formatter = $this->collaborators->formatter();
+        $increment = $this->visitContext->countParentIds();
+        $this->formatter->indent($increment, $this->dotWriter);
 
-        $parents = $this->collaborators->parentNodeIds();
+        $parentId = $this->visitContext->peekParentId();
+        $nodeId    = $this->buildNumberedDOTIdentifier('"alternative[%s]"', $this->visitContext);
+        $this->dotWriter->writeEdgeStatement($parentId, $nodeId);
 
-        $increment = $parents->count();
-        $formatter->indent($increment, $dotWriter);
-
-        $parentId = $parents->top();
-        $nodeId    = $this->buildDOTIdentifier($astNode);
-        $dotWriter->writeEdgeStatement($parentId, $nodeId);
-
-        $formatter->whitespace(1, $dotWriter); //formatting options
-        $dotWriter->writeStatementTerminator();
+        $this->formatter->whitespace(1, $this->dotWriter); //formatting options
+        $this->dotWriter->writeStatementTerminator();
 
         if (0 < $astNode->countChildren()) {
-            $parents->push($nodeId);
+            $this->visitContext->pushParentId($nodeId);
         }
 
         return true;
@@ -82,18 +73,10 @@ class AlternativeNodeVisitor extends AbstractDispatchingVisitor implements AstNo
      */
     public function postVisitAlternativeNode(AlternativeNode $astNode)
     {
-        $parents = $this->collaborators->parentNodeIds();
-        $parents->pop();
+        if (0 < $astNode->countChildren()) {
+            $this->visitContext->popParentId();
+        }
 
         return true;
-    }
-
-    /**
-     * @return VisitDispatcher
-     */
-    protected function getVisitDispatcher()
-    {
-        $visitDispatcher = $this->visitDispatcher;
-        return $visitDispatcher;
     }
 }

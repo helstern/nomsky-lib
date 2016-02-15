@@ -1,39 +1,37 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\Graphviz\DotWriterVisitors;
 
 use Helstern\Nomsky\Grammars\Ebnf\Ast\RepeatedExpressionNode;
-use Helstern\Nomsky\Grammars\Ebnf\Graphviz\VisitorCollaborators;
-use Helstern\Nomsky\Parser\Ast\AstNodeVisitor;
-use Helstern\Nomsky\Parser\AstNodeVisitor\AbstractDispatchingVisitor;
-use Helstern\Nomsky\Parser\AstNodeVisitor\VisitDispatcher;
+use Helstern\Nomsky\Grammars\Ebnf\Graphviz\Formatter;
+use Helstern\Nomsky\Grammars\Ebnf\Graphviz\VisitContext;
+use Helstern\Nomsky\Graphviz\DotWriter;
 
-class RepeatedExpressionNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVisitor
+class RepeatedExpressionNodeVisitor extends AbstractVisitor
 {
-    /** @var VisitorCollaborators */
-    protected $collaborators;
-
-    /** @var VisitDispatcher  */
-    protected $visitDispatcher;
+    /**
+     * @var VisitContext
+     */
+    private $visitContext;
 
     /**
-     * @param VisitorCollaborators $collaborators
-     * @param VisitDispatcher $visitDispatcher
+     * @var DotWriter
      */
-    public function __construct(VisitorCollaborators $collaborators, VisitDispatcher $visitDispatcher)
-    {
-        $this->collaborators = $collaborators;
-        $this->visitDispatcher = $visitDispatcher;
-    }
+    private $dotWriter;
 
     /**
-     * @param RepeatedExpressionNode $astNode
-     * @return string
+     * @var Formatter
      */
-    protected function buildDOTIdentifier(RepeatedExpressionNode $astNode)
-    {
-        $nodeCounter = $this->collaborators->nodeCounter();
-        $idNumber = $nodeCounter->getNodeCount();
+    private $formatter;
 
-        return '"' . 'repeated_expression' . '[' .$idNumber . ']' . '"';
+    /**
+     * @param VisitContext $visitContext
+     * @param DotWriter $dotWriter
+     * @param Formatter $formatter
+     */
+    public function __construct(VisitContext $visitContext, DotWriter $dotWriter, Formatter $formatter)
+    {
+        $this->visitContext = $visitContext;
+        $this->dotWriter = $dotWriter;
+        $this->formatter = $formatter;
     }
 
     /**
@@ -42,9 +40,7 @@ class RepeatedExpressionNodeVisitor extends AbstractDispatchingVisitor implement
      */
     public function preVisitRepeatedExpressionNode(RepeatedExpressionNode $astNode)
     {
-        $nodeCounter = $this->collaborators->nodeCounter();
-        $nodeCounter->increment($astNode);
-
+        $this->visitContext->incrementNodeCount($astNode);
         return true;
     }
 
@@ -54,21 +50,17 @@ class RepeatedExpressionNodeVisitor extends AbstractDispatchingVisitor implement
      */
     public function visitRepeatedExpressionNode(RepeatedExpressionNode $astNode)
     {
-        $dotWriter = $this->collaborators->dotWriter();
-        $formatter = $this->collaborators->formatter();
+        $increment = $this->visitContext->countParentIds();
+        $this->formatter->indent($increment, $this->dotWriter);
 
-        $parents = $this->collaborators->parentNodeIds();
-        $increment = $parents->count();
-        $formatter->indent($increment, $dotWriter);
+        $parentId = $this->visitContext->peekParentId();
+        $nodeId    = $this->buildNumberedDOTIdentifier('"repeated_expression[%s]"', $this->visitContext);
 
-        $parentId = $parents->top();
-        $nodeId    = $this->buildDOTIdentifier($astNode);
+        $this->dotWriter->writeEdgeStatement($parentId, $nodeId);
+        $this->formatter->whitespace(1, $this->dotWriter); //formatting options
+        $this->dotWriter->writeStatementTerminator();
 
-        $dotWriter->writeEdgeStatement($parentId, $nodeId);
-        $formatter->whitespace(1, $dotWriter); //formatting options
-        $dotWriter->writeStatementTerminator();
-
-        $parents->push($nodeId);
+        $this->visitContext->pushParentId($nodeId);
 
         return true;
     }
@@ -79,18 +71,7 @@ class RepeatedExpressionNodeVisitor extends AbstractDispatchingVisitor implement
      */
     public function postVisitRepeatedExpressionNode(RepeatedExpressionNode $astNode)
     {
-        $parents = $this->collaborators->parentNodeIds();
-        $parents->pop();
-
+        $this->visitContext->popParentId();
         return true;
-    }
-
-    /**
-     * @return VisitDispatcher
-     */
-    protected function getVisitDispatcher()
-    {
-        $visitDispatcher = $this->visitDispatcher;
-        return $visitDispatcher;
     }
 }

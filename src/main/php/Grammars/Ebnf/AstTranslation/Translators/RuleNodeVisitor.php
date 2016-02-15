@@ -6,38 +6,20 @@ use Helstern\Nomsky\Grammar\Symbol\GenericSymbol;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\RuleNode;
 use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\VisitContext;
-use Helstern\Nomsky\Parser\Ast\AstNodeVisitor;
-use Helstern\Nomsky\Parser\AstNodeVisitor\AbstractDispatchingVisitor;
-use Helstern\Nomsky\Parser\AstNodeVisitor\VisitDispatcher;
 
-class RuleNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVisitor
+class RuleNodeVisitor
 {
     /**
      * @var VisitContext
      */
     private $visitContext;
 
-    /** @var VisitDispatcher  */
-    protected $visitDispatcher;
-
     /**
      * @param VisitContext $visitContext
-     * @param VisitDispatcher $visitDispatcher
-     *
      */
-    public function __construct(VisitContext $visitContext, VisitDispatcher $visitDispatcher)
+    public function __construct(VisitContext $visitContext)
     {
         $this->visitContext = $visitContext;
-        $this->visitDispatcher = $visitDispatcher;
-    }
-
-    /**
-     * @return VisitDispatcher
-     */
-    protected function getVisitDispatcher()
-    {
-        $visitDispatcher = $this->visitDispatcher;
-        return $visitDispatcher;
     }
 
     /**

@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\AstTranslation;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators;
 
 use Helstern\Nomsky\Grammars\Ebnf\Ast\AlternativeNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\GroupedExpressionNode;
@@ -6,16 +6,12 @@ use Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalExpressionNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\RuleNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\SequenceNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\StringLiteralNode;
-use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators\AlternativeNodeVisitor;
-use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators\GroupedExpressionNodeVisitor;
-use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators\OptionalExpressionNodeVisitor;
-use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators\RuleNodeVisitor;
-use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators\SequenceNodeVisitor;
-use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators\StringLiteralNodeVisitor;
-use Helstern\Nomsky\Parser\AstNodeVisitStrategy\AstNodeVisitorProvider;
-use Helstern\Nomsky\Parser\AstNodeVisitor\AbstractDispatchingProvider;
+use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\VisitContext;
+use Helstern\Nomsky\Parser\Ast\AstNode;
+use Helstern\Nomsky\Parser\AstNodeVisitor\DispatchingVisitor;
+use Helstern\Nomsky\Parser\AstNodeVisitor\DispatchingVisitorBuilder;
 
-class Visitors extends AbstractDispatchingProvider implements AstNodeVisitorProvider
+class Translators
 {
     /**
      * @var VisitContext
@@ -23,7 +19,7 @@ class Visitors extends AbstractDispatchingProvider implements AstNodeVisitorProv
     private $visitContext;
 
     /**
-     * @return Visitors
+     * @return Translators
      */
     public static function defaultInstance()
     {
@@ -42,10 +38,9 @@ class Visitors extends AbstractDispatchingProvider implements AstNodeVisitorProv
      */
     public function getAlternativeNodeVisitor(AlternativeNode $node)
     {
-        $visitDispatcher = $this->createVisitDispatcher($node);
-        $visitor = new AlternativeNodeVisitor($this->visitContext, $visitDispatcher);
-
-        return $visitor;
+        $visitor = new AlternativeNodeVisitor($this->visitContext);
+        $dispatcher = $this->createDispatchingVisitor($visitor, $node);
+        return $dispatcher;
     }
 
     /**
@@ -54,10 +49,9 @@ class Visitors extends AbstractDispatchingProvider implements AstNodeVisitorProv
      */
     public function getGroupedExpressionNodeVisitor(GroupedExpressionNode $node)
     {
-        $visitDispatcher = $this->createVisitDispatcher($node);
-        $visitor = new GroupedExpressionNodeVisitor($this->visitContext, $visitDispatcher);
-
-        return $visitor;
+        $visitor = new GroupedExpressionNodeVisitor($this->visitContext);
+        $dispatcher = $this->createDispatchingVisitor($visitor, $node);
+        return $dispatcher;
     }
 
     /**
@@ -66,10 +60,9 @@ class Visitors extends AbstractDispatchingProvider implements AstNodeVisitorProv
      */
     public function getOptionalExpressionNodeVisitor(OptionalExpressionNode $node)
     {
-        $visitDispatcher = $this->createVisitDispatcher($node);
-        $visitor = new OptionalExpressionNodeVisitor($this->visitContext, $visitDispatcher);
-
-        return $visitor;
+        $visitor = new OptionalExpressionNodeVisitor($this->visitContext);
+        $dispatcher = $this->createDispatchingVisitor($visitor, $node);
+        return $dispatcher;
     }
 
 //    /**
@@ -92,10 +85,9 @@ class Visitors extends AbstractDispatchingProvider implements AstNodeVisitorProv
      */
     public function getRuleNodeVisitor(RuleNode $node)
     {
-        $visitDispatcher = $this->createVisitDispatcher($node);
-        $visitor = new RuleNodeVisitor($this->visitContext, $visitDispatcher);
-
-        return $visitor;
+        $visitor = new RuleNodeVisitor($this->visitContext);
+        $dispatcher = $this->createDispatchingVisitor($visitor, $node);
+        return $dispatcher;
     }
 
     /**
@@ -104,10 +96,9 @@ class Visitors extends AbstractDispatchingProvider implements AstNodeVisitorProv
      */
     public function getSequenceNodeVisitor(SequenceNode $node)
     {
-        $visitDispatcher = $this->createVisitDispatcher($node);
-        $visitor = new SequenceNodeVisitor($this->visitContext, $visitDispatcher);
-
-        return $visitor;
+        $visitor = new SequenceNodeVisitor($this->visitContext);
+        $dispatcher = $this->createDispatchingVisitor($visitor, $node);
+        return $dispatcher;
     }
 
     /**
@@ -116,10 +107,9 @@ class Visitors extends AbstractDispatchingProvider implements AstNodeVisitorProv
      */
     public function getStringLiteralNodeVisitor(StringLiteralNode $node)
     {
-        $visitDispatcher = $this->createVisitDispatcher($node);
-        $visitor = new StringLiteralNodeVisitor($this->visitContext, $visitDispatcher);
-
-        return $visitor;
+        $visitor = new StringLiteralNodeVisitor($this->visitContext);
+        $dispatcher = $this->createDispatchingVisitor($visitor, $node);
+        return $dispatcher;
     }
 
 //    /**
@@ -135,4 +125,20 @@ class Visitors extends AbstractDispatchingProvider implements AstNodeVisitorProv
 //
 //        return $visitor;
 //    }
+
+    /**
+     * @param $visitor
+     * @param AstNode $node
+     *
+     * @return DispatchingVisitor
+     */
+    private function createDispatchingVisitor($visitor, AstNode $node)
+    {
+        $builder = new DispatchingVisitorBuilder();
+        $node->configureDoubleDispatcher($builder);
+        $builder->setVisitor($visitor);
+        $dispatcher = $builder->build();
+
+        return $dispatcher;
+    }
 }

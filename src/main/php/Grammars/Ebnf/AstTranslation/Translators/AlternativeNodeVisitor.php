@@ -3,38 +3,21 @@
 use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\AlternativeNode;
 use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\VisitContext;
-use Helstern\Nomsky\Parser\Ast\AstNodeVisitor;
-use Helstern\Nomsky\Parser\AstNodeVisitor\AbstractDispatchingVisitor;
-use Helstern\Nomsky\Parser\AstNodeVisitor\VisitDispatcher;
 
-class AlternativeNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVisitor
+class AlternativeNodeVisitor
 {
     /**
      * @var VisitContext
      */
     private $visitContext;
 
-    /** @var VisitDispatcher  */
-    protected $visitDispatcher;
-
     /**
      * @param VisitContext $visitContext
-     * @param VisitDispatcher $visitDispatcher
      *
      */
-    public function __construct(VisitContext $visitContext, VisitDispatcher $visitDispatcher)
+    public function __construct(VisitContext $visitContext)
     {
         $this->visitContext = $visitContext;
-        $this->visitDispatcher = $visitDispatcher;
-    }
-
-    /**
-     * @return VisitDispatcher
-     */
-    protected function getVisitDispatcher()
-    {
-        $visitDispatcher = $this->visitDispatcher;
-        return $visitDispatcher;
     }
 
     /**
@@ -66,6 +49,4 @@ class AlternativeNodeVisitor extends AbstractDispatchingVisitor implements AstNo
         $expression = new Alternative(array_shift($children), $children);
         $this->visitContext->pushExpression($expression);
     }
-
-
 }

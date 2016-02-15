@@ -8,9 +8,17 @@ interface AstNode
 {
     /**
      * @param DoubleDispatcherBuilder $dispatcherBuilder
-     * @return DoubleDispatcher
+     * @return DoubleDispatcherBuilder
      */
-    public function buildDoubleDispatcher(DoubleDispatcherBuilder $dispatcherBuilder);
+    public function configureDoubleDispatcher(DoubleDispatcherBuilder $dispatcherBuilder);
+
+    /**
+     * @param DoubleDispatcher $dispatcher
+     * @param object $visitor
+     *
+     * @return boolean
+     */
+    public function dispatch(DoubleDispatcher $dispatcher, $visitor);
 
     /**
      * @return CharPosition

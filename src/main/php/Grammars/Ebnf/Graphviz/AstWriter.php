@@ -1,9 +1,10 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\Graphviz;
 
 use Helstern\Nomsky\Grammars\Ebnf\Ast\SyntaxNode;
-use Helstern\Nomsky\Grammars\Ebnf\Graphviz\DotWriterVisitors\Visitors;
+use Helstern\Nomsky\Grammars\Ebnf\Graphviz\DotWriterVisitors\Writers;
 use Helstern\Nomsky\Graphviz\DotFile;
 use Helstern\Nomsky\Parser\Ast\StackBasedAstWalker;
+use Helstern\Nomsky\Parser\AstNodeVisitor\DispatchingProvider;
 use Helstern\Nomsky\Parser\AstNodeVisitStrategy\PreOrderVisitStrategy;
 
 class AstWriter
@@ -14,11 +15,12 @@ class AstWriter
      *
      * @return bool
      */
-    public function write(SyntaxNode $astNode,DotFile $dotFile)
+    public function write(SyntaxNode $astNode, DotFile $dotFile)
     {
-        $visitorProvider = new Visitors($dotFile);
+        $visitorProvider = new Writers($dotFile, new VisitContext());
+        $dispatchingProvider = new DispatchingProvider($visitorProvider);
 
-        $walkStrategy = new PreOrderVisitStrategy($visitorProvider);
+        $walkStrategy = PreOrderVisitStrategy::newDefaultInstance($dispatchingProvider);
         $walker = new StackBasedAstWalker($walkStrategy);
 
         $walkResult = $walker->walk($astNode);
