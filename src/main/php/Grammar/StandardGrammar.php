@@ -6,7 +6,7 @@ use Helstern\Nomsky\Grammar\Symbol\Comparator\HashCodeComparator;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolTypeEquals;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 
-class DefaultGrammar implements Grammar
+class StandardGrammar implements Grammar
 {
     /** @var string */
     protected $name;

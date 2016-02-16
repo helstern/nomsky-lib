@@ -1,8 +1,8 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\Translators;
 
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\AlternativeNode;
-use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\VisitContext;
+use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\VisitContext;
 
 class SequenceNodeVisitor
 {
@@ -25,7 +25,7 @@ class SequenceNodeVisitor
      */
     public function preVisitAlternativeNode(AlternativeNode $astNode)
     {
-        $this->visitContext->pushMarker($this);
+        $this->visitContext->pushExpressionMarker($this);
         return true;
     }
 

@@ -1,11 +1,11 @@
 <?php namespace Helstern\Nomsky\Grammar\Converter\Conversions;
 
 use Helstern\Nomsky\Grammar\Converter\Conversions;
-use Helstern\Nomsky\Grammar\DefaultGrammar;
+use Helstern\Nomsky\Grammar\StandardGrammar;
 use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
 use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
-use Helstern\Nomsky\Grammar\Production\DefaultProduction;
+use Helstern\Nomsky\Grammar\Production\StandardProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
 use Helstern\Nomsky\Grammar\TestUtils\TestGrammars;
 
@@ -68,8 +68,8 @@ class EbnfToBnfTest extends \PHPUnit_Framework_TestCase
             )
         ];
         $rightSide = new Sequence(array_shift($expressionItems), $expressionItems);
-        $productions[] = new DefaultProduction($leftSide, $rightSide);
-        $ebnfGrammar = new DefaultGrammar('simple test boolean logic', $productions);
+        $productions[] = new StandardProduction($leftSide, $rightSide);
+        $ebnfGrammar = new StandardGrammar('simple test boolean logic', $productions);
 
         $converter = new Conversions();
         $actualBnfProductions = $converter->ebnfToBnf($ebnfGrammar);
@@ -81,7 +81,7 @@ class EbnfToBnfTest extends \PHPUnit_Framework_TestCase
         );
 
         $expectedBnfProductions = [
-            new DefaultProduction(
+            new StandardProduction(
                 $expressionUtils->createNonTerminal('Expression'),
                 $expressionUtils->createSequenceFromSymbols(
                     [
@@ -91,20 +91,20 @@ class EbnfToBnfTest extends \PHPUnit_Framework_TestCase
                     ]
                 )
             ),
-            new DefaultProduction(
+            new StandardProduction(
                 $expressionUtils->createNonTerminal($generatedNames[0]),
                 $expressionUtils->createSequenceFromListOfStringSymbols(array(''))
             ),
-            new DefaultProduction(
+            new StandardProduction(
                 $expressionUtils->createNonTerminal($generatedNames[0]),
                 $expressionUtils->createSequenceFromListOfStringSymbols(array('!'))
 
             ),
-            new DefaultProduction(
+            new StandardProduction(
                 $expressionUtils->createNonTerminal($generatedNames[1]),
                 $expressionUtils->createSequenceFromListOfStringSymbols(array(''))
             ),
-            new DefaultProduction(
+            new StandardProduction(
                 $expressionUtils->createNonTerminal($generatedNames[1]),
                 $expressionUtils->createSequenceFromSymbols(
                     array(

@@ -1,11 +1,11 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\Translators;
 
 
-use Helstern\Nomsky\Grammar\Production\DefaultProduction;
+use Helstern\Nomsky\Grammar\Production\StandardProduction;
 use Helstern\Nomsky\Grammar\Symbol\GenericSymbol;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\RuleNode;
-use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\VisitContext;
+use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\VisitContext;
 
 class RuleNodeVisitor
 {
@@ -28,7 +28,7 @@ class RuleNodeVisitor
      */
     public function preVisitRuleNode(RuleNode $astNode)
     {
-
+        $this->visitContext->pushExpressionMarker($this);
         return true;
     }
 
@@ -42,7 +42,7 @@ class RuleNodeVisitor
         $name = $identifierNode->getIdentifierName();
         $symbol = new GenericSymbol(Symbol::TYPE_NON_TERMINAL, $name);
 
-        $this->visitContext->pushSymbol($symbol, $this);
+        $this->visitContext->pushLeftHandSymbol($symbol, $this);
 
         return true;
     }
@@ -53,11 +53,11 @@ class RuleNodeVisitor
      */
     public function postVisitRuleNode(RuleNode $astNode)
     {
-        $symbol = $this->visitContext->popSymbol($this);
+        $symbol = $this->visitContext->popLeftHandSymbol($this);
         $expression = $this->visitContext->popOneExpression($this);
-        $production = new DefaultProduction($symbol, $expression);
+        $production = new StandardProduction($symbol, $expression);
 
-        $this->visitContext->addProduction($production);
+        $this->visitContext->collectProduction($production);
         return true;
     }
 }

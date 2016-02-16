@@ -3,7 +3,7 @@
 use Helstern\Nomsky\Grammar\Converter\ProductionTransformer;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
-use Helstern\Nomsky\Grammar\Production\DefaultProduction;
+use Helstern\Nomsky\Grammar\Production\StandardProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
 
 class Transformer implements ProductionTransformer
@@ -23,7 +23,7 @@ class Transformer implements ProductionTransformer
         $walker->walk($expression, $hierarchicVisitDispatcher);
         $rootExpression             = $visitor->getRoot();
 
-        $production = new DefaultProduction($production->getNonTerminal(), $rootExpression);
+        $production = new StandardProduction($production->getNonTerminal(), $rootExpression);
         return array($production);
     }
 }

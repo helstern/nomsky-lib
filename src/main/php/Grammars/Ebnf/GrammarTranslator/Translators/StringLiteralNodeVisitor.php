@@ -1,9 +1,9 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\Translators;
 
 use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\StringLiteralNode;
-use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\VisitContext;
+use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\VisitContext;
 
 class StringLiteralNodeVisitor
 {

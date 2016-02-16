@@ -14,7 +14,7 @@ use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolTypeEquals;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\AnySymbolPredicate;
 
-class DefaultProduction implements Production
+class StandardProduction implements Production
 {
     /** @var Symbol */
     protected $nonTerminal;

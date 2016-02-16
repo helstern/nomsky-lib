@@ -9,7 +9,7 @@ use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisitor;
-use Helstern\Nomsky\Grammar\Production\DefaultProduction;
+use Helstern\Nomsky\Grammar\Production\StandardProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
 use Helstern\Nomsky\Grammar\Symbol\GenericSymbol;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
@@ -200,7 +200,8 @@ class OptionalsEliminator implements HierarchyVisitor
      *
      * @param Symbol $nonTerminal
      * @param Expression $optionalExpression
-     * @return DefaultProduction
+     *
+*@return StandardProduction
      */
     protected function addEpsilonAlternativeForList(Symbol $nonTerminal, Expression $optionalExpression)
     {
@@ -226,7 +227,7 @@ class OptionalsEliminator implements HierarchyVisitor
 
         $alternation = new Alternative(array_shift($alternationItems), $alternationItems);
 
-        $production = new DefaultProduction($nonTerminal, $alternation);
+        $production = new StandardProduction($nonTerminal, $alternation);
         $this->epsilonAlternatives[] = $production;
 
         return $production;
@@ -276,7 +277,7 @@ class OptionalsEliminator implements HierarchyVisitor
         }
 
         $alternation = new Alternative(array_shift($alternationItems), $alternationItems);
-        $production = new DefaultProduction($nonTerminal, $alternation);
+        $production = new StandardProduction($nonTerminal, $alternation);
         $this->epsilonAlternatives[] = $production;
 
         return $production;

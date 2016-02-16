@@ -1,8 +1,8 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\Translators;
 
 use Helstern\Nomsky\Grammar\Expressions\OptionalList;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalExpressionNode;
-use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\VisitContext;
+use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\VisitContext;
 
 class OptionalExpressionNodeVisitor
 {
@@ -25,6 +25,7 @@ class OptionalExpressionNodeVisitor
      */
     public function preVisitOptionalExpressionNode(OptionalExpressionNode $astNode)
     {
+        $this->visitContext->pushExpressionMarker($this);
         return true;
     }
 
@@ -43,7 +44,7 @@ class OptionalExpressionNodeVisitor
      */
     public function postVisitOptionalExpressionNode(OptionalExpressionNode $astNode)
     {
-        $child = $this->visitContext->popOneExpression();
+        $child = $this->visitContext->popOneExpression($this);
         $expression = new OptionalList($child);
         $this->visitContext->pushExpression($expression);
 

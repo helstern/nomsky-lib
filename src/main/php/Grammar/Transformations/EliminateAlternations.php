@@ -5,7 +5,7 @@ use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
-use Helstern\Nomsky\Grammar\Production\DefaultProduction;
+use Helstern\Nomsky\Grammar\Production\StandardProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
 
 class EliminateAlternations implements ProductionTransformer
@@ -24,7 +24,7 @@ class EliminateAlternations implements ProductionTransformer
             $expressions = iterator_to_array($expression->getIterator());
             foreach($expressions as $expression) {
                 $expressionIterable = $this->convertToExpressionIterable($expression);
-                $productions[] = new DefaultProduction($production->getNonTerminal(), $expressionIterable);
+                $productions[] = new StandardProduction($production->getNonTerminal(), $expressionIterable);
             }
             return $productions;
         }

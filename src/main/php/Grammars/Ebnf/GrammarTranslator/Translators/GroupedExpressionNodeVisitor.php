@@ -1,8 +1,8 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\AstTranslation\Translators;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\Translators;
 
 use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\GroupedExpressionNode;
-use Helstern\Nomsky\Grammars\Ebnf\AstTranslation\VisitContext;
+use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\VisitContext;
 
 class GroupedExpressionNodeVisitor
 {
@@ -26,6 +26,7 @@ class GroupedExpressionNodeVisitor
      */
     public function preVisitGroupedExpressionNode(GroupedExpressionNode $astNode)
     {
+        $this->visitContext->pushExpressionMarker($this);
         return true;
     }
 
@@ -34,8 +35,7 @@ class GroupedExpressionNodeVisitor
      * @return bool
      */
     public function visitGroupedExpressionNode(GroupedExpressionNode $astNode)
-    {
-    }
+    {}
 
     /**
      * @param GroupedExpressionNode $astNode
@@ -43,7 +43,7 @@ class GroupedExpressionNodeVisitor
      */
     public function postVisitGroupedExpressionNode(GroupedExpressionNode $astNode)
     {
-        $child = $this->visitContext->popOneExpression();
+        $child = $this->visitContext->popOneExpression($this);
         $expression = new Group($child);
         $this->visitContext->pushExpression($expression);
     }
