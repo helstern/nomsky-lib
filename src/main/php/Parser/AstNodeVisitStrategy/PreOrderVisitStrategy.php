@@ -1,15 +1,23 @@
 <?php namespace Helstern\Nomsky\Parser\AstNodeVisitStrategy;
 
 use Helstern\Nomsky\Parser\Ast\AstNodeVisitor;
+use Helstern\Nomsky\Parser\Ast\CalculateWalkListAction;
 use Helstern\Nomsky\Parser\Ast\CompositeAstNode;
 use Helstern\Nomsky\Parser\Ast\AstNode;
 use Helstern\Nomsky\Parser\Ast\AstNodeWalkStrategy;
-use Helstern\Nomsky\Parser\Ast\VisitActionFactory;
+use Helstern\Nomsky\Parser\Ast\WalkerStateMachine;
+use Helstern\Nomsky\Parser\Ast\WalkListItemCollector;
+use Helstern\Nomsky\Parser\AstNodeVisitor\VisitActions;
 
 class PreOrderVisitStrategy implements AstNodeWalkStrategy
 {
     /** @var AstNodeVisitorProvider */
     private $visitorProvider;
+
+    /**
+     * @var bool
+     */
+    private $skipMissing;
 
     /**
      * @var AstNodeVisitorProvider
@@ -19,111 +27,118 @@ class PreOrderVisitStrategy implements AstNodeWalkStrategy
     /**
      * @param AstNodeVisitorProvider $astNodeVisitorProvider
      *
+     * @param bool $skipMissing
+     *
      * @return PreOrderVisitStrategy
      */
-    public static function newDefaultInstance(AstNodeVisitorProvider $astNodeVisitorProvider)
+    public static function newDefaultInstance(AstNodeVisitorProvider $astNodeVisitorProvider, $skipMissing = true)
     {
-        return new self($astNodeVisitorProvider, new VisitActions());
+        return new self($astNodeVisitorProvider, $skipMissing, new VisitActions());
     }
 
     /**
-     * @param AstNodeVisitorProvider $astNodeVisitorProvider
+     * @param AstNodeVisitorProvider $visitorProvider
+     * @param boolean $skipMissing
      * @param VisitActionFactory $visits
      */
-    public function __construct(
-        AstNodeVisitorProvider $astNodeVisitorProvider,
-        VisitActionFactory $visits
-    ) {
-        $this->visitorProvider = $astNodeVisitorProvider;
+    public function __construct(AstNodeVisitorProvider $visitorProvider, $skipMissing, VisitActionFactory $visits)
+    {
+        $this->visitorProvider = $visitorProvider;
+        $this->skipMissing = (bool) $skipMissing;
         $this->visits = $visits;
     }
 
-    /**
-     * @param AstNode $parent
-     * @return \SplDoublyLinkedList|\Traversable
-     */
-    public function calculateWalkList(AstNode $parent)
+    public function calculateWalkList(AstNode $parent, WalkListItemCollector $walkListCollector, WalkerStateMachine $walkerStates)
     {
         $visitor = $this->visitorProvider->getVisitor($parent);
+        if (is_null($visitor) && $this->skipMissing) {
+            $walkerStates->ignore($parent);
+            $walkerState = $walkerStates->getState();
+            return $walkerState;
+        }
+
         if (is_null($visitor)) {
-            return [];
+            throw new \InvalidArgumentException('can not find a proper visitor');
         }
 
-        $list = null;
-        if ($parent instanceof CompositeAstNode) {
-            $list = $this->buildParentNodeList($parent, $visitor);
-        } else {
-            $list = $this->buildChildlessNodeList($parent, $visitor);
+        if ($parent instanceof CompositeAstNode && 0 < $parent->countChildren()) {
+            $this->collectParentNodeActions($parent, $visitor, $walkListCollector);
+
+            $walkerStates->walk($parent);
+            $walkerState = $walkerStates->getState();
+            return $walkerState;
         }
 
-        return $list;
+        $this->collectChildlessNodeActions($parent, $visitor, $walkListCollector);
+        $walkerStates->walk($parent);
+        $walkerState = $walkerStates->getState();
+        return $walkerState;
     }
 
     /**
      * @param CompositeAstNode $parent
      * @param AstNodeVisitor $visitor
+     * @param WalkListItemCollector $walkListCollector
      *
-     * @return \SplDoublyLinkedList
+     * @return int
      */
-    private function buildParentNodeList(CompositeAstNode $parent, AstNodeVisitor $visitor)
-    {
-        $list = new \SplDoublyLinkedList();
-        $list->setIteratorMode(\SplDoublyLinkedList::IT_MODE_LIFO | \SplDoublyLinkedList::IT_MODE_KEEP);
-
+    private function collectParentNodeActions(
+        CompositeAstNode $parent,
+        AstNodeVisitor $visitor,
+        WalkListItemCollector $walkListCollector
+    ) {
         $actionsHead = [
             $this->visits->createPreVisit($parent, $visitor),
             $this->visits->createActualVisit($parent, $visitor)
         ];
-        foreach ($actionsHead as $action) {
-            $list->push($action);
-        }
+        $walkListCollector->collectList($actionsHead);
 
-        $this->addChildrenActionsToList($parent, $list);
+        $nrActions = $this->collectChildrenActions($parent, $walkListCollector);
 
         $tailAction = $this->visits->createPostVisit($parent, $visitor);
-        $list->push($tailAction);
+        $walkListCollector->collect($tailAction);
 
-        return $list;
+        return 3 + $nrActions;
     }
 
     /**
      * @param CompositeAstNode $parent
-     * @param \SplDoublyLinkedList $list
-     * @return bool
+     * @param WalkListItemCollector $walkListCollector
+     *
+     * @return int
      */
-    private function addChildrenActionsToList(CompositeAstNode $parent, \SplDoublyLinkedList $list)
+    private function collectChildrenActions(CompositeAstNode $parent, WalkListItemCollector $walkListCollector)
     {
-        $addToListResult = false;
-
         $children = $parent->getChildren();
         foreach($children as $child) {
-            $list->push($child);
-            $addToListResult = true;
+            $action = new CalculateWalkListAction($child);
+            $walkListCollector->collect($action);
         }
 
-        return $addToListResult;
+        return count($children);
     }
 
     /**
      * @param AstNode $node
      * @param AstNodeVisitor $visitor
+     * @param WalkListItemCollector $walkListCollector
      *
-     * @return \SplDoublyLinkedList
+     * @return int
      */
-    private function buildChildlessNodeList(AstNode $node, AstNodeVisitor $visitor)
-    {
-        $list = new \SplDoublyLinkedList();
-        $list->setIteratorMode(\SplDoublyLinkedList::IT_MODE_LIFO | \SplDoublyLinkedList::IT_MODE_KEEP);
-
+    private function collectChildlessNodeActions(
+        AstNode $node,
+        AstNodeVisitor $visitor,
+        WalkListItemCollector $walkListCollector
+    ) {
         $visit = $this->visits->createPreVisit($node, $visitor);
-        $list->push($visit);
+        $walkListCollector->collect($visit);
 
         $visit = $this->visits->createActualVisit($node, $visitor);
-        $list->push($visit);
+        $walkListCollector->collect($visit);
 
         $visit = $this->visits->createPostVisit($node, $visitor);
-        $list->push($visit);
+        $walkListCollector->collect($visit);
 
-        return $list;
+        return 3;
     }
 }

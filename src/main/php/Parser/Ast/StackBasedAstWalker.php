@@ -3,14 +3,23 @@
 class StackBasedAstWalker implements AstWalker
 {
     /** @var AstNodeWalkStrategy */
-    protected $childrenWalkStrategy;
+    private $walkStrategy;
+
+    /**
+     * @var WalkerStateMachine
+     */
+    private $walkStateMachine;
 
     /**
      * @param AstNodeWalkStrategy $childrenWalkStrategy
+     * @param WalkerStateMachine $walkerStateMachine
      */
-    public function __construct(AstNodeWalkStrategy $childrenWalkStrategy)
+    public function __construct(AstNodeWalkStrategy $childrenWalkStrategy, WalkerStateMachine $walkerStateMachine = null)
     {
-        $this->childrenWalkStrategy = $childrenWalkStrategy;
+        $this->walkStrategy = $childrenWalkStrategy;
+        if (is_null($walkerStateMachine)) {
+            $this->walkStateMachine = new WalkerStateMachine();
+        }
     }
 
     /**
@@ -20,23 +29,27 @@ class StackBasedAstWalker implements AstWalker
      */
     public function walk(AstNode $astNode)
     {
-        /** @var AstNode[]|VisitAction[] $stackOfExpressions */
+        /** @var WalkAction[] $stackOfExpressions */
         $initialNode = $astNode;
         $lastAstNode = null;
 
-        $stackOfVisits = array($initialNode);
-        $stackHeight = 1;
+        $stack = new WalkActionStack();
+        $stack->collect(new CalculateWalkListAction($initialNode));
+        $stackHeight = $stack->stack();
 
+        $this->walkStateMachine->walk($initialNode);
+
+        /** @var WalkAction $walkAction */
+        $walkAction = null;
         do {
-            $nodeOrVisitAction = array_pop($stackOfVisits);
+            $walkAction = $stack->pop();
             $stackHeight--;
 
-            if ($nodeOrVisitAction instanceof VisitAction) {
-                $this->executeVisitAction($nodeOrVisitAction);
+            if ($walkAction->execute()) {
                 continue;
             }
 
-            $astNode = $nodeOrVisitAction;
+            $astNode = $walkAction->getSubject();
             if ($lastAstNode === $astNode) {
                 $infiniteLoopException = new \RuntimeException('Infinite loop detected');
                 throw $infiniteLoopException;
@@ -44,34 +57,16 @@ class StackBasedAstWalker implements AstWalker
                 $lastAstNode = $astNode;
             }
 
-            $visitList = $this->calculateWalkList($astNode);
-
-            //reverse push the children linked list, such that the first child is last in $stackOfExpressions
-            foreach ($visitList as $nextVisit) {
-                array_push($stackOfVisits, $nextVisit);
-                $stackHeight++;
+            $state = $this->walkStrategy->calculateWalkList($astNode, $stack, $this->walkStateMachine);
+            if ($state == WalkerStateMachine::STATE_IGNORE) {
+                continue;
             }
+
+            $stackedCount = $stack->stack();
+            $stackHeight = $stackHeight + $stackedCount;
 
         } while ($stackHeight > 0);
 
         return true;
-    }
-
-    /**
-     * @param VisitAction $visitAction
-     */
-    protected function executeVisitAction(VisitAction $visitAction)
-    {
-        $visitAction->execute();
-    }
-
-    /**
-     * @param AstNode $parent
-     * @return \Traversable
-     */
-    protected function calculateWalkList(AstNode $parent)
-    {
-        $list = $this->childrenWalkStrategy->calculateWalkList($parent);
-        return $list;
     }
 }

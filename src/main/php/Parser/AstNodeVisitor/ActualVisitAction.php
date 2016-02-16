@@ -1,13 +1,12 @@
 <?php namespace Helstern\Nomsky\Parser\AstNodeVisitor;
 
 use Helstern\Nomsky\Parser\Ast\AstNode;
-use Helstern\Nomsky\Parser\Ast\VisitAction;
 use Helstern\Nomsky\Parser\Ast\AstNodeVisitor;
 
 class ActualVisitAction implements VisitAction
 {
     /** @var AstNode */
-    protected $visitReceiver;
+    protected $astNode;
 
     /** @var AstNodeVisitor */
     protected $visitor;
@@ -18,7 +17,7 @@ class ActualVisitAction implements VisitAction
      */
     public function __construct(AstNode $visitReceiver, AstNodeVisitor $visitor)
     {
-        $this->visitReceiver = $visitReceiver;
+        $this->astNode = $visitReceiver;
         $this->visitor = $visitor;
     }
 
@@ -27,14 +26,14 @@ class ActualVisitAction implements VisitAction
         return $this->visitor;
     }
 
-    public function getVisitReceiver()
+    public function getSubject()
     {
-        return $this->visitReceiver;
+        return $this->astNode;
     }
 
     public function execute()
     {
-        $this->visitor->visit($this->visitReceiver);
+        $this->visitor->visit($this->astNode);
         return true;
     }
 }

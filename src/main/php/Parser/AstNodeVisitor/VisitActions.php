@@ -1,11 +1,8 @@
-<?php namespace Helstern\Nomsky\Parser\AstNodeVisitStrategy;
+<?php namespace Helstern\Nomsky\Parser\AstNodeVisitor;
 
 use Helstern\Nomsky\Parser\Ast\AstNode;
 use Helstern\Nomsky\Parser\Ast\AstNodeVisitor;
-use Helstern\Nomsky\Parser\Ast\VisitActionFactory;
-use Helstern\Nomsky\Parser\AstNodeVisitor\ActualVisitAction;
-use Helstern\Nomsky\Parser\AstNodeVisitor\PostVisitAction;
-use Helstern\Nomsky\Parser\AstNodeVisitor\PreVisitAction;
+use Helstern\Nomsky\Parser\AstNodeVisitStrategy\VisitActionFactory;
 
 class VisitActions implements VisitActionFactory
 {
