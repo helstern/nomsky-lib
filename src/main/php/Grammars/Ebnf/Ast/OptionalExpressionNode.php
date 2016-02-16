@@ -33,6 +33,6 @@ class OptionalExpressionNode extends AbstractEbnfNode implements AstNode, Compos
      */
     public function countChildren()
     {
-        return;
+        return 1;
     }
 }
