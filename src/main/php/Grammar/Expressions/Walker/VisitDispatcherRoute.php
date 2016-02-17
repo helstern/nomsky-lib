@@ -1,11 +1,11 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions\Walker;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Optional;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 use Helstern\Nomsky\Grammar\Expressions\Walker\Visit\VisitDispatcher;
 
 class VisitDispatcherRoute
@@ -31,16 +31,16 @@ class VisitDispatcherRoute
         $futureVisitAction  = null;
         $actionDispatcher   = $this->actionDispatcher;
 
-        if ($expression instanceof Alternative) {
-            $futureVisitAction = $actionDispatcher->dispatchVisitAlternation($expression);
+        if ($expression instanceof Choice) {
+            $futureVisitAction = $actionDispatcher->dispatchVisitChoice($expression);
         } else if ($expression instanceof Group) {
             $futureVisitAction = $actionDispatcher->dispatchVisitGroup($expression);
-        } else if ($expression instanceof OptionalItem) {
-            $futureVisitAction = $actionDispatcher->dispatchVisitOptionalItem($expression);
-        } else if ($expression instanceof OptionalList) {
-            $futureVisitAction = $actionDispatcher->dispatchVisitOptionalList($expression);
-        } else if ($expression instanceof Sequence) {
-            $futureVisitAction = $actionDispatcher->dispatchVisitSequence($expression);
+        } else if ($expression instanceof Optional) {
+            $futureVisitAction = $actionDispatcher->dispatchVisitOptional($expression);
+        } else if ($expression instanceof Repetition) {
+            $futureVisitAction = $actionDispatcher->dispatchVisitRepetition($expression);
+        } else if ($expression instanceof Concatenation) {
+            $futureVisitAction = $actionDispatcher->dispatchVisitConcatenation($expression);
         } else {
             $futureVisitAction = $actionDispatcher->dispatchVisitExpression($expression);
         }

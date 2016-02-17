@@ -1,12 +1,12 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit;
 
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisitor;
 use Helstern\Nomsky\Grammar\Expressions\Walker\Visit\VisitAction;
 
-class EndSequenceAction implements VisitAction
+class EndConcatenationAction implements VisitAction
 {
-    /** @var  Sequence */
+    /** @var  Concatenation */
     protected $expression;
 
     /** @var HierarchyVisitor */
@@ -15,14 +15,14 @@ class EndSequenceAction implements VisitAction
     /** @var bool */
     protected $executed = false;
 
-    public function __construct(Sequence $expression, HierarchyVisitor $visitor)
+    public function __construct(Concatenation $expression, HierarchyVisitor $visitor)
     {
         $this->expression   = $expression;
         $this->visitor      = $visitor;
     }
 
     /**
-     * @return Sequence
+     * @return Concatenation
      */
     public function getExpression()
     {
@@ -46,7 +46,7 @@ class EndSequenceAction implements VisitAction
             return false;
         }
 
-        $this->visitor->endVisitSequence($this->expression);
+        $this->visitor->endVisitConcatenation($this->expression);
         $this->executed = true;
 
         return true;

@@ -5,7 +5,7 @@
  *
  * @package Helstern\Nomsky\Grammar\Expressions
  */
-class OptionalItem implements Expression, ExpressionAggregate
+class Optional implements Expression, ExpressionAggregate
 {
     /** @var Expression */
     protected $expression;

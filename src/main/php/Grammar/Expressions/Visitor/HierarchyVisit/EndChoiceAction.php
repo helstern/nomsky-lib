@@ -1,12 +1,12 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit;
 
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisitor;
 use Helstern\Nomsky\Grammar\Expressions\Walker\Visit\VisitAction;
 
-class EndOptionalItemAction implements VisitAction
+class EndChoiceAction implements VisitAction
 {
-    /** @var OptionalItem */
+    /** @var  Choice */
     protected $expression;
 
     /** @var HierarchyVisitor */
@@ -15,14 +15,14 @@ class EndOptionalItemAction implements VisitAction
     /** @var bool */
     protected $executed = false;
 
-    public function __construct(OptionalItem $expression, HierarchyVisitor $visitor)
+    public function __construct(Choice $expression, HierarchyVisitor $visitor)
     {
         $this->expression   = $expression;
         $this->visitor      = $visitor;
     }
 
     /**
-     * @return OptionalItem
+     * @return Choice
      */
     public function getExpression()
     {
@@ -46,7 +46,7 @@ class EndOptionalItemAction implements VisitAction
             return false;
         }
 
-        $this->visitor->endVisitOptionalItem($this->expression);
+        $this->visitor->endVisitChoice($this->expression);
         $this->executed = true;
 
         return true;

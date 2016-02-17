@@ -1,11 +1,11 @@
 <?php namespace Helstern\Nomsky\Grammar\Converter;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Optional;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisitor;
 
 abstract class AbstractErrorTriggeringVisitor implements HierarchyVisitor
@@ -17,10 +17,11 @@ abstract class AbstractErrorTriggeringVisitor implements HierarchyVisitor
     abstract protected function getMethodNotCalledWarningMessage($methodName);
 
     /**
-     * @param Alternative $expression
-     * @return boolean
+     * @param Choice $expression
+     *
+    * @return boolean
      */
-    public function startVisitAlternation(Alternative $expression)
+    public function startVisitChoice(Choice $expression)
     {
         $warningMessage = $this->getMethodNotCalledWarningMessage(__METHOD__);
         trigger_error($warningMessage, E_USER_WARNING);
@@ -29,10 +30,11 @@ abstract class AbstractErrorTriggeringVisitor implements HierarchyVisitor
     }
 
     /**
-     * @param Alternative $expression
+     * @param Choice $expression
+     *
      * @return boolean
      */
-    public function endVisitAlternation(Alternative $expression)
+    public function endVisitChoice(Choice $expression)
     {
         $warningMessage = $this->getMethodNotCalledWarningMessage(__METHOD__);
         trigger_error($warningMessage, E_USER_WARNING);
@@ -41,10 +43,11 @@ abstract class AbstractErrorTriggeringVisitor implements HierarchyVisitor
     }
 
     /**
-     * @param Sequence $expression
+     * @param Concatenation $expression
+     *
      * @return boolean
      */
-    public function startVisitSequence(Sequence $expression)
+    public function startVisitConcatenation(Concatenation $expression)
     {
         $warningMessage = $this->getMethodNotCalledWarningMessage(__METHOD__);
         trigger_error($warningMessage, E_USER_WARNING);
@@ -53,10 +56,11 @@ abstract class AbstractErrorTriggeringVisitor implements HierarchyVisitor
     }
 
     /**
-     * @param Sequence $expression
+     * @param Concatenation $expression
+     *
      * @return boolean
      */
-    public function endVisitSequence(Sequence $expression)
+    public function endVisitConcatenation(Concatenation $expression)
     {
         $warningMessage = $this->getMethodNotCalledWarningMessage(__METHOD__);
         trigger_error($warningMessage, E_USER_WARNING);
@@ -89,10 +93,11 @@ abstract class AbstractErrorTriggeringVisitor implements HierarchyVisitor
     }
 
     /**
-     * @param OptionalList $expression
+     * @param Repetition $expression
+     *
      * @return boolean
      */
-    public function startVisitOptionalList(OptionalList $expression)
+    public function startVisitRepetition(Repetition $expression)
     {
         $warningMessage = $this->getMethodNotCalledWarningMessage(__METHOD__);
         trigger_error($warningMessage, E_USER_WARNING);
@@ -101,10 +106,11 @@ abstract class AbstractErrorTriggeringVisitor implements HierarchyVisitor
     }
 
     /**
-     * @param OptionalList $expression
+     * @param Repetition $expression
+     *
      * @return boolean
      */
-    public function endVisitOptionalList(OptionalList $expression)
+    public function endVisitRepetition(Repetition $expression)
     {
         $warningMessage = $this->getMethodNotCalledWarningMessage(__METHOD__);
         trigger_error($warningMessage, E_USER_WARNING);
@@ -113,10 +119,11 @@ abstract class AbstractErrorTriggeringVisitor implements HierarchyVisitor
     }
 
     /**
-     * @param OptionalItem $expression
+     * @param Optional $expression
+     *
      * @return boolean
      */
-    public function startVisitOptionalItem(OptionalItem $expression)
+    public function startVisitOptional(Optional $expression)
     {
         $warningMessage = $this->getMethodNotCalledWarningMessage(__METHOD__);
         trigger_error($warningMessage, E_USER_WARNING);
@@ -125,10 +132,11 @@ abstract class AbstractErrorTriggeringVisitor implements HierarchyVisitor
     }
 
     /**
-     * @param OptionalItem $expression
+     * @param Optional $expression
+     *
      * @return boolean
      */
-    public function endVisitOptionalItem(OptionalItem $expression)
+    public function endVisitOptional(Optional $expression)
     {
         $warningMessage = $this->getMethodNotCalledWarningMessage(__METHOD__);
         trigger_error($warningMessage, E_USER_WARNING);

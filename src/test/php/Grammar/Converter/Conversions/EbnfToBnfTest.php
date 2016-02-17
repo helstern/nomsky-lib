@@ -2,9 +2,9 @@
 
 use Helstern\Nomsky\Grammar\Converter\Conversions;
 use Helstern\Nomsky\Grammar\StandardGrammar;
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Optional;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 use Helstern\Nomsky\Grammar\Production\StandardProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
 use Helstern\Nomsky\Grammar\TestUtils\TestGrammars;
@@ -56,9 +56,9 @@ class EbnfToBnfTest extends \PHPUnit_Framework_TestCase
 
         $leftSide = $expressionUtils->createNonTerminal('Expression');
         $expressionItems = [
-            new OptionalItem($expressionUtils->createTerminal('!')),
+            new Optional($expressionUtils->createTerminal('!')),
             $expressionUtils->createNonTerminal('Boolean'),
-            new OptionalList(
+            new Repetition(
                 $expressionUtils->createSequenceFromSymbols(
                     array(
                         $expressionUtils->createNonTerminal('BooleanOperator'),
@@ -67,7 +67,7 @@ class EbnfToBnfTest extends \PHPUnit_Framework_TestCase
                 )
             )
         ];
-        $rightSide = new Sequence(array_shift($expressionItems), $expressionItems);
+        $rightSide = new Concatenation(array_shift($expressionItems), $expressionItems);
         $productions[] = new StandardProduction($leftSide, $rightSide);
         $ebnfGrammar = new StandardGrammar('simple test boolean logic', $productions);
 

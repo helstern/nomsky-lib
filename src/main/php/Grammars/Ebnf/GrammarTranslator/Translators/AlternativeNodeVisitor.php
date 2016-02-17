@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\AlternativeNode;
 use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\VisitContext;
 
@@ -46,7 +46,7 @@ class AlternativeNodeVisitor
     public function postVisitAlternativeNode(AlternativeNode $astNode)
     {
         $children = $this->visitContext->popExpressions($this);
-        $expression = new Alternative(array_shift($children), $children);
+        $expression = new Choice(array_shift($children), $children);
         $this->visitContext->pushExpression($expression);
     }
 }

@@ -1,17 +1,17 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions;
 
-class Alternative implements Expression, ExpressionIterable
+class Concatenation implements Expression, ExpressionIterable
 {
     /** @var Expression[] */
     protected $expressions;
 
     /**
-     * @param Expression $anAlternative
+     * @param Expression $startSymbol
      * @param array|Expression[] $otherAlternatives
      */
-    public function __construct(Expression $anAlternative, array $otherAlternatives = null)
+    public function __construct(Expression $startSymbol, array $otherAlternatives = null)
     {
-        $this->expressions = array($anAlternative);
+        $this->expressions = array($startSymbol);
         if (is_null($otherAlternatives) == false) {
             $this->expressions = array_merge($this->expressions, $otherAlternatives);
         }
@@ -23,7 +23,7 @@ class Alternative implements Expression, ExpressionIterable
     }
 
     /**
-     * @return \ArrayIterator|Expression[]
+     * @return Expression[]
      */
     public function getIterator()
     {

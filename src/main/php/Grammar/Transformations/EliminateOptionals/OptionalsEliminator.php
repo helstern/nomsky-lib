@@ -1,12 +1,12 @@
 <?php namespace Helstern\Nomsky\Grammar\Transformations\EliminateOptionals;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Optional;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisitor;
 use Helstern\Nomsky\Grammar\Production\StandardProduction;
@@ -85,10 +85,11 @@ class OptionalsEliminator implements HierarchyVisitor
     }
 
     /**
-     * @param Alternative $expression
-     * @return boolean
+     * @param Choice $expression
+     *
+    * @return boolean
      */
-    public function startVisitAlternation(Alternative $expression)
+    public function startVisitChoice(Choice $expression)
     {
         $this->stackOfChildren[] = array();
 
@@ -96,16 +97,17 @@ class OptionalsEliminator implements HierarchyVisitor
     }
 
     /**
-     * @param Alternative $expression
+     * @param Choice $expression
+     *
      * @return boolean
      */
-    public function endVisitAlternation(Alternative $expression)
+    public function endVisitChoice(Choice $expression)
     {
         /** @var Expression[]|array $children */
         $children = array_pop($this->stackOfChildren);
 
         $firstChild = array_shift($children);
-        $alternation = new Alternative($firstChild, $children);
+        $alternation = new Choice($firstChild, $children);
 
         $this->setAsRootOrAddToStackOfChildren($alternation);
 
@@ -113,10 +115,11 @@ class OptionalsEliminator implements HierarchyVisitor
     }
 
     /**
-     * @param Sequence $expression
+     * @param Concatenation $expression
+     *
      * @return boolean
      */
-    public function startVisitSequence(Sequence $expression)
+    public function startVisitConcatenation(Concatenation $expression)
     {
         $this->stackOfChildren[] = array();
 
@@ -124,16 +127,17 @@ class OptionalsEliminator implements HierarchyVisitor
     }
 
     /**
-     * @param Sequence $expression
+     * @param Concatenation $expression
+     *
      * @return boolean
      */
-    public function endVisitSequence(Sequence $expression)
+    public function endVisitConcatenation(Concatenation $expression)
     {
         /** @var Expression[]|array $children */
         $children = array_pop($this->stackOfChildren);
 
         $firstChild = array_shift($children);
-        $sequence = new Sequence($firstChild, $children);
+        $sequence = new Concatenation($firstChild, $children);
 
         $this->setAsRootOrAddToStackOfChildren($sequence);
 
@@ -168,10 +172,11 @@ class OptionalsEliminator implements HierarchyVisitor
     }
 
     /**
-     * @param OptionalList $expression
-     * @return boolean
+     * @param Repetition $expression
+     *
+    * @return boolean
      */
-    public function startVisitOptionalList(OptionalList $expression)
+    public function startVisitRepetition(Repetition $expression)
     {
         $this->stackOfChildren[] = array();
 
@@ -179,10 +184,11 @@ class OptionalsEliminator implements HierarchyVisitor
     }
 
     /**
-     * @param OptionalList $expression
+     * @param Repetition $expression
+     *
      * @return boolean
      */
-    public function endVisitOptionalList(OptionalList $expression)
+    public function endVisitRepetition(Repetition $expression)
     {
         /** @var Expression[]|array $children */
         $children            = array_pop($this->stackOfChildren);
@@ -201,7 +207,7 @@ class OptionalsEliminator implements HierarchyVisitor
      * @param Symbol $nonTerminal
      * @param Expression $optionalExpression
      *
-*@return StandardProduction
+     * @return StandardProduction
      */
     protected function addEpsilonAlternativeForList(Symbol $nonTerminal, Expression $optionalExpression)
     {
@@ -215,17 +221,17 @@ class OptionalsEliminator implements HierarchyVisitor
                 new Group($optionalExpression),
                 ExpressionSymbol::createAdapterForSymbol($nonTerminal)
             );
-            $alternationItems[] = new Sequence(array_shift($items), $items);
+            $alternationItems[] = new Concatenation(array_shift($items), $items);
         } else {
             /** @var $optionalExpression Expression */
             $items = array(
                 $optionalExpression,
                 ExpressionSymbol::createAdapterForSymbol($nonTerminal)
             );
-            $alternationItems[] = new Sequence(array_shift($items), $items);
+            $alternationItems[] = new Concatenation(array_shift($items), $items);
         }
 
-        $alternation = new Alternative(array_shift($alternationItems), $alternationItems);
+        $alternation = new Choice(array_shift($alternationItems), $alternationItems);
 
         $production = new StandardProduction($nonTerminal, $alternation);
         $this->epsilonAlternatives[] = $production;
@@ -235,10 +241,11 @@ class OptionalsEliminator implements HierarchyVisitor
 
 
     /**
-     * @param OptionalItem $expression
+     * @param Optional $expression
+     *
      * @return boolean
      */
-    public function startVisitOptionalItem(OptionalItem $expression)
+    public function startVisitOptional(Optional $expression)
     {
         $this->stackOfChildren[] = array();
 
@@ -246,10 +253,11 @@ class OptionalsEliminator implements HierarchyVisitor
     }
 
     /**
-     * @param OptionalItem $expression
+     * @param Optional $expression
+     *
      * @return boolean
      */
-    public function endVisitOptionalItem(OptionalItem $expression)
+    public function endVisitOptional(Optional $expression)
     {
         /** @var Expression[]|array $children */
         $children           = array_pop($this->stackOfChildren);
@@ -268,15 +276,15 @@ class OptionalsEliminator implements HierarchyVisitor
             ExpressionSymbol::createAdapterForEpsilon()
         );
 
-        if ($optionalExpression instanceof Sequence) {
+        if ($optionalExpression instanceof Concatenation) {
             $alternationItems[] = $optionalExpression;
-        } elseif ($optionalExpression instanceof Alternative) {
+        } elseif ($optionalExpression instanceof Choice) {
             $alternationItems[] = new Group($optionalExpression);
         } else {
             $alternationItems[] = $optionalExpression;
         }
 
-        $alternation = new Alternative(array_shift($alternationItems), $alternationItems);
+        $alternation = new Choice(array_shift($alternationItems), $alternationItems);
         $production = new StandardProduction($nonTerminal, $alternation);
         $this->epsilonAlternatives[] = $production;
 

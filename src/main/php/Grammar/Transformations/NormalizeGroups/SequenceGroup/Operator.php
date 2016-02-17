@@ -4,7 +4,7 @@ use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\NormalizeOperator;
 use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\OperationResult\AlternationResult;
 use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\OperationResult\SequenceResult;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 
 class Operator implements NormalizeOperator
 {
@@ -26,20 +26,20 @@ class Operator implements NormalizeOperator
                 /** @var array|Expression[] $tail */
                 $tail = null;
 
-                if ($tailItem instanceof Sequence) {//make sure sequence does not contain another sequence
+                if ($tailItem instanceof Concatenation) {//make sure sequence does not contain another sequence
                     $tail = $tailItem->toArray();
                 } else {
                     $tail = array($tailItem);
                 }
 
-                if ($headItem instanceof Sequence) {
+                if ($headItem instanceof Concatenation) {
                     $tail = array_merge($headItem->toArray(), $tail);
                     $head = array_shift($tail);
                 } else {
                     $head = $headItem;
                 }
 
-                $normalized[] = new Sequence($head, array($tail));
+                $normalized[] = new Concatenation($head, array($tail));
             }
         }
 
@@ -62,14 +62,14 @@ class Operator implements NormalizeOperator
             /** @var array|Expression[] $tail */
             $tail = $rightGroupItems;
 
-            if ($headItem instanceof Sequence) {//make sure sequence does not contain another sequence
+            if ($headItem instanceof Concatenation) {//make sure sequence does not contain another sequence
                 $tail = array_merge($headItem->toArray(), $rightGroupItems);
                 $head = array_shift($tail);
             } else {
                 $head = $headItem;
             }
 
-            $normalized[] = new Sequence($head, $tail);
+            $normalized[] = new Concatenation($head, $tail);
         }
 
         return new AlternationResult($normalized);
@@ -89,13 +89,13 @@ class Operator implements NormalizeOperator
         foreach($rightGroupItems as $tailItem) {
             /** @var array $tail */
             $tail = null;
-            if ($tailItem instanceof Sequence) { //make sure sequence does not contain another sequence
+            if ($tailItem instanceof Concatenation) { //make sure sequence does not contain another sequence
                 $tail = array_merge($leftGroupItems, $tailItem->toArray());
             } else {
                 $tail = array_merge($leftGroupItems, array($tailItem));
             }
 
-            $normalized[] = new Sequence($head, $tail);
+            $normalized[] = new Concatenation($head, $tail);
         }
 
         return new AlternationResult($normalized);

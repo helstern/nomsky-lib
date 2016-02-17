@@ -1,17 +1,17 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions;
 
-class Sequence implements Expression, ExpressionIterable
+class Choice implements Expression, ExpressionIterable
 {
     /** @var Expression[] */
     protected $expressions;
 
     /**
-     * @param Expression $startSymbol
+     * @param Expression $anAlternative
      * @param array|Expression[] $otherAlternatives
      */
-    public function __construct(Expression $startSymbol, array $otherAlternatives = null)
+    public function __construct(Expression $anAlternative, array $otherAlternatives = null)
     {
-        $this->expressions = array($startSymbol);
+        $this->expressions = array($anAlternative);
         if (is_null($otherAlternatives) == false) {
             $this->expressions = array_merge($this->expressions, $otherAlternatives);
         }
@@ -23,7 +23,7 @@ class Sequence implements Expression, ExpressionIterable
     }
 
     /**
-     * @return Expression[]
+     * @return \ArrayIterator|Expression[]
      */
     public function getIterator()
     {

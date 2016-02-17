@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators;
 
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\SequenceNode;
 use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\VisitContext;
 
@@ -48,7 +48,7 @@ class SequenceNodeVisitor
     public function postVisitSequenceNode(SequenceNode $astNode)
     {
         $children = $this->visitContext->popExpressions($this);
-        $expression = new Sequence(array_shift($children), $children);
+        $expression = new Concatenation(array_shift($children), $children);
         $this->visitContext->pushExpression($expression);
     }
 

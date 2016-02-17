@@ -1,10 +1,10 @@
 <?php namespace Helstern\Nomsky\Grammar\Transformations;
 
 use Helstern\Nomsky\Grammar\Converter\ProductionTransformer;
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 use Helstern\Nomsky\Grammar\Production\StandardProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
 
@@ -18,7 +18,7 @@ class EliminateAlternations implements ProductionTransformer
     {
         $expression = $production->getExpression();
 
-        if ($expression instanceof Alternative) {
+        if ($expression instanceof Choice) {
             $productions = array();
 
             $expressions = iterator_to_array($expression->getIterator());
@@ -34,7 +34,8 @@ class EliminateAlternations implements ProductionTransformer
 
     /**
      * @param Expression $e
-     * @return ExpressionIterable|Sequence
+     *
+*@return ExpressionIterable|Concatenation
      */
     protected function convertToExpressionIterable(Expression $e)
     {
@@ -42,6 +43,6 @@ class EliminateAlternations implements ProductionTransformer
             return $e;
         }
 
-        return new Sequence($e);
+        return new Concatenation($e);
     }
 }

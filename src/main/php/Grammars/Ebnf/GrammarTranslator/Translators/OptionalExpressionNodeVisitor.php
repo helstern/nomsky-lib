@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators;
 
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalExpressionNode;
 use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\VisitContext;
 
@@ -45,7 +45,7 @@ class OptionalExpressionNodeVisitor
     public function postVisitOptionalExpressionNode(OptionalExpressionNode $astNode)
     {
         $child = $this->visitContext->popOneExpression($this);
-        $expression = new OptionalList($child);
+        $expression = new Repetition($child);
         $this->visitContext->pushExpression($expression);
 
         return true;

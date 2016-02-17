@@ -1,11 +1,11 @@
 <?php namespace Helstern\Nomsky\Grammar;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Optional;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisitor;
 use Helstern\Nomsky\Grammar\Symbol\Comparator\HashCodeComparator;
@@ -35,37 +35,41 @@ class SymbolCollectorVisitor implements HierarchyVisitor
     }
 
     /**
-     * @param Alternative $expression
-     * @return boolean
+     * @param Choice $expression
+     *
+*@return boolean
      */
-    public function startVisitAlternation(Alternative $expression)
+    public function startVisitChoice(Choice $expression)
     {
         return true;
     }
 
     /**
-     * @param Alternative $expression
-     * @return boolean
+     * @param Choice $expression
+     *
+*@return boolean
      */
-    public function endVisitAlternation(Alternative $expression)
+    public function endVisitChoice(Choice $expression)
     {
         return true;
     }
 
     /**
-     * @param Sequence $expression
-     * @return boolean
+     * @param Concatenation $expression
+     *
+*@return boolean
      */
-    public function startVisitSequence(Sequence $expression)
+    public function startVisitConcatenation(Concatenation $expression)
     {
         return true;
     }
 
     /**
-     * @param Sequence $expression
-     * @return boolean
+     * @param Concatenation $expression
+     *
+*@return boolean
      */
-    public function endVisitSequence(Sequence $expression)
+    public function endVisitConcatenation(Concatenation $expression)
     {
         return true;
     }
@@ -89,37 +93,41 @@ class SymbolCollectorVisitor implements HierarchyVisitor
     }
 
     /**
-     * @param OptionalList $expression
-     * @return boolean
+     * @param Repetition $expression
+     *
+*@return boolean
      */
-    public function startVisitOptionalList(OptionalList $expression)
+    public function startVisitRepetition(Repetition $expression)
     {
         return true;
     }
 
     /**
-     * @param OptionalList $expression
-     * @return boolean
+     * @param Repetition $expression
+     *
+*@return boolean
      */
-    public function endVisitOptionalList(OptionalList $expression)
+    public function endVisitRepetition(Repetition $expression)
     {
         return true;
     }
 
     /**
-     * @param OptionalItem $expression
-     * @return boolean
+     * @param Optional $expression
+     *
+*@return boolean
      */
-    public function startVisitOptionalItem(OptionalItem $expression)
+    public function startVisitOptional(Optional $expression)
     {
         return true;
     }
 
     /**
-     * @param OptionalItem $expression
-     * @return boolean
+     * @param Optional $expression
+     *
+*@return boolean
      */
-    public function endVisitOptionalItem(OptionalItem $expression)
+    public function endVisitOptional(Optional $expression)
     {
         return true;
     }
