@@ -3,6 +3,7 @@
 use Helstern\Nomsky\Grammars\Ebnf\Ast\AlternativeNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\GroupedExpressionNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalExpressionNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\RepeatedExpressionNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\RuleNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\SequenceNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\StringLiteralNode;
@@ -68,19 +69,16 @@ class Translators
         return $dispatcher;
     }
 
-//    /**
-//     * @param RepeatedExpressionNode $node
-//     * @return RepeatedExpressionNodeVisitor
-//     */
-//    public function getRepeatedExpressionNodeVisitor(RepeatedExpressionNode $node)
-//    {
-//        $collaborators = $this->createVisitorCollaborators();
-//        $visitDispatcher = $this->createVisitDispatcher($node);
-//
-//        $visitor = new RepeatedExpressionNodeVisitor($collaborators, $visitDispatcher);
-//
-//        return $visitor;
-//    }
+    /**
+     * @param RepeatedExpressionNode $node
+     * @return RepetitionVisitor
+     */
+    public function getRepeatedExpressionNodeVisitor(RepeatedExpressionNode $node)
+    {
+        $visitor = new RepetitionVisitor($this->visitContext);
+        $dispatcher = $this->createDispatchingVisitor($visitor, $node);
+        return $dispatcher;
+    }
 
     /**
      * @param RuleNode $node

@@ -1,0 +1,15 @@
+"simple logo" {
+program  ::= sentence { sentence } EOF
+
+sentence ::= FORWARD <integer>
+
+            | BACK <integer>
+
+            | LEFT <integer>
+
+            | RIGHT <integer>
+
+            | REPEAT <integer> [ sentence { sentence } ]
+
+integer ::= ZERO | ONE_TO_NINE {DIGIT}
+}  "a simple logo like language"
