@@ -1,8 +1,8 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\Translators;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators;
 
 use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\GroupedExpressionNode;
-use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\VisitContext;
+use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\VisitContext;
 
 class GroupedExpressionNodeVisitor
 {

@@ -1,8 +1,9 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator;
 
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Production\Production;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
+use SebastianBergmann\RecursionContext\Exception;
 
 class VisitContext
 {
@@ -67,9 +68,22 @@ class VisitContext
      * @param mixed $marker
      * @return Expression
      */
-    public function popOneExpression($marker = null)
+    public function popOneExpression($marker)
     {
+        $expression = array_pop($this->expressions);
+        if (! $expression instanceof Expression) {
+            array_push($this->leftHandSymbols, $symbol);
+            return null;
+        }
 
+        $actualMarker = array_pop($this->expressions);
+        if ($actualMarker !== $marker) {
+            array_push($this->expressions, $actualMarker);
+            array_push($this->expressions, $expression);
+            return null;
+        }
+
+        return $expression;
     }
 
     /**

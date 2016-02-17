@@ -1,22 +1,22 @@
 <?php namespace Helstern\Nomsky\Parser\ParseException;
 
 use Exception;
-use Helstern\Nomsky\Text\TextPosition;
-use Helstern\Nomsky\Tokens\StringToken;
+use Helstern\Nomsky\Parser\CharPosition;
+use Helstern\Nomsky\Parser\Token;
 
 class SyntacticException extends \Exception
 {
-    /** @var StringToken */
+    /** @var Token */
     protected $illegalToken;
 
-    public function __construct(StringToken $illegalToken, $message, $code = 0)
+    public function __construct(Token $illegalToken, $message, $code = 0)
     {
         parent::__construct($message, $code);
         $this->illegalToken = $illegalToken;
     }
 
     /**
-     * @return TextPosition
+     * @return CharPosition
      */
     public function getTextPosition()
     {

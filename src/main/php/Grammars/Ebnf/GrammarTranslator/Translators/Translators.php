@@ -1,13 +1,14 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\Translators;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators;
 
 use Helstern\Nomsky\Grammars\Ebnf\Ast\AlternativeNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\GroupedExpressionNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\IdentifierNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalExpressionNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\RepeatedExpressionNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\RuleNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\SequenceNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\StringLiteralNode;
-use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\VisitContext;
+use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\VisitContext;
 use Helstern\Nomsky\Parser\Ast\AstNode;
 use Helstern\Nomsky\Parser\AstNodeVisitor\DispatchingVisitor;
 use Helstern\Nomsky\Parser\AstNodeVisitor\DispatchingVisitorBuilder;
@@ -54,6 +55,17 @@ class Translators
     public function getGroupedExpressionNodeVisitor(GroupedExpressionNode $node)
     {
         $visitor = new GroupedExpressionNodeVisitor($this->visitContext);
+        $dispatcher = $this->createDispatchingVisitor($visitor, $node);
+        return $dispatcher;
+    }
+
+    /**
+     * @param IdentifierNode $node
+     * @return IdentifierNodeVisitor
+     */
+    public function getIdentifierNodeVisitor(IdentifierNode $node)
+    {
+        $visitor = new IdentifierNodeVisitor($this->visitContext);
         $dispatcher = $this->createDispatchingVisitor($visitor, $node);
         return $dispatcher;
     }

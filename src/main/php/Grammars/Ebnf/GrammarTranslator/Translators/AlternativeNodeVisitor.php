@@ -1,8 +1,8 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\Translators;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators;
 
 use Helstern\Nomsky\Grammar\Expressions\Alternative;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\AlternativeNode;
-use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\VisitContext;
+use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\VisitContext;
 
 class AlternativeNodeVisitor
 {

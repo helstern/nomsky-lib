@@ -1,8 +1,8 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\Translators;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators;
 
 use Helstern\Nomsky\Grammar\Expressions\Sequence;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\AlternativeNode;
-use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslation\VisitContext;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\SequenceNode;
+use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\VisitContext;
 
 class SequenceNodeVisitor
 {
@@ -20,29 +20,32 @@ class SequenceNodeVisitor
     }
 
     /**
-     * @param AlternativeNode $astNode
+     * @param SequenceNode $astNode
+     *
      * @return bool
      */
-    public function preVisitAlternativeNode(AlternativeNode $astNode)
+    public function preVisitSequenceNode(SequenceNode $astNode)
     {
         $this->visitContext->pushExpressionMarker($this);
         return true;
     }
 
     /**
-     * @param AlternativeNode $astNode
+     * @param SequenceNode $astNode
+     *
      * @return bool
      */
-    public function visitAlternativeNode(AlternativeNode $astNode)
+    public function visitSequenceNode(SequenceNode $astNode)
     {
         return true;
     }
 
     /**
-     * @param AlternativeNode $astNode
+     * @param SequenceNode $astNode
+     *
      * @return bool
      */
-    public function postVisitAlternativeNode(AlternativeNode $astNode)
+    public function postVisitSequenceNode(SequenceNode $astNode)
     {
         $children = $this->visitContext->popExpressions($this);
         $expression = new Sequence(array_shift($children), $children);
