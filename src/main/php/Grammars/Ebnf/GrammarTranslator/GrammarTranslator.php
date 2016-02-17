@@ -1,7 +1,7 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator;
 
 use Helstern\Nomsky\Grammar\StandardGrammar;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\StringLiteralNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\LiteralNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\SyntaxNode;
 use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators\Translators;
 use Helstern\Nomsky\Parser\Ast\StackBasedAstWalker;
@@ -29,7 +29,7 @@ class GrammarTranslator
 
         $grammarTitle = 'untitled';
         $grammarTitleNode = $node->getGrammarTitleNode();
-        if ($grammarTitleNode instanceof StringLiteralNode) {
+        if ($grammarTitleNode instanceof LiteralNode) {
             $grammarTitle = $grammarTitleNode->getLiteral();
         }
 

@@ -2,10 +2,10 @@
 
 use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\StringLiteralNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\LiteralNode;
 use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\VisitContext;
 
-class StringLiteralNodeVisitor
+class LiteralNodeVisitor
 {
     /**
      * @var VisitContext
@@ -22,19 +22,21 @@ class StringLiteralNodeVisitor
     }
 
     /**
-     * @param StringLiteralNode $astNode
+     * @param LiteralNode $astNode
+     *
      * @return bool
      */
-    public function preVisitStringLiteralNode(StringLiteralNode $astNode)
+    public function preVisitLiteralNode(LiteralNode $astNode)
     {
         return true;
     }
 
     /**
-     * @param StringLiteralNode $astNode
+     * @param LiteralNode $astNode
+     *
      * @return bool
      */
-    public function visitStringLiteralNode(StringLiteralNode $astNode)
+    public function visitLiteralNode(LiteralNode $astNode)
     {
         $expression = new ExpressionSymbol(Symbol::TYPE_TERMINAL, $astNode->getLiteral());
         $this->visitContext->pushExpression($expression);
@@ -43,10 +45,11 @@ class StringLiteralNodeVisitor
     }
 
     /**
-     * @param StringLiteralNode $astNode
+     * @param LiteralNode $astNode
+     *
      * @return bool
      */
-    public function postVisitStringLiteralNode(StringLiteralNode $astNode)
+    public function postVisitLiteralNode(LiteralNode $astNode)
     {
         return true;
     }

@@ -4,7 +4,7 @@ use Helstern\Nomsky\Parser\Ast\CompositeAstNode;
 use Helstern\Nomsky\Parser\Ast\AstNode;
 use Helstern\Nomsky\Parser\CharPosition;
 
-class RepeatedExpressionNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
+class RepetitionNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
 {
     /** @var CharPosition */
     protected $textPosition;

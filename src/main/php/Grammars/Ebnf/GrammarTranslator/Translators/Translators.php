@@ -1,13 +1,13 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators;
 
-use Helstern\Nomsky\Grammars\Ebnf\Ast\AlternativeNode;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\GroupedExpressionNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\ChoiceNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\GroupNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\IdentifierNode;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalExpressionNode;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\RepeatedExpressionNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\RepetitionNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\RuleNode;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\SequenceNode;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\StringLiteralNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\ConcatenationNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\LiteralNode;
 use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\VisitContext;
 use Helstern\Nomsky\Parser\Ast\AstNode;
 use Helstern\Nomsky\Parser\AstNodeVisitor\DispatchingVisitor;
@@ -38,23 +38,25 @@ class Translators
     }
 
     /**
-     * @param AlternativeNode $node
-     * @return AlternativeNodeVisitor
+     * @param ChoiceNode $node
+     *
+     * @return ChoiceNodeVisitor
      */
-    public function getAlternativeNodeVisitor(AlternativeNode $node)
+    public function getChoiceNodeVisitor(ChoiceNode $node)
     {
-        $visitor = new AlternativeNodeVisitor($this->visitContext);
+        $visitor = new ChoiceNodeVisitor($this->visitContext);
         $dispatcher = $this->createDispatchingVisitor($visitor, $node);
         return $dispatcher;
     }
 
     /**
-     * @param GroupedExpressionNode $node
-     * @return GroupedExpressionNodeVisitor
+     * @param GroupNode $node
+     *
+     * @return GroupNodeVisitor
      */
-    public function getGroupedExpressionNodeVisitor(GroupedExpressionNode $node)
+    public function getGroupNodeVisitor(GroupNode $node)
     {
-        $visitor = new GroupedExpressionNodeVisitor($this->visitContext);
+        $visitor = new GroupNodeVisitor($this->visitContext);
         $dispatcher = $this->createDispatchingVisitor($visitor, $node);
         return $dispatcher;
     }
@@ -71,23 +73,25 @@ class Translators
     }
 
     /**
-     * @param OptionalExpressionNode $node
-     * @return OptionalExpressionNodeVisitor
+     * @param OptionalNode $node
+     *
+     * @return OptionalNodeVisitor
      */
-    public function getOptionalExpressionNodeVisitor(OptionalExpressionNode $node)
+    public function getOptionalNodeVisitor(OptionalNode $node)
     {
-        $visitor = new OptionalExpressionNodeVisitor($this->visitContext);
+        $visitor = new OptionalNodeVisitor($this->visitContext);
         $dispatcher = $this->createDispatchingVisitor($visitor, $node);
         return $dispatcher;
     }
 
     /**
-     * @param RepeatedExpressionNode $node
-     * @return RepetitionVisitor
+     * @param RepetitionNode $node
+     *
+     * @return RepetitionNodeVisitor
      */
-    public function getRepeatedExpressionNodeVisitor(RepeatedExpressionNode $node)
+    public function getRepetitionNodeVisitor(RepetitionNode $node)
     {
-        $visitor = new RepetitionVisitor($this->visitContext);
+        $visitor = new RepetitionNodeVisitor($this->visitContext);
         $dispatcher = $this->createDispatchingVisitor($visitor, $node);
         return $dispatcher;
     }
@@ -104,23 +108,25 @@ class Translators
     }
 
     /**
-     * @param SequenceNode $node
-     * @return SequenceNodeVisitor
+     * @param ConcatenationNode $node
+     *
+     * @return ConcatenationNodeVisitor
      */
-    public function getSequenceNodeVisitor(SequenceNode $node)
+    public function getConcatenationNodeVisitor(ConcatenationNode $node)
     {
-        $visitor = new SequenceNodeVisitor($this->visitContext);
+        $visitor = new ConcatenationNodeVisitor($this->visitContext);
         $dispatcher = $this->createDispatchingVisitor($visitor, $node);
         return $dispatcher;
     }
 
     /**
-     * @param StringLiteralNode $node
-     * @return StringLiteralNodeVisitor
+     * @param LiteralNode $node
+     *
+     * @return LiteralNodeVisitor
      */
-    public function getStringLiteralNodeVisitor(StringLiteralNode $node)
+    public function getLiteralNodeVisitor(LiteralNode $node)
     {
-        $visitor = new StringLiteralNodeVisitor($this->visitContext);
+        $visitor = new LiteralNodeVisitor($this->visitContext);
         $dispatcher = $this->createDispatchingVisitor($visitor, $node);
         return $dispatcher;
     }

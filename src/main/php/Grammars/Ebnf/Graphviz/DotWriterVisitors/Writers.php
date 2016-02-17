@@ -1,15 +1,15 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\Graphviz\DotWriterVisitors;
 
-use Helstern\Nomsky\Grammars\Ebnf\Ast\AlternativeNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\ChoiceNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\CommentNode;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\GroupedExpressionNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\GroupNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\IdentifierNode;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalExpressionNode;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\RepeatedExpressionNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\RepetitionNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\RuleNode;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\SequenceNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\ConcatenationNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\SpecialSequenceNode;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\StringLiteralNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\LiteralNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\SyntaxNode;
 use Helstern\Nomsky\Grammars\Ebnf\Graphviz\Formatter;
 use Helstern\Nomsky\Grammars\Ebnf\Graphviz\VisitContext;
@@ -77,12 +77,13 @@ class Writers
     }
 
     /**
-     * @param AlternativeNode $node
-     * @return AlternativeNodeVisitor
+     * @param ChoiceNode $node
+     *
+*@return ChoiceNodeVisitor
      */
-    public function getAlternativeNodeVisitor(AlternativeNode $node)
+    public function getAlternativeNodeVisitor(ChoiceNode $node)
     {
-        $visitor = new AlternativeNodeVisitor($this->visitContext, $this->dotWriter, $this->formatter);
+        $visitor = new ChoiceNodeVisitor($this->visitContext, $this->dotWriter, $this->formatter);
 
         $dispatcher = $this->createDispatchingVisitor($visitor, $node);
         return $dispatcher;
@@ -100,12 +101,13 @@ class Writers
     }
 
     /**
-     * @param GroupedExpressionNode $node
-     * @return GroupedExpressionNodeVisitor
+     * @param GroupNode $node
+     *
+*@return GroupNodeVisitor
      */
-    public function getGroupedExpressionNodeVisitor(GroupedExpressionNode $node)
+    public function getGroupedExpressionNodeVisitor(GroupNode $node)
     {
-        $visitor = new GroupedExpressionNodeVisitor($this->visitContext, $this->dotWriter, $this->formatter);
+        $visitor = new GroupNodeVisitor($this->visitContext, $this->dotWriter, $this->formatter);
         $dispatcher = $this->createDispatchingVisitor($visitor, $node);
         return $dispatcher;
     }
@@ -122,23 +124,25 @@ class Writers
     }
 
     /**
-     * @param OptionalExpressionNode $node
-     * @return OptionalExpressionNodeVisitor
+     * @param OptionalNode $node
+     *
+*@return OptionalNodeVisitor
      */
-    public function getOptionalExpressionNodeVisitor(OptionalExpressionNode $node)
+    public function getOptionalExpressionNodeVisitor(OptionalNode $node)
     {
-        $visitor = new OptionalExpressionNodeVisitor($this->visitContext, $this->dotWriter, $this->formatter);
+        $visitor = new OptionalNodeVisitor($this->visitContext, $this->dotWriter, $this->formatter);
         $dispatcher = $this->createDispatchingVisitor($visitor, $node);
         return $dispatcher;
     }
 
     /**
-     * @param RepeatedExpressionNode $node
-     * @return RepeatedExpressionNodeVisitor
+     * @param RepetitionNode $node
+     *
+*@return RepetitionNodeVisitor
      */
-    public function getRepeatedExpressionNodeVisitor(RepeatedExpressionNode $node)
+    public function getRepeatedExpressionNodeVisitor(RepetitionNode $node)
     {
-        $visitor = new RepeatedExpressionNodeVisitor($this->visitContext, $this->dotWriter, $this->formatter);
+        $visitor = new RepetitionNodeVisitor($this->visitContext, $this->dotWriter, $this->formatter);
         $dispatcher = $this->createDispatchingVisitor($visitor, $node);
         return $dispatcher;
     }
@@ -155,12 +159,13 @@ class Writers
     }
 
     /**
-     * @param SequenceNode $node
-     * @return SequenceNodeVisitor
+     * @param ConcatenationNode $node
+     *
+*@return ConcatenationNodeVisitor
      */
-    public function getSequenceNodeVisitor(SequenceNode $node)
+    public function getSequenceNodeVisitor(ConcatenationNode $node)
     {
-        $visitor = new SequenceNodeVisitor($this->visitContext, $this->dotWriter, $this->formatter);
+        $visitor = new ConcatenationNodeVisitor($this->visitContext, $this->dotWriter, $this->formatter);
         $dispatcher = $this->createDispatchingVisitor($visitor, $node);
         return $dispatcher;
     }
@@ -177,12 +182,13 @@ class Writers
     }
 
     /**
-     * @param StringLiteralNode $node
-     * @return StringLiteralNodeVisitor
+     * @param LiteralNode $node
+     *
+*@return LiteralNodeVisitor
      */
-    public function getStringLiteralNodeVisitor(StringLiteralNode $node)
+    public function getStringLiteralNodeVisitor(LiteralNode $node)
     {
-        $visitor = new StringLiteralNodeVisitor($this->visitContext, $this->dotWriter, $this->formatter);
+        $visitor = new LiteralNodeVisitor($this->visitContext, $this->dotWriter, $this->formatter);
         $dispatcher = $this->createDispatchingVisitor($visitor, $node);
         return $dispatcher;
     }

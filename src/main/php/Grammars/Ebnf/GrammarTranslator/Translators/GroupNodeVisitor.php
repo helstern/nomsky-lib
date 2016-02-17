@@ -1,10 +1,10 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators;
 
-use Helstern\Nomsky\Grammar\Expressions\Choice;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\AlternativeNode;
+use Helstern\Nomsky\Grammar\Expressions\Group;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\GroupNode;
 use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\VisitContext;
 
-class AlternativeNodeVisitor
+class GroupNodeVisitor
 {
     /**
      * @var VisitContext
@@ -21,32 +21,33 @@ class AlternativeNodeVisitor
     }
 
     /**
-     * @param AlternativeNode $astNode
+     * @param GroupNode $astNode
+     *
      * @return bool
      */
-    public function preVisitAlternativeNode(AlternativeNode $astNode)
+    public function preVisitGroupNode(GroupNode $astNode)
     {
         $this->visitContext->pushExpressionMarker($this);
         return true;
     }
 
     /**
-     * @param AlternativeNode $astNode
+     * @param GroupNode $astNode
+     *
      * @return bool
      */
-    public function visitAlternativeNode(AlternativeNode $astNode)
-    {
-        return true;
-    }
+    public function visitGroupNode(GroupNode $astNode)
+    {}
 
     /**
-     * @param AlternativeNode $astNode
+     * @param GroupNode $astNode
+     *
      * @return bool
      */
-    public function postVisitAlternativeNode(AlternativeNode $astNode)
+    public function postVisitGroupNode(GroupNode $astNode)
     {
-        $children = $this->visitContext->popExpressions($this);
-        $expression = new Choice(array_shift($children), $children);
+        $child = $this->visitContext->popOneExpression($this);
+        $expression = new Group($child);
         $this->visitContext->pushExpression($expression);
     }
 }

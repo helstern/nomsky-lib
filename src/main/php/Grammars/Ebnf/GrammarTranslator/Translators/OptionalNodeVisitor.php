@@ -1,10 +1,10 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators;
 
 use Helstern\Nomsky\Grammar\Expressions\Repetition;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalExpressionNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\OptionalNode;
 use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\VisitContext;
 
-class OptionalExpressionNodeVisitor
+class OptionalNodeVisitor
 {
     /**
      * @var VisitContext
@@ -20,29 +20,32 @@ class OptionalExpressionNodeVisitor
     }
 
     /**
-     * @param OptionalExpressionNode $astNode
+     * @param OptionalNode $astNode
+     *
      * @return bool
      */
-    public function preVisitOptionalExpressionNode(OptionalExpressionNode $astNode)
+    public function preVisitOptionalNode(OptionalNode $astNode)
     {
         $this->visitContext->pushExpressionMarker($this);
         return true;
     }
 
     /**
-     * @param OptionalExpressionNode $astNode
+     * @param OptionalNode $astNode
+     *
      * @return bool
      */
-    public function visitOptionalExpressionNode(OptionalExpressionNode $astNode)
+    public function visitOptionalNode(OptionalNode $astNode)
     {
         return true;
     }
 
     /**
-     * @param OptionalExpressionNode $astNode
+     * @param OptionalNode $astNode
+     *
      * @return bool
      */
-    public function postVisitOptionalExpressionNode(OptionalExpressionNode $astNode)
+    public function postVisitOptionalNode(OptionalNode $astNode)
     {
         $child = $this->visitContext->popOneExpression($this);
         $expression = new Repetition($child);

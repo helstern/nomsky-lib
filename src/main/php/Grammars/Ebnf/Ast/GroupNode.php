@@ -4,7 +4,7 @@ use Helstern\Nomsky\Parser\Ast\CompositeAstNode;
 use Helstern\Nomsky\Parser\Ast\AstNode;
 use Helstern\Nomsky\Parser\CharPosition;
 
-class OptionalExpressionNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
+class GroupNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
 {
     /** @var CharPosition */
     protected $textPosition;
@@ -12,20 +12,20 @@ class OptionalExpressionNode extends AbstractEbnfNode implements AstNode, Compos
     /** @var AstNode */
     protected $childNode;
 
-    public function __construct(CharPosition $textPosition, AstNode $expression)
+    public function __construct(CharPosition $textPosition, AstNode $childNode)
     {
         $this->textPosition = $textPosition;
-        $this->childNode = $expression;
-    }
-
-    public function getChildren()
-    {
-        return array($this->childNode);
+        $this->childNode = $childNode;
     }
 
     public function getTextPosition()
     {
         return $this->textPosition;
+    }
+
+    public function getChildren()
+    {
+        return array($this->childNode);
     }
 
     /**

@@ -1,10 +1,10 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators;
 
-use Helstern\Nomsky\Grammar\Expressions\Concatenation;
-use Helstern\Nomsky\Grammars\Ebnf\Ast\SequenceNode;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\ChoiceNode;
 use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\VisitContext;
 
-class SequenceNodeVisitor
+class ChoiceNodeVisitor
 {
     /**
      * @var VisitContext
@@ -13,6 +13,7 @@ class SequenceNodeVisitor
 
     /**
      * @param VisitContext $visitContext
+     *
      */
     public function __construct(VisitContext $visitContext)
     {
@@ -20,36 +21,35 @@ class SequenceNodeVisitor
     }
 
     /**
-     * @param SequenceNode $astNode
+     * @param ChoiceNode $astNode
      *
-     * @return bool
+     *@return bool
      */
-    public function preVisitSequenceNode(SequenceNode $astNode)
+    public function preVisitChoiceNode(ChoiceNode $astNode)
     {
         $this->visitContext->pushExpressionMarker($this);
         return true;
     }
 
     /**
-     * @param SequenceNode $astNode
+     * @param ChoiceNode $astNode
      *
      * @return bool
      */
-    public function visitSequenceNode(SequenceNode $astNode)
+    public function visitChoiceNode(ChoiceNode $astNode)
     {
         return true;
     }
 
     /**
-     * @param SequenceNode $astNode
+     * @param ChoiceNode $astNode
      *
      * @return bool
      */
-    public function postVisitSequenceNode(SequenceNode $astNode)
+    public function postVisitChoiceNode(ChoiceNode $astNode)
     {
         $children = $this->visitContext->popExpressions($this);
-        $expression = new Concatenation(array_shift($children), $children);
+        $expression = new Choice(array_shift($children), $children);
         $this->visitContext->pushExpression($expression);
     }
-
 }

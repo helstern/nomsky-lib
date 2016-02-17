@@ -1,11 +1,11 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\Graphviz\DotWriterVisitors;
 
-use Helstern\Nomsky\Grammars\Ebnf\Ast\GroupedExpressionNode;
+use Helstern\Nomsky\Grammars\Ebnf\Ast\ConcatenationNode;
 use Helstern\Nomsky\Grammars\Ebnf\Graphviz\Formatter;
 use Helstern\Nomsky\Grammars\Ebnf\Graphviz\VisitContext;
 use Helstern\Nomsky\Graphviz\DotWriter;
 
-class GroupedExpressionNodeVisitor extends AbstractVisitor
+class ConcatenationNodeVisitor extends AbstractVisitor
 {
     /**
      * @var VisitContext
@@ -35,25 +35,27 @@ class GroupedExpressionNodeVisitor extends AbstractVisitor
     }
 
     /**
-     * @param GroupedExpressionNode $astNode
+     * @param ConcatenationNode $astNode
+     *
      * @return bool
      */
-    public function preVisitGroupedExpressionNode(GroupedExpressionNode $astNode)
+    public function preVisitConcatenationNode(ConcatenationNode $astNode)
     {
         $this->visitContext->incrementNodeCount($astNode);
         return true;
     }
 
     /**
-     * @param GroupedExpressionNode $astNode
+     * @param ConcatenationNode $astNode
+     *
      * @return bool
      */
-    public function visitGroupedExpressionNode(GroupedExpressionNode $astNode)
+    public function visitConcatenationNode(ConcatenationNode $astNode)
     {
         $increment = $this->visitContext->countParentIds();
         $this->formatter->indent($increment, $this->dotWriter);
 
-        $nodeId    = $this->buildNumberedDOTIdentifier('"grouped_expression[%s]"', $this->visitContext);
+        $nodeId    = $this->buildNumberedDOTIdentifier('"sequence[%s]"', $this->visitContext);
         $parentId = $this->visitContext->peekParentId();
 
         $this->dotWriter->writeEdgeStatement($parentId, $nodeId);
@@ -68,14 +70,16 @@ class GroupedExpressionNodeVisitor extends AbstractVisitor
     }
 
     /**
-     * @param GroupedExpressionNode $astNode
+     * @param ConcatenationNode $astNode
+     *
      * @return bool
      */
-    public function postVisitGroupedExpressionNode(GroupedExpressionNode $astNode)
+    public function postVisitConcatenationNode(ConcatenationNode $astNode)
     {
         if (0 < $astNode->countChildren()) {
             $this->visitContext->popParentId();
         }
+
         return true;
     }
 }
