@@ -8,7 +8,7 @@ use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 use Helstern\Nomsky\Grammar\Production\StandardProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
 
-class EliminateAlternations implements ProductionTransformer
+class EliminateChoice implements ProductionTransformer
 {
     /**
      * @param Production $production

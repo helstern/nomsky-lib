@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\AlternationGroup;
+<?php namespace Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\ChoiceGroup;
 
 use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\NormalizeOperator;
 use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\OperationResult\AlternationResult;

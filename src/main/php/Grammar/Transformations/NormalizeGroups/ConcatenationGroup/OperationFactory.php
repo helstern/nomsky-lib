@@ -1,24 +1,23 @@
-<?php namespace Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\AlternationGroup;
+<?php namespace Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\ConcatenationGroup;
 
 use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\NormalizeOperationFactory;
-use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\NormalizeOperand;
-use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\OperationResult\AlternationResult;
+use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\OperationResult\SequenceResult;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 
 class OperationFactory implements NormalizeOperationFactory
 {
     /**
      * @param array $resultItems
-     * @return AlternationResult
+     * @return SequenceResult
      */
     public function createResult(array $resultItems)
     {
-        return new AlternationResult($resultItems);
+        return new SequenceResult($resultItems);
     }
 
     /**
      * @param array|Expression[] $operandItems
-     * @return NormalizeOperand
+     * @return Operand
      */
     public function createOperand(array $operandItems)
     {

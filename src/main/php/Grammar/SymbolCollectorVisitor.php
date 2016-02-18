@@ -37,7 +37,7 @@ class SymbolCollectorVisitor implements HierarchyVisitor
     /**
      * @param Choice $expression
      *
-*@return boolean
+     * @return boolean
      */
     public function startVisitChoice(Choice $expression)
     {
@@ -47,7 +47,7 @@ class SymbolCollectorVisitor implements HierarchyVisitor
     /**
      * @param Choice $expression
      *
-*@return boolean
+     * @return boolean
      */
     public function endVisitChoice(Choice $expression)
     {
@@ -57,7 +57,7 @@ class SymbolCollectorVisitor implements HierarchyVisitor
     /**
      * @param Concatenation $expression
      *
-*@return boolean
+     * @return boolean
      */
     public function startVisitConcatenation(Concatenation $expression)
     {
@@ -67,7 +67,7 @@ class SymbolCollectorVisitor implements HierarchyVisitor
     /**
      * @param Concatenation $expression
      *
-*@return boolean
+     * @return boolean
      */
     public function endVisitConcatenation(Concatenation $expression)
     {
@@ -95,7 +95,7 @@ class SymbolCollectorVisitor implements HierarchyVisitor
     /**
      * @param Repetition $expression
      *
-*@return boolean
+     * @return boolean
      */
     public function startVisitRepetition(Repetition $expression)
     {
@@ -105,7 +105,7 @@ class SymbolCollectorVisitor implements HierarchyVisitor
     /**
      * @param Repetition $expression
      *
-*@return boolean
+     * @return boolean
      */
     public function endVisitRepetition(Repetition $expression)
     {
@@ -115,7 +115,7 @@ class SymbolCollectorVisitor implements HierarchyVisitor
     /**
      * @param Optional $expression
      *
-*@return boolean
+     * @return boolean
      */
     public function startVisitOptional(Optional $expression)
     {
@@ -125,7 +125,7 @@ class SymbolCollectorVisitor implements HierarchyVisitor
     /**
      * @param Optional $expression
      *
-*@return boolean
+     * @return boolean
      */
     public function endVisitOptional(Optional $expression)
     {

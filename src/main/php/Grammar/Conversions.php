@@ -1,10 +1,10 @@
-<?php namespace Helstern\Nomsky\Grammar\Converter;
+<?php namespace Helstern\Nomsky\Grammar;
 
+use Helstern\Nomsky\Grammar\Converter\Converter;
 use Helstern\Nomsky\Grammar\Transformations\EliminateOptionals;
 use Helstern\Nomsky\Grammar\Transformations\EliminateGroups;
-use Helstern\Nomsky\Grammar\Transformations\EliminateAlternations;
+use Helstern\Nomsky\Grammar\Transformations\EliminateChoice;
 
-use Helstern\Nomsky\Grammar\Grammar;
 use Helstern\Nomsky\Grammar\Production\Production;
 
 class Conversions
@@ -17,7 +17,7 @@ class Conversions
         $transformers = array(
             new EliminateOptionals\Transformer(new EliminateOptionals\IncrementalNamingStrategy()),
             new EliminateGroups\Transformer(),
-            new EliminateAlternations()
+            new EliminateChoice()
         );
 
         $converter = new Converter($transformers);

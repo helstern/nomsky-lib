@@ -3,7 +3,7 @@
 use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 
-use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\AlternationGroup\Operand;
+use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\ChoiceGroup\Operand;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 
 class AlternationResult implements ResultInterface

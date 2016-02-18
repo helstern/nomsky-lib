@@ -1,6 +1,7 @@
-<?php namespace Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\AlternationGroup;
+<?php namespace Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\ConcatenationGroup;
 
 use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\NormalizeOperand;
+
 use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\NormalizeOperator;
 use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\OperationResult\ResultInterface;
 use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\PerformNormalizeOperationStrategy;
@@ -9,22 +10,22 @@ use Helstern\Nomsky\Grammar\Expressions\Expression;
 class Operand implements NormalizeOperand
 {
     /** @var Expression[] */
-    protected $alternationItems;
+    protected $sequenceItems;
 
     /**
-     * @param array|Expression[] $alternationItems
+     * @param array|Expression[] $sequenceItems
      */
-    public function __construct(array $alternationItems)
+    public function __construct(array $sequenceItems)
     {
-        $this->alternationItems = $alternationItems;
+        $this->sequenceItems = $sequenceItems;
     }
 
     /**
-     * @return Expression[]
+     * @return array|Expression[]
      */
     public function getItems()
     {
-        return $this->alternationItems;
+        return $this->sequenceItems;
     }
 
     /**
@@ -43,6 +44,6 @@ class Operand implements NormalizeOperand
      */
     public function performOperation(PerformNormalizeOperationStrategy $strategy, NormalizeOperator $operator)
     {
-        return $strategy->performRightOperandIsAlternation($operator);
+        return $strategy->performRightOperandIsSequence($operator);
     }
 }

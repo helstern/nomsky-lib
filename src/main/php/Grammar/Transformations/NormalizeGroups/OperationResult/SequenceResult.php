@@ -4,7 +4,7 @@ use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 
-use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\SequenceGroup\Operand;
+use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\ConcatenationGroup\Operand;
 
 class SequenceResult implements ResultInterface
 {

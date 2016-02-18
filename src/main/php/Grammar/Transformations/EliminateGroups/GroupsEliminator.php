@@ -1,8 +1,8 @@
 <?php namespace Helstern\Nomsky\Grammar\Transformations\EliminateGroups;
 
 use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\NormalizeOperationFactory;
-use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\SequenceGroup\OperationFactory as SequenceGroupOperationFactory;
-use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\AlternationGroup\OperationFactory as AlternationGroupOperationFactory;
+use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\ConcatenationGroup\OperationFactory as ConcatenationGroupOperationFactory;
+use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\ChoiceGroup\OperationFactory as ChoiceGroupOperationFactory;
 
 use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
@@ -122,7 +122,7 @@ class GroupsEliminator extends AbstractErrorTriggeringVisitor implements Hierarc
 
     public function startVisitChoice(Choice $expression)
     {
-        $normalizeOperationFactory = new AlternationGroupOperationFactory();
+        $normalizeOperationFactory = new ChoiceGroupOperationFactory();
         $this->onBeforeStartVisitExpressionIterable($expression, $normalizeOperationFactory);
 
         return true;
@@ -137,7 +137,7 @@ class GroupsEliminator extends AbstractErrorTriggeringVisitor implements Hierarc
 
     public function startVisitConcatenation(Concatenation $expression)
     {
-        $normalizeOperationFactory = new SequenceGroupOperationFactory();
+        $normalizeOperationFactory = new ConcatenationGroupOperationFactory();
         $this->onBeforeStartVisitExpressionIterable($expression, $normalizeOperationFactory);
 
         return true;

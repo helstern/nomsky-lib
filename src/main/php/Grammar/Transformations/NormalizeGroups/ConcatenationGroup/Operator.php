@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\SequenceGroup;
+<?php namespace Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\ConcatenationGroup;
 
 use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\NormalizeOperator;
 use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\OperationResult\AlternationResult;
