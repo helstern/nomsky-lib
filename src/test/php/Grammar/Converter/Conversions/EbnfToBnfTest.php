@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\Converter\Conversions;
 
-use Helstern\Nomsky\Grammar\Converter\Conversions;
+use Helstern\Nomsky\Grammar\Conversions;
 use Helstern\Nomsky\Grammar\StandardGrammar;
 use Helstern\Nomsky\Grammar\Expressions\Optional;
 use Helstern\Nomsky\Grammar\Expressions\Repetition;
