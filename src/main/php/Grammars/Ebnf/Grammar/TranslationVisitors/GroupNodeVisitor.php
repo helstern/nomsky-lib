@@ -1,21 +1,21 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\Grammar\TranslationVisitors;
 
 use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\GroupNode;
-use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\VisitContext;
+use Helstern\Nomsky\Grammars\Ebnf\Grammar\AstTranslatorContext;
 
 class GroupNodeVisitor
 {
     /**
-     * @var VisitContext
+     * @var AstTranslatorContext
      */
     private $visitContext;
 
     /**
-     * @param VisitContext $visitContext
+     * @param AstTranslatorContext $visitContext
      *
      */
-    public function __construct(VisitContext $visitContext)
+    public function __construct(AstTranslatorContext $visitContext)
     {
         $this->visitContext = $visitContext;
     }

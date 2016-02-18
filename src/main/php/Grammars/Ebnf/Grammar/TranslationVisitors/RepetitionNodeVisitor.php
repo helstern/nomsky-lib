@@ -1,20 +1,20 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\Grammar\TranslationVisitors;
 
 use Helstern\Nomsky\Grammar\Expressions\Repetition;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\RepetitionNode;
-use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\VisitContext;
+use Helstern\Nomsky\Grammars\Ebnf\Grammar\AstTranslatorContext;
 
 class RepetitionNodeVisitor
 {
     /**
-     * @var VisitContext
+     * @var AstTranslatorContext
      */
     private $visitContext;
 
     /**
-     * @param VisitContext $visitContext
+     * @param AstTranslatorContext $visitContext
      */
-    public function __construct(VisitContext $visitContext)
+    public function __construct(AstTranslatorContext $visitContext)
     {
         $this->visitContext = $visitContext;
     }

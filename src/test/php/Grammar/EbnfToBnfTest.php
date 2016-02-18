@@ -1,15 +1,14 @@
-<?php namespace Helstern\Nomsky\Grammar\Converter\Conversions;
+<?php namespace Helstern\Nomsky\Grammar;
 
-use Helstern\Nomsky\Grammar\Conversions;
-use Helstern\Nomsky\Grammar\StandardGrammar;
 use Helstern\Nomsky\Grammar\Expressions\Optional;
 use Helstern\Nomsky\Grammar\Expressions\Repetition;
 use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 use Helstern\Nomsky\Grammar\Production\StandardProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
 use Helstern\Nomsky\Grammar\TestUtils\TestGrammars;
+use Helstern\Nomsky\TestCase;
 
-class EbnfToBnfTest extends \PHPUnit_Framework_TestCase
+class EbnfToBnfTest extends TestCase
 {
     /** @var TestGrammars */
     protected $testGrammars;

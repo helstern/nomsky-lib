@@ -1,19 +1,19 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\Grammar;
 
 use Helstern\Nomsky\Grammar\StandardGrammar;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\LiteralNode;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\SyntaxNode;
-use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators\Translators;
+use Helstern\Nomsky\Grammars\Ebnf\Grammar\TranslationVisitors\VisitorProvider;
 use Helstern\Nomsky\Parser\Ast\StackBasedAstWalker;
 use Helstern\Nomsky\Parser\AstNodeVisitor\DispatchingProvider;
 use Helstern\Nomsky\Parser\AstNodeVisitStrategy\PreOrderVisitStrategy;
 
-class GrammarTranslator
+class AstTranslator
 {
     public function translate(SyntaxNode $node)
     {
-        $visitContext = new VisitContext();
-        $visitorProvider = new Translators($visitContext);
+        $visitContext = new AstTranslatorContext();
+        $visitorProvider = new VisitorProvider($visitContext);
 
         $dispatchingProvider = new DispatchingProvider($visitorProvider);
         $walkStrategy = PreOrderVisitStrategy::newDefaultInstance($dispatchingProvider);

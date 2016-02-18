@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\Grammar;
 
 use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfLexerFactory;
 use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfParser;
@@ -17,7 +17,7 @@ class GrammarTranslatorTest extends TestCase
         $parser = new IsoEbnfParser($assertions);
 
         $syntaxNode = $parser->parse($lexer);
-        $translator = new GrammarTranslator();
+        $translator = new AstTranslator();
         $grammar = $translator->translate($syntaxNode);
 
         $this->assertNotNull($grammar);

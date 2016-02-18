@@ -1,11 +1,11 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\Grammar;
 
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Production\Production;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use SebastianBergmann\RecursionContext\Exception;
 
-class VisitContext
+class AstTranslatorContext
 {
     /**
      * @var array the stack that holds the left hand symbols
@@ -25,7 +25,7 @@ class VisitContext
     /**
      * @param Expression $expression
      *
-     * @return VisitContext
+     * @return AstTranslatorContext
      */
     public function pushExpression(Expression $expression)
     {
@@ -90,7 +90,7 @@ class VisitContext
      * @param Symbol $symbol
      * @param $marker
      *
-     * @return VisitContext
+     * @return AstTranslatorContext
      */
     public function pushLeftHandSymbol(Symbol $symbol, $marker)
     {
@@ -125,7 +125,7 @@ class VisitContext
     /**
      * @param Production $production
      *
-     * @return VisitContext
+     * @return AstTranslatorContext
      */
     public function collectProduction(Production $production)
     {

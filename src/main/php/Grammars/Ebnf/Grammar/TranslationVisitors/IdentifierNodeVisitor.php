@@ -1,22 +1,22 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\Translators;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\Grammar\TranslationVisitors;
 
 use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\IdentifierNode;
-use Helstern\Nomsky\Grammars\Ebnf\GrammarTranslator\VisitContext;
+use Helstern\Nomsky\Grammars\Ebnf\Grammar\AstTranslatorContext;
 
 class IdentifierNodeVisitor
 {
     /**
-     * @var VisitContext
+     * @var AstTranslatorContext
      */
     private $visitContext;
 
     /**
-     * @param VisitContext $visitContext
+     * @param AstTranslatorContext $visitContext
      *
      */
-    public function __construct(VisitContext $visitContext)
+    public function __construct(AstTranslatorContext $visitContext)
     {
         $this->visitContext = $visitContext;
     }
