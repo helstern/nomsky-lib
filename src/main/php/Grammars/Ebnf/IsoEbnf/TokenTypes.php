@@ -1,6 +1,6 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\IsoEbnf;
 
-class TokenTypesEnum {
+class TokenTypes {
 
     /**
      * ,

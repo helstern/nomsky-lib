@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\IsoEbnf;
 
 
 use Helstern\Nomsky\Exception\SyntacticException;
@@ -17,13 +17,13 @@ use Helstern\Nomsky\Grammars\Ebnf\Ast\SyntaxNode;
 use Helstern\Nomsky\Parser\Errors\ParseAssertions;
 use Helstern\Nomsky\Parser\Lexer;
 
-use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens\TokenTypesEnum;
+use Helstern\Nomsky\Grammars\Ebnf\IsoEbnf\TokenTypes;
 
 /**
  * Class StandardEbnfParser
  * @see http://standards.iso.org/ittf/PubliclyAvailableStandards/s026153_ISO_IEC_14977_1996(E).zip
  */
-class IsoEbnfParser
+class Parser
 {
     /** @var ParseAssertions */
     protected $parseAssertions;
@@ -59,13 +59,13 @@ class IsoEbnfParser
         $grammarTitle = null;
         $grammarComment = null;
 
-        if ($token->getType() == TokenTypesEnum::ENUM_STRING_LITERAL) {
+        if ($token->getType() == TokenTypes::ENUM_STRING_LITERAL) {
             $grammarTitle = $this->parseStringLiteral($lexer);
             $lexer->nextToken();
         }
 
         $token = $lexer->currentToken();
-        $this->parseAssertions->assertValidTokenType($token, TokenTypesEnum::ENUM_START_REPEAT);
+        $this->parseAssertions->assertValidTokenType($token, TokenTypes::ENUM_START_REPEAT);
         if (is_null($startTextPosition)) {
             $startTextPosition = $token->getPosition();
         }
@@ -73,30 +73,30 @@ class IsoEbnfParser
 
         $productionNodes = array();
         $token = $lexer->currentToken();
-        while ($token->getType() == TokenTypesEnum::ENUM_COMMENT) {
+        while ($token->getType() == TokenTypes::ENUM_COMMENT) {
             $productionNodes[] = $this->parseComment($lexer);
             $lexer->nextToken();
             $token = $lexer->currentToken();
         }
 
-        while ($token->getType() == TokenTypesEnum::ENUM_IDENTIFIER) {
+        while ($token->getType() == TokenTypes::ENUM_IDENTIFIER) {
             $productionNodes[] = $this->parseRule($lexer);
             $lexer->nextToken();
             $token = $lexer->currentToken();
 
-            if ($token->getType() == TokenTypesEnum::ENUM_COMMENT) {
+            if ($token->getType() == TokenTypes::ENUM_COMMENT) {
                 $productionNodes[] = $this->parseComment($lexer);
                 $lexer->nextToken();
                 $token = $lexer->currentToken();
             }
         }
 
-        $this->parseAssertions->assertValidTokenType($token, TokenTypesEnum::ENUM_END_REPEAT);
+        $this->parseAssertions->assertValidTokenType($token, TokenTypes::ENUM_END_REPEAT);
         $lexer->nextToken();
         $token = $lexer->currentToken();
 
 
-        if ($token->getType() == TokenTypesEnum::ENUM_STRING_LITERAL) {
+        if ($token->getType() == TokenTypes::ENUM_STRING_LITERAL) {
             $grammarComment = $this->parseStringLiteral($lexer);
             $lexer->nextToken();
             $token = null;
@@ -116,8 +116,8 @@ class IsoEbnfParser
 
         $token = $lexer->currentToken();
 
-        if ($token->getType() != TokenTypesEnum::ENUM_COMMENT) {
-            throw new SyntacticException($token, 'Expected ' . TokenTypesEnum::ENUM_COMMENT);
+        if ($token->getType() != TokenTypes::ENUM_COMMENT) {
+            throw new SyntacticException($token, 'Expected ' . TokenTypes::ENUM_COMMENT);
         }
 
         $textPosition = $token->getPosition();
@@ -136,14 +136,14 @@ class IsoEbnfParser
         $identifierNode = $this->parseIdentifier($lexer);
 
         $peekToken = $lexer->peekToken();
-        $this->parseAssertions->assertValidTokenType($peekToken, TokenTypesEnum::ENUM_DEFINITION_LIST_START);
+        $this->parseAssertions->assertValidTokenType($peekToken, TokenTypes::ENUM_DEFINITION_LIST_START);
 
         $lexer->nextToken();
         $expressionNode = $this->parseExpression($lexer);
 
         $peekToken = $lexer->peekToken();
 
-        $this->parseAssertions->assertValidTokenType($peekToken, TokenTypesEnum::ENUM_TERMINATOR);
+        $this->parseAssertions->assertValidTokenType($peekToken, TokenTypes::ENUM_TERMINATOR);
         $lexer->nextToken();
 
         $textPosition = $identifierNode->getTextPosition();
@@ -159,7 +159,7 @@ class IsoEbnfParser
     protected function parseIdentifier(Lexer $lexer)
     {
         $token = $lexer->currentToken();
-        $this->parseAssertions->assertValidTokenType($token, TokenTypesEnum::ENUM_IDENTIFIER);
+        $this->parseAssertions->assertValidTokenType($token, TokenTypes::ENUM_IDENTIFIER);
 
         $identifierName = $token->getValue();
         $textPosition = $token->getPosition();
@@ -180,7 +180,7 @@ class IsoEbnfParser
 
         $peekToken = $lexer->peekToken();
         $predicates = $this->parseAssertions->getTokenPredicates();
-        while ($predicates->hasSameType($peekToken, TokenTypesEnum::ENUM_DEFINITION_SEPARATOR)) {
+        while ($predicates->hasSameType($peekToken, TokenTypes::ENUM_DEFINITION_SEPARATOR)) {
             $lexer->nextToken();
             $tail[] = $this->parseTerm($lexer);
 
@@ -209,7 +209,7 @@ class IsoEbnfParser
         $tail = array();
         $predicates = $this->parseAssertions->getTokenPredicates();
         $peekToken = $lexer->peekToken();
-        while ($predicates->hasSameType($peekToken, TokenTypesEnum::ENUM_CONCATENATE)) {
+        while ($predicates->hasSameType($peekToken, TokenTypes::ENUM_CONCATENATE)) {
             $lexer->nextToken();
             $tail[] = $this->parseFactor($lexer);
 
@@ -238,22 +238,22 @@ class IsoEbnfParser
 
         /** @var AstNode $node */
         $node = null;
-        if ($predicates->hasSameType($peekToken, TokenTypesEnum::ENUM_IDENTIFIER)) {
+        if ($predicates->hasSameType($peekToken, TokenTypes::ENUM_IDENTIFIER)) {
             $lexer->nextToken();
             $node = $this->parseIdentifier($lexer);
-        } elseif ($predicates->hasSameType($peekToken, TokenTypesEnum::ENUM_STRING_LITERAL)) {
+        } elseif ($predicates->hasSameType($peekToken, TokenTypes::ENUM_STRING_LITERAL)) {
             $lexer->nextToken();
             $node = $this->parseStringLiteral($lexer);
-        } elseif ($predicates->hasSameType($peekToken, TokenTypesEnum::ENUM_SPECIAL_SEQUENCE)) {
+        } elseif ($predicates->hasSameType($peekToken, TokenTypes::ENUM_SPECIAL_SEQUENCE)) {
             $lexer->nextToken();
             $node = $this->parseSpecialExpression($lexer);
-        } elseif ($predicates->hasSameType($peekToken, TokenTypesEnum::ENUM_START_OPTION)) {
+        } elseif ($predicates->hasSameType($peekToken, TokenTypes::ENUM_START_OPTION)) {
             $lexer->nextToken();
             $node = $this->parseOptionalExpression($lexer);
-        } elseif ($predicates->hasSameType($peekToken, TokenTypesEnum::ENUM_START_GROUP)) {
+        } elseif ($predicates->hasSameType($peekToken, TokenTypes::ENUM_START_GROUP)) {
             $lexer->nextToken();
             $node = $this->parseGroupedExpression($lexer);
-        } elseif ($predicates->hasSameType($peekToken, TokenTypesEnum::ENUM_START_REPEAT)) {
+        } elseif ($predicates->hasSameType($peekToken, TokenTypes::ENUM_START_REPEAT)) {
             $lexer->nextToken();
             $node = $this->parseRepeatedExpression($lexer);
         }
@@ -275,8 +275,8 @@ class IsoEbnfParser
     {
         $token = $lexer->currentToken();
 
-        if ($token->getType() != TokenTypesEnum::ENUM_STRING_LITERAL) {
-            throw new SyntacticException($token, 'Expected ' . TokenTypesEnum::ENUM_STRING_LITERAL);
+        if ($token->getType() != TokenTypes::ENUM_STRING_LITERAL) {
+            throw new SyntacticException($token, 'Expected ' . TokenTypes::ENUM_STRING_LITERAL);
         }
 
         $textPosition = $token->getPosition();
@@ -295,8 +295,8 @@ class IsoEbnfParser
     {
         $token = $lexer->currentToken();
 
-        if ($token->getType() != TokenTypesEnum::ENUM_SPECIAL_SEQUENCE) {
-            throw new SyntacticException($token, 'Expected ' . TokenTypesEnum::ENUM_SPECIAL_SEQUENCE);
+        if ($token->getType() != TokenTypes::ENUM_SPECIAL_SEQUENCE) {
+            throw new SyntacticException($token, 'Expected ' . TokenTypes::ENUM_SPECIAL_SEQUENCE);
         }
 
         $textPosition = $token->getPosition();
@@ -314,13 +314,13 @@ class IsoEbnfParser
     protected function parseOptionalExpression(Lexer $lexer)
     {
         $token = $lexer->currentToken();
-        $this->parseAssertions->assertValidTokenType($token, TokenTypesEnum::ENUM_START_OPTION);
+        $this->parseAssertions->assertValidTokenType($token, TokenTypes::ENUM_START_OPTION);
         $startPosition = $token->getPosition();
 
         $expression = $this->parseExpression($lexer);
 
         $peekToken = $lexer->peekToken();
-        $this->parseAssertions->assertValidTokenType($peekToken, TokenTypesEnum::ENUM_END_OPTION);
+        $this->parseAssertions->assertValidTokenType($peekToken, TokenTypes::ENUM_END_OPTION);
         $lexer->nextToken();
 
         $node = new OptionalNode($startPosition, $expression);
@@ -335,13 +335,13 @@ class IsoEbnfParser
     protected function parseGroupedExpression(Lexer $lexer)
     {
         $token = $lexer->currentToken();
-        $this->parseAssertions->assertValidTokenType($token, TokenTypesEnum::ENUM_START_GROUP);
+        $this->parseAssertions->assertValidTokenType($token, TokenTypes::ENUM_START_GROUP);
         $startPosition = $token->getPosition();
 
         $expression = $this->parseExpression($lexer);
 
         $peekToken = $lexer->peekToken();
-        $this->parseAssertions->assertValidTokenType($peekToken, TokenTypesEnum::ENUM_END_GROUP);
+        $this->parseAssertions->assertValidTokenType($peekToken, TokenTypes::ENUM_END_GROUP);
         $lexer->nextToken();
 
         $node = new GroupNode($startPosition, $expression);
@@ -356,14 +356,14 @@ class IsoEbnfParser
     protected function parseRepeatedExpression(Lexer $lexer)
     {
         $token = $lexer->currentToken();
-        $this->parseAssertions->assertValidTokenType($token, TokenTypesEnum::ENUM_START_REPEAT);
+        $this->parseAssertions->assertValidTokenType($token, TokenTypes::ENUM_START_REPEAT);
 
         $startPosition = $token->getPosition();
 
         $expression = $this->parseExpression($lexer);
 
         $peekToken = $lexer->peekToken();
-        $this->parseAssertions->assertValidTokenType($peekToken, TokenTypesEnum::ENUM_END_REPEAT);
+        $this->parseAssertions->assertValidTokenType($peekToken, TokenTypes::ENUM_END_REPEAT);
         $lexer->nextToken();
 
         $node = new RepetitionNode($startPosition, $expression);

@@ -1,13 +1,13 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\IsoEbnf;
 
-use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens\TokenPatterns;
+use Helstern\Nomsky\Grammars\Ebnf\IsoEbnf\TokenPatterns;
 use Helstern\Nomsky\Lexer\LongestMatchWinsStrategy;
 use Helstern\Nomsky\Lexer\StandardLexer;
 use Helstern\Nomsky\Text\FileSource;
 
 use Helstern\Nomsky\Text\WhitespaceMatcher;
 
-class IsoEbnfLexerFactory
+class LexerFactory
 {
     /**
      * @param string $filePath

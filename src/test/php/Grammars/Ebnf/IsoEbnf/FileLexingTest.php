@@ -1,6 +1,5 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\IsoEbnf;
 
-use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfLexerFactory;
 use Helstern\Nomsky\Grammars\TestResources;
 use Helstern\Nomsky\Parser\Token;
 
@@ -24,7 +23,7 @@ class FileLexingTest extends \PHPUnit_Framework_TestCase
     {
         $fileName = 'ebnf.iso.ebnf';
         $filePath = self::getResourceFilePath($fileName);
-        $lexer = (new IsoEbnfLexerFactory())->fromFile($filePath);
+        $lexer = (new LexerFactory())->fromFile($filePath);
 
         $actualTokens = [];
 

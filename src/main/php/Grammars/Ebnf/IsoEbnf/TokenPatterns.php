@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\IsoEbnf;
 
 use Helstern\Nomsky\Lexer\TokenMatchReader;
 use Helstern\Nomsky\Text\RegexAlternativesPattern;
@@ -6,8 +6,7 @@ use Helstern\Nomsky\Text\RegexPattern;
 use Helstern\Nomsky\Regex\RegexBuilder;
 use Helstern\Nomsky\Text\TokenMatchPcreReader;
 
-use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens\SymbolsEnum as Symbols;
-use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfTokens\TokenTypesEnum as TokenTypes;
+use Helstern\Nomsky\Grammars\Ebnf\IsoEbnf\TokenTypes as TokenTypes;
 
 class TokenPatterns
 {

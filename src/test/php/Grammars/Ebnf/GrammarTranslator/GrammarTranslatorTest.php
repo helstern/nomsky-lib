@@ -1,7 +1,7 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\Grammar;
 
-use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfLexerFactory;
-use Helstern\Nomsky\Grammars\Ebnf\IsoEbnfParser;
+use Helstern\Nomsky\Grammars\Ebnf\IsoEbnf\LexerFactory as IsoEbnfLexerFactory;
+use Helstern\Nomsky\Grammars\Ebnf\IsoEbnf\Parser as IsoEbnfParser;
 use Helstern\Nomsky\Parser\Errors\ParseAssertions;
 use Helstern\Nomsky\TestCase;
 use Helstern\Nomsky\Tokens\TokenPredicates;

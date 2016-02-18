@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Grammars\Ebnf;
+<?php namespace Helstern\Nomsky\Grammars\Ebnf\IsoEbnf;
 
 use Helstern\Nomsky\Parser\Errors\ParseAssertions;
 use Helstern\Nomsky\Grammars\TestResources;
@@ -21,10 +21,10 @@ class IsoEbnfParserTest extends \PHPUnit_Framework_TestCase
         $expectedAstNode = '\\Helstern\Nomsky\Grammars\Ebnf\Ast\\SyntaxNode';
 
         $grammarFile = self::getResourceFilePath('ebnf.iso.ebnf');
-        $lexer = (new IsoEbnfLexerFactory())->fromFile($grammarFile);
+        $lexer = (new LexerFactory())->fromFile($grammarFile);
 
         $assertions = new ParseAssertions(new TokenPredicates);
-        $parser = new IsoEbnfParser($assertions);
+        $parser = new Parser($assertions);
 
         $actualAstNode = $parser->parse($lexer);
         $this->assertInstanceOf($expectedAstNode, $actualAstNode, 'wrong instance type received');
