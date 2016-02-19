@@ -1,9 +1,9 @@
 <?php namespace Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\OperationResult;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 
-use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\AlternationGroup\Operand;
+use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\ChoiceGroup\Operand;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 
 class AlternationResult implements ResultInterface
@@ -29,11 +29,11 @@ class AlternationResult implements ResultInterface
     }
 
     /**
-     * @return Alternative
+     * @return Choice
      */
     public function toExpression()
     {
-        return new Alternative(reset($this->alternationItems), array_slice($this->alternationItems, 1));
+        return new Choice(reset($this->alternationItems), array_slice($this->alternationItems, 1));
     }
 
     /**

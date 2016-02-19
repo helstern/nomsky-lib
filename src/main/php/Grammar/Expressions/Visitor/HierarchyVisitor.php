@@ -1,37 +1,41 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions\Visitor;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Optional;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 
 interface HierarchyVisitor
 {
     /**
-     * @param Alternative $expression
+     * @param Choice $expression
+     *
      * @return boolean
      */
-    public function startVisitAlternation(Alternative $expression);
+    public function startVisitChoice(Choice $expression);
 
     /**
-     * @param Alternative $expression
+     * @param Choice $expression
+     *
      * @return boolean
      */
-    public function endVisitAlternation(Alternative $expression);
+    public function endVisitChoice(Choice $expression);
 
     /**
-     * @param Sequence $expression
+     * @param Concatenation $expression
+     *
      * @return boolean
      */
-    public function startVisitSequence(Sequence $expression);
+    public function startVisitConcatenation(Concatenation $expression);
 
     /**
-     * @param Sequence $expression
+     * @param Concatenation $expression
+     *
      * @return boolean
      */
-    public function endVisitSequence(Sequence $expression);
+    public function endVisitConcatenation(Concatenation $expression);
 
     /**
      * @param Group $expression
@@ -46,28 +50,32 @@ interface HierarchyVisitor
     public function endVisitGroup(Group $expression);
 
     /**
-     * @param OptionalList $expression
+     * @param Repetition $expression
+     *
      * @return boolean
      */
-    public function startVisitOptionalList(OptionalList $expression);
+    public function startVisitRepetition(Repetition $expression);
 
     /**
-     * @param OptionalList $expression
+     * @param Repetition $expression
+     *
      * @return boolean
      */
-    public function endVisitOptionalList(OptionalList $expression);
+    public function endVisitRepetition(Repetition $expression);
 
     /**
-     * @param OptionalItem $expression
+     * @param Optional $expression
+     *
      * @return boolean
      */
-    public function startVisitOptionalItem(OptionalItem $expression);
+    public function startVisitOptional(Optional $expression);
 
     /**
-     * @param OptionalItem $expression
+     * @param Optional $expression
+     *
      * @return boolean
      */
-    public function endVisitOptionalItem(OptionalItem $expression);
+    public function endVisitOptional(Optional $expression);
 
     /**
      * @param Expression $expression

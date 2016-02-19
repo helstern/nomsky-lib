@@ -12,17 +12,17 @@ class SyntaxNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
     /** @var array | RuleNode[] */
     protected $ruleNodes;
 
-    /** @var StringLiteralNode|null */
+    /** @var LiteralNode|null */
     protected $grammarTitle;
 
-    /** @var StringLiteralNode|null */
+    /** @var LiteralNode|null */
     protected $grammarComment;
 
     public function __construct(
         CharPosition $textPosition,
         array $productionNodes,
-        StringLiteralNode $grammarTitle = null,
-        StringLiteralNode $grammarComment = null
+        LiteralNode $grammarTitle = null,
+        LiteralNode $grammarComment = null
     ) {
         $this->textPosition = $textPosition;
         $this->ruleNodes = $productionNodes;
@@ -31,7 +31,7 @@ class SyntaxNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
     }
 
     /**
-     * @return StringLiteralNode|null
+     * @return LiteralNode|null
      */
     public function getGrammarTitleNode()
     {
@@ -39,7 +39,7 @@ class SyntaxNode extends AbstractEbnfNode implements AstNode, CompositeAstNode
     }
 
     /**
-     * @return StringLiteralNode|null
+     * @return LiteralNode|null
      */
     public function getGrammarCommentNode()
     {

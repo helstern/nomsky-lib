@@ -1,12 +1,12 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions\Visitor\CompositeVisit;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Optional;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 
 use Helstern\Nomsky\Grammar\Expressions\Visitor\CompositeVisitor;
 
@@ -24,12 +24,13 @@ class CompleteVisitDispatcher extends AbstractDispatcher implements VisitDispatc
     }
 
     /**
-     * @param Alternative $expression
+     * @param Choice $expression
+     *
      * @return null
      */
-    public function dispatchVisitAlternation(Alternative $expression)
+    public function dispatchVisitChoice(Choice $expression)
     {
-        $this->visitor->visitAlternation($expression);
+        $this->visitor->visitChoice($expression);
         return null;
     }
 
@@ -54,32 +55,35 @@ class CompleteVisitDispatcher extends AbstractDispatcher implements VisitDispatc
     }
 
     /**
-     * @param OptionalItem $expression
+     * @param Optional $expression
+     *
      * @return null
      */
-    public function dispatchVisitOptionalItem(OptionalItem $expression)
+    public function dispatchVisitOptional(Optional $expression)
     {
-        $this->visitor->visitOptionalItem($expression);
+        $this->visitor->visitOptional($expression);
         return null;
     }
 
     /**
-     * @param Sequence $expression
+     * @param Concatenation $expression
+     *
      * @return null
      */
-    public function dispatchVisitSequence(Sequence $expression)
+    public function dispatchVisitConcatenation(Concatenation $expression)
     {
-        $this->visitor->visitSequence($expression);
+        $this->visitor->visitConcatenation($expression);
         return null;
     }
 
     /**
-     * @param OptionalList $expression
-     * @return null
+     * @param Repetition $expression
+     *
+    * @return null
      */
-    public function dispatchVisitOptionalList(OptionalList $expression)
+    public function dispatchVisitRepetition(Repetition $expression)
     {
-        $this->visitor->visitOptionalList($expression);
+        $this->visitor->visitRepetition($expression);
         return null;
     }
 }

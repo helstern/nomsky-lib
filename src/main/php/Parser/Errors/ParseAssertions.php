@@ -1,6 +1,7 @@
 <?php namespace Helstern\Nomsky\Parser\Errors;
 
 use Helstern\Nomsky\Parser\ParseException\SyntacticException;
+use Helstern\Nomsky\Parser\Token;
 use Helstern\Nomsky\Tokens\TokenPredicates;
 use Helstern\Nomsky\Tokens\StringToken;
 
@@ -24,13 +25,13 @@ class ParseAssertions
     }
 
     /**
-     * @param StringToken $actualToken
+     * @param Token $actualToken
      * @param $expectedType
      *
-*@return bool
-     * @throws \Helstern\Nomsky\Parser\ParseException\SyntacticException
+     * @return bool
+     * @throws SyntacticException
      */
-    public function assertValidTokenType(StringToken $actualToken, $expectedType)
+    public function assertValidTokenType(Token $actualToken, $expectedType)
     {
         if ($this->tokenPredicates->hasSameType($actualToken, $expectedType)) {
             return true;
@@ -41,12 +42,13 @@ class ParseAssertions
     }
 
     /**
-     * @param \Helstern\Nomsky\Tokens\StringToken $actualToken
      *
-     * @throws \Helstern\Nomsky\Parser\ParseException\SyntacticException
+     * @param Token $actualToken
+     *
      * @return bool
+     * @throws SyntacticException
      */
-    public function assertNotEOF(StringToken $actualToken)
+    public function assertNotEOF(Token $actualToken)
     {
         if ($this->tokenPredicates->hasSameType($actualToken, 0)) {
             $exceptionMsg = (new ErrorMessagesBuilder)->unexpectedEOF($actualToken);

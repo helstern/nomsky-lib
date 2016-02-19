@@ -1,19 +1,20 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions\Visitor;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Optional;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 
 interface CompositeVisitor
 {
     /**
-     * @param Alternative $expression
+     * @param Choice $expression
+     *
      * @return boolean
      */
-    public function visitAlternation(Alternative $expression);
+    public function visitChoice(Choice $expression);
 
     /**
      * @param Group $expression
@@ -22,22 +23,25 @@ interface CompositeVisitor
     public function visitGroup(Group $expression);
 
     /**
-     * @param Sequence $expression
+     * @param Concatenation $expression
+     *
      * @return boolean
      */
-    public function visitSequence(Sequence $expression);
+    public function visitConcatenation(Concatenation $expression);
 
     /**
-     * @param OptionalList $expression
+     * @param Repetition $expression
+     *
      * @return boolean
      */
-    public function visitOptionalList(OptionalList $expression);
+    public function visitRepetition(Repetition $expression);
 
     /**
-     * @param OptionalItem $expression
+     * @param Optional $expression
+     *
      * @return boolean
      */
-    public function visitOptionalItem(OptionalItem $expression);
+    public function visitOptional(Optional $expression);
 
     /**
      * @param Expression $expression

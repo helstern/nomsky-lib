@@ -1,12 +1,12 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
 
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Optional;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 
 
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisitor;
@@ -28,14 +28,15 @@ class CompleteVisitDispatcher extends AbstractDispatcher implements VisitDispatc
     }
 
     /**
-     * @param Alternative $expression
-     * @return EndAlternationAction
+     * @param Choice $expression
+     *
+     * @return EndChoiceAction
      */
-    public function dispatchVisitAlternation(Alternative $expression)
+    public function dispatchVisitChoice(Choice $expression)
     {
-        $this->visitor->startVisitAlternation($expression);
+        $this->visitor->startVisitChoice($expression);
 
-        $nextVisitAction = new EndAlternationAction($expression, $this->visitor);
+        $nextVisitAction = new EndChoiceAction($expression, $this->visitor);
         return $nextVisitAction;
     }
 
@@ -62,38 +63,41 @@ class CompleteVisitDispatcher extends AbstractDispatcher implements VisitDispatc
     }
 
     /**
-     * @param OptionalItem $expression
-     * @return EndOptionalItemAction
+     * @param Optional $expression
+     *
+     * @return EndOptionalAction
      */
-    public function dispatchVisitOptionalItem(OptionalItem $expression)
+    public function dispatchVisitOptional(Optional $expression)
     {
-        $this->visitor->startVisitOptionalItem($expression);
+        $this->visitor->startVisitOptional($expression);
 
-        $nextVisitAction = new EndOptionalItemAction($expression, $this->visitor);
+        $nextVisitAction = new EndOptionalAction($expression, $this->visitor);
         return $nextVisitAction;
     }
 
     /**
-     * @param Sequence $expression
-     * @return EndSequenceAction
+     * @param Concatenation $expression
+     *
+     * @return EndConcatenationAction
      */
-    public function dispatchVisitSequence(Sequence $expression)
+    public function dispatchVisitConcatenation(Concatenation $expression)
     {
-        $this->visitor->startVisitSequence($expression);
+        $this->visitor->startVisitConcatenation($expression);
 
-        $nextVisitAction = new EndSequenceAction($expression, $this->visitor);
+        $nextVisitAction = new EndConcatenationAction($expression, $this->visitor);
         return $nextVisitAction;
     }
 
     /**
-     * @param OptionalList $expression
-     * @return EndOptionalListAction
+     * @param Repetition $expression
+     *
+    * @return EndRepetitionAction
      */
-    public function dispatchVisitOptionalList(OptionalList $expression)
+    public function dispatchVisitRepetition(Repetition $expression)
     {
-        $this->visitor->startVisitOptionalList($expression);
+        $this->visitor->startVisitRepetition($expression);
 
-        $nextVisitAction = new EndOptionalListAction($expression, $this->visitor);
+        $nextVisitAction = new EndRepetitionAction($expression, $this->visitor);
         return $nextVisitAction;
     }
 }

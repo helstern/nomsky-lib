@@ -3,8 +3,8 @@
 use Helstern\Nomsky\Grammar\Transformations\EliminateOptionals\IncrementalNamingStrategy;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 
 class ExpressionUtils
@@ -27,42 +27,46 @@ class ExpressionUtils
 
     /**
      * @param array $symbols
-     * @return Sequence
+     *
+*@return Concatenation
      */
     public function createSequenceFromSymbols(array $symbols)
     {
-        return new Sequence(array_shift($symbols), $symbols);
+        return new Concatenation(array_shift($symbols), $symbols);
     }
 
     /**
      * @param array $symbols
-     * @return Alternative
+     *
+*@return Choice
      */
     public function createAlternationFromSymbols(array $symbols)
     {
-        return new Alternative(array_shift($symbols), $symbols);
+        return new Choice(array_shift($symbols), $symbols);
     }
 
     /**
      * @param array $listOfStringSymbols
-     * @return Sequence
+     *
+*@return Concatenation
      */
     public function createSequenceFromListOfStringSymbols(array $listOfStringSymbols)
     {
         $listOfSymbols = $this->createListOfExpressions($listOfStringSymbols);
-        $alternation = new Sequence(array_shift($listOfSymbols), $listOfSymbols);
+        $alternation = new Concatenation(array_shift($listOfSymbols), $listOfSymbols);
 
         return $alternation;
     }
 
     /**
      * @param array $listOfStringSymbols
-     * @return Alternative
+     *
+*@return Choice
      */
     public function createAlternationFromListOfStringSymbols(array $listOfStringSymbols)
     {
         $listOfSymbols = $this->createListOfExpressions($listOfStringSymbols);
-        $alternation = new Alternative(array_shift($listOfSymbols), $listOfSymbols);
+        $alternation = new Choice(array_shift($listOfSymbols), $listOfSymbols);
 
         return $alternation;
     }
@@ -129,9 +133,9 @@ class ExpressionUtils
             }
         }
 
-        if ($expression instanceof Alternative) {
+        if ($expression instanceof Choice) {
             $separator = '| ';
-        } elseif ($expression instanceof Sequence) {
+        } elseif ($expression instanceof Concatenation) {
             $separator = ' ';
         } else {
             $separator = ', ';

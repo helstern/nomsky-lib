@@ -5,9 +5,9 @@ use Helstern\Nomsky\Grammar\Transformations\EliminateOptionals\OptionalsEliminat
 use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Optional;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 
 use Helstern\Nomsky\Grammar\Converter;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
@@ -60,11 +60,11 @@ class GroupsTest extends \PHPUnit_Framework_TestCase
         $initialList[]    = $exprTestUtils->getGroupUtils()->createAlternationFromSymbols(
             array(
                 $exprTestUtils->createTerminal('1'),
-                new OptionalItem($exprTestUtils->createTerminal('2')),
+                new Optional($exprTestUtils->createTerminal('2')),
                 $exprTestUtils->createTerminal('3')
             )
         );
-        $initialExpression = new Sequence(array_shift($initialList), $initialList);
+        $initialExpression = new Concatenation(array_shift($initialList), $initialList);
 
         $namingStrategy = $exprTestUtils->createNonTerminalNamingStrategy();
         $actualExpression = $this->getDepthFirstWalkResult($initialExpression, $namingStrategy);
@@ -84,7 +84,7 @@ class GroupsTest extends \PHPUnit_Framework_TestCase
                 $exprTestUtils->createTerminal('3')
             )
         );
-        $expectedExpression = new Sequence(array_shift($expectedList), $expectedList);
+        $expectedExpression = new Concatenation(array_shift($expectedList), $expectedList);
 
         $assertFailMsgTpl = 'Expected the following sequence: %s';
         $this->assertEquals(
@@ -107,11 +107,11 @@ class GroupsTest extends \PHPUnit_Framework_TestCase
         $initialList[]    = $exprTestUtils->getGroupUtils()->createAlternationFromSymbols(
             array(
                 $exprTestUtils->createTerminal('1'),
-                new OptionalList($exprTestUtils->createTerminal('2')),
+                new Repetition($exprTestUtils->createTerminal('2')),
                 $exprTestUtils->createTerminal('3')
             )
         );
-        $initialExpression = new Sequence(array_shift($initialList), $initialList);
+        $initialExpression = new Concatenation(array_shift($initialList), $initialList);
         $namingStrategy = $exprTestUtils->createNonTerminalNamingStrategy();
         $actualExpression = $this->getDepthFirstWalkResult($initialExpression, $namingStrategy);
 
@@ -130,7 +130,7 @@ class GroupsTest extends \PHPUnit_Framework_TestCase
                 $exprTestUtils->createTerminal('3')
             )
         );
-        $expectedExpression = new Sequence(array_shift($expectedList), $expectedList);
+        $expectedExpression = new Concatenation(array_shift($expectedList), $expectedList);
 
         $assertFailMsgTpl = 'Expected the following sequence: %s';
         $this->assertEquals(

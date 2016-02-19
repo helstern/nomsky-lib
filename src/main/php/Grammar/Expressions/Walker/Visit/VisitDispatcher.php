@@ -1,19 +1,20 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions\Walker\Visit;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Optional;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 
 interface VisitDispatcher
 {
     /**
-     * @param Alternative $expression
-     * @return VisitAction|null
+     * @param Choice $expression
+     *
+*@return VisitAction|null
      */
-    public function dispatchVisitAlternation(Alternative $expression);
+    public function dispatchVisitChoice(Choice $expression);
 
     /**
      * @param Expression $expression
@@ -28,20 +29,23 @@ interface VisitDispatcher
     public function dispatchVisitGroup(Group $expression);
 
     /**
-     * @param OptionalItem $expression
-     * @return VisitAction|null
+     * @param Optional $expression
+     *
+*@return VisitAction|null
      */
-    public function dispatchVisitOptionalItem(OptionalItem $expression);
+    public function dispatchVisitOptional(Optional $expression);
 
     /**
-     * @param Sequence $expression
-     * @return VisitAction|null
+     * @param Concatenation $expression
+     *
+*@return VisitAction|null
      */
-    public function dispatchVisitSequence(Sequence $expression);
+    public function dispatchVisitConcatenation(Concatenation $expression);
 
     /**
-     * @param OptionalList $expression
-     * @return VisitAction|null
+     * @param Repetition $expression
+     *
+*@return VisitAction|null
      */
-    public function dispatchVisitOptionalList(OptionalList $expression);
+    public function dispatchVisitRepetition(Repetition $expression);
 }

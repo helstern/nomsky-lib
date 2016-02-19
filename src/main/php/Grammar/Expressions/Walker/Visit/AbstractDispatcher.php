@@ -1,11 +1,11 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions\Walker\Visit;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Optional;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 
 /**
  * Abstract implementation providing empty hooks for dispatch methods
@@ -15,10 +15,11 @@ use Helstern\Nomsky\Grammar\Expressions\Sequence;
 abstract class AbstractDispatcher implements VisitDispatcher
 {
     /**
-     * @param Alternative $expression
-     * @return null
+     * @param Choice $expression
+     *
+*@return null
      */
-    public function dispatchVisitAlternation(Alternative $expression)
+    public function dispatchVisitChoice(Choice $expression)
     {
         return null;
     }
@@ -42,28 +43,31 @@ abstract class AbstractDispatcher implements VisitDispatcher
     }
 
     /**
-     * @param OptionalItem $expression
-     * @return null
+     * @param Optional $expression
+     *
+*@return null
      */
-    public function dispatchVisitOptionalItem(OptionalItem $expression)
+    public function dispatchVisitOptional(Optional $expression)
     {
         return null;
     }
 
     /**
-     * @param Sequence $expression
-     * @return null
+     * @param Concatenation $expression
+     *
+*@return null
      */
-    public function dispatchVisitSequence(Sequence $expression)
+    public function dispatchVisitConcatenation(Concatenation $expression)
     {
         return null;
     }
 
     /**
-     * @param OptionalList $expression
-     * @return null
+     * @param Repetition $expression
+     *
+*@return null
      */
-    public function dispatchVisitOptionalList(OptionalList $expression)
+    public function dispatchVisitRepetition(Repetition $expression)
     {
         return null;
     }

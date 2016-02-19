@@ -20,15 +20,23 @@ abstract class AbstractEbnfNode implements AstNode
 
     /**
      * @param DoubleDispatcherBuilder $dispatcherBuilder
-     * @return DoubleDispatcher
+     * @return DoubleDispatcherBuilder
      */
-    public function buildDoubleDispatcher(DoubleDispatcherBuilder $dispatcherBuilder)
+    public function configureDoubleDispatcher(DoubleDispatcherBuilder $dispatcherBuilder)
     {
-        $localClassName = $this->getLocalClassName();
-        $dispatcherBuilder->addDispatchArgumentType($localClassName);
-        $dispatcher = $dispatcherBuilder->build();
+        $dispatcherBuilder->addDispatchArgumentType($this);
+        return $dispatcherBuilder;
+    }
 
-        return $dispatcher;
+    /**
+     * @param DoubleDispatcher $dispatcher
+     * @param object $visitor
+     *
+     * @return boolean
+     */
+    public function dispatch(DoubleDispatcher $dispatcher, $visitor)
+    {
+        return $dispatcher->dispatch($visitor, $this);
     }
 
 }

@@ -3,17 +3,17 @@
 use Helstern\Nomsky\Grammar\Transformations\EliminateOptionals\OptionalsEliminator;
 
 use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Optional;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 
 use Helstern\Nomsky\Grammar\Converter;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
-use Helstern\Nomsky\Grammar\Production\DefaultProduction;
+use Helstern\Nomsky\Grammar\Production\StandardProduction;
 
 class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,9 +60,9 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $exprTestUtils = $this->getExpressionTestUtils();
 
         $initialList      = $exprTestUtils->createListOfExpressions(array('a', 'b'));
-        $initialList[]    = new OptionalList($exprTestUtils->createTerminal('c'));
+        $initialList[]    = new Repetition($exprTestUtils->createTerminal('c'));
         $initialList[]    = $exprTestUtils->createTerminal('d');
-        $initialExpression = new Sequence(array_shift($initialList), $initialList);
+        $initialExpression = new Concatenation(array_shift($initialList), $initialList);
 
         $visitor = new OptionalsEliminator($exprTestUtils->createNonTerminalNamingStrategy());
         $this->walkAndVisitExpression($initialExpression, $visitor);
@@ -71,15 +71,15 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $assertFailMsgTpl = 'Expected 1 rules to be generated for a repetion. Instead %s were generated';
         $this->assertEquals(1, count($epsilonAlternatives), sprintf($assertFailMsgTpl, count($epsilonAlternatives)));
 
-        /** @var DefaultProduction $production */
+        /** @var StandardProduction $production */
         $production = array_pop($epsilonAlternatives);
-        /** @var Alternative $actualExpression */
+        /** @var Choice $actualExpression */
         $actualExpression = $production->getExpression();
 
         /** @var \Exception $castAlternationException */
         $castAlternationException = null;
         try {
-            $castToAlternation = function (Alternative $alternation) { return $alternation; };
+            $castToAlternation = function (Choice $alternation) { return $alternation; };
             $castToAlternation($actualExpression);
         } catch (\Exception $castAlternationException) {
             /** on purpose left */
@@ -118,9 +118,9 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $exprTestUtils = $this->getExpressionTestUtils();
 
         $initialList      = $exprTestUtils->createListOfExpressions(array('a', 'b'));
-        $initialList[]    = new OptionalItem($exprTestUtils->createTerminal('c'));
+        $initialList[]    = new Optional($exprTestUtils->createTerminal('c'));
         $initialList[]    = $exprTestUtils->createTerminal('d');
-        $initialExpression = new Sequence(array_shift($initialList), $initialList);
+        $initialExpression = new Concatenation(array_shift($initialList), $initialList);
 
         $visitor = new OptionalsEliminator($exprTestUtils->createNonTerminalNamingStrategy());
         $this->walkAndVisitExpression($initialExpression, $visitor);
@@ -129,15 +129,15 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $assertFailMsgTpl = 'Expected 1 rules to be generated for a repetion. Instead %s were generated';
         $this->assertEquals(1, count($epsilonAlternatives), sprintf($assertFailMsgTpl, count($epsilonAlternatives)));
 
-        /** @var DefaultProduction $production */
+        /** @var StandardProduction $production */
         $production = array_pop($epsilonAlternatives);
-        /** @var Alternative $actualExpression */
+        /** @var Choice $actualExpression */
         $actualExpression = $production->getExpression();
 
         /** @var \Exception $castAlternationException */
         $castAlternationException = null;
         try {
-            $castToAlternation = function (Alternative $alternation) { return $alternation; };
+            $castToAlternation = function (Choice $alternation) { return $alternation; };
             $castToAlternation($actualExpression);
         } catch (\Exception $castAlternationException) {
             /** on purpose left */

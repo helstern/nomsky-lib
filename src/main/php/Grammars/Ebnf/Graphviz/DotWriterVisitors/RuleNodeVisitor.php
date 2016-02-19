@@ -1,27 +1,37 @@
 <?php namespace Helstern\Nomsky\Grammars\Ebnf\Graphviz\DotWriterVisitors;
 
 use Helstern\Nomsky\Grammars\Ebnf\Ast\RuleNode;
-use Helstern\Nomsky\Grammars\Ebnf\Graphviz\VisitorCollaborators;
-use Helstern\Nomsky\Parser\Ast\AstNodeVisitor;
-use Helstern\Nomsky\Parser\AstNodeVisitor\AbstractDispatchingVisitor;
-use Helstern\Nomsky\Parser\AstNodeVisitor\VisitDispatcher;
+use Helstern\Nomsky\Grammars\Ebnf\Graphviz\Formatter;
+use Helstern\Nomsky\Grammars\Ebnf\Graphviz\VisitContext;
+use Helstern\Nomsky\Graphviz\DotWriter;
 
-class RuleNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVisitor
+class RuleNodeVisitor
 {
-    /** @var VisitorCollaborators */
-    protected $collaborators;
-
-    /** @var VisitDispatcher  */
-    protected $visitDispatcher;
+    /**
+     * @var VisitContext
+     */
+    private $visitContext;
 
     /**
-     * @param VisitorCollaborators $collaborators
-     * @param VisitDispatcher $visitDispatcher
+     * @var DotWriter
      */
-    public function __construct(VisitorCollaborators $collaborators, VisitDispatcher $visitDispatcher)
+    private $dotWriter;
+
+    /**
+     * @var Formatter
+     */
+    private $formatter;
+
+    /**
+     * @param VisitContext $visitContext
+     * @param DotWriter $dotWriter
+     * @param Formatter $formatter
+     */
+    public function __construct(VisitContext $visitContext, DotWriter $dotWriter, Formatter $formatter)
     {
-        $this->collaborators = $collaborators;
-        $this->visitDispatcher = $visitDispatcher;
+        $this->visitContext = $visitContext;
+        $this->dotWriter = $dotWriter;
+        $this->formatter = $formatter;
     }
 
     /**
@@ -30,13 +40,12 @@ class RuleNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVisit
      */
     protected function buildDOTIdentifier(RuleNode $astNode)
     {
-        $nodeCounter = $this->collaborators->nodeCounter();
-        $idNumber = $nodeCounter->getNodeCount();
+        $idNumber = $this->visitContext->getNodeCount();
 
         $identifierNode = $astNode->getIdentifierNode();
         $identifierName = $identifierNode->getIdentifierName();
 
-        return '"' . 'rule' . '[' . $identifierName . ']' . '[' . $idNumber . ']' . '"' ;
+        return sprintf('"rule[%s][%s]"', $identifierName, $idNumber) ;
     }
 
     /**
@@ -45,9 +54,7 @@ class RuleNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVisit
      */
     public function preVisitRuleNode(RuleNode $astNode)
     {
-        $nodeCounter = $this->collaborators->nodeCounter();
-        $nodeCounter->increment($astNode);
-
+        $this->visitContext->incrementNodeCount($astNode);
         return true;
     }
 
@@ -57,22 +64,17 @@ class RuleNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVisit
      */
     public function visitRuleNode(RuleNode $astNode)
     {
-        $dotWriter = $this->collaborators->dotWriter();
-        $formatter = $this->collaborators->formatter();
-
-        $parents = $this->collaborators->parentNodeIds();
-        $increment = $parents->count();
-        $formatter->indent($increment, $dotWriter);
+        $increment = $this->visitContext->countParentIds();
+        $this->formatter->indent($increment, $this->dotWriter);
 
         $nodeId    = $this->buildDOTIdentifier($astNode);
-        $parents = $this->collaborators->parentNodeIds();
-        $parentId = $parents->top();
+        $parentId = $this->visitContext->peekParentId();
 
-        $dotWriter->writeEdgeStatement($parentId, $nodeId);
-        $formatter->whitespace(1, $dotWriter); //formatting options
-        $dotWriter->writeStatementTerminator();
+        $this->dotWriter->writeEdgeStatement($parentId, $nodeId);
+        $this->formatter->whitespace(1, $this->dotWriter); //formatting options
+        $this->dotWriter->writeStatementTerminator();
 
-        $parents->push($nodeId);
+        $this->visitContext->pushParentId($nodeId);
 
         return true;
     }
@@ -83,18 +85,7 @@ class RuleNodeVisitor extends AbstractDispatchingVisitor implements AstNodeVisit
      */
     public function postVisitRuleNode(RuleNode $astNode)
     {
-        $parents = $this->collaborators->parentNodeIds();
-        $parents->pop();
-
+        $this->visitContext->popParentId();
         return true;
-    }
-
-    /**
-     * @return VisitDispatcher
-     */
-    protected function getVisitDispatcher()
-    {
-        $visitDispatcher = $this->visitDispatcher;
-        return $visitDispatcher;
     }
 }

@@ -1,11 +1,11 @@
 <?php namespace Helstern\Nomsky\Grammar\TestUtils;
 
-use Helstern\Nomsky\Grammar\DefaultGrammar;
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
-use Helstern\Nomsky\Grammar\Production\DefaultProduction;
+use Helstern\Nomsky\Grammar\StandardGrammar;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
+use Helstern\Nomsky\Grammar\Expressions\Optional;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
+use Helstern\Nomsky\Grammar\Production\StandardProduction;
 
 class TestGrammars
 {
@@ -31,7 +31,7 @@ class TestGrammars
      *   BooleanOperator := "And" | "Or"
      *   BooleanConstant := "True" | "False"
      *
-     * @return DefaultGrammar
+     * @return StandardGrammar
      */
     public function ebnfSimpleTestBooleanLogicGrammar()
     {
@@ -41,9 +41,9 @@ class TestGrammars
 
         $leftSide = $expressionUtils->createNonTerminal('Expression');
         $expressionItems = array(
-            new OptionalItem($expressionUtils->createTerminal('!')),
+            new Optional($expressionUtils->createTerminal('!')),
             $expressionUtils->createNonTerminal('Boolean'),
-            new OptionalList(
+            new Repetition(
                 $expressionUtils->createSequenceFromSymbols(
                     array(
                         $expressionUtils->createNonTerminal('BooleanOperator'),
@@ -52,8 +52,8 @@ class TestGrammars
                 )
             )
         );
-        $rightSide = new Sequence(array_shift($expressionItems), $expressionItems);
-        $productions[] = new DefaultProduction($leftSide, $rightSide);
+        $rightSide = new Concatenation(array_shift($expressionItems), $expressionItems);
+        $productions[] = new StandardProduction($leftSide, $rightSide);
 
         $leftSide = $expressionUtils->createNonTerminal('Boolean');
         $expressionItems = array(
@@ -67,26 +67,26 @@ class TestGrammars
                  )
             )
         );
-        $rightSide = new Alternative(array_shift($expressionItems), $expressionItems);
-        $productions[] = new DefaultProduction($leftSide, $rightSide);
+        $rightSide = new Choice(array_shift($expressionItems), $expressionItems);
+        $productions[] = new StandardProduction($leftSide, $rightSide);
 
         $leftSide = $expressionUtils->createNonTerminal('BooleanOperator');
         $expressionItems = array(
             $expressionUtils->createTerminal('And'),
             $expressionUtils->createTerminal('Or'),
         );
-        $rightSide = new Alternative(array_shift($expressionItems), $expressionItems);
-        $productions[] = new DefaultProduction($leftSide, $rightSide);
+        $rightSide = new Choice(array_shift($expressionItems), $expressionItems);
+        $productions[] = new StandardProduction($leftSide, $rightSide);
 
         $leftSide = $expressionUtils->createNonTerminal('BooleanConstant');
         $expressionItems = array(
             $expressionUtils->createTerminal('True'),
             $expressionUtils->createTerminal('False'),
         );
-        $rightSide = new Alternative(array_shift($expressionItems), $expressionItems);
-        $productions[] = new DefaultProduction($leftSide, $rightSide);
+        $rightSide = new Choice(array_shift($expressionItems), $expressionItems);
+        $productions[] = new StandardProduction($leftSide, $rightSide);
 
-        $grammar = new DefaultGrammar('simple test boolean logic', $productions);
+        $grammar = new StandardGrammar('simple test boolean logic', $productions);
         return $grammar;
     }
 }

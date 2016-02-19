@@ -3,8 +3,16 @@
 interface AstNodeWalkStrategy
 {
     /**
+     *
      * @param AstNode $parent
-     * @return \Traversable
+     * @param WalkerStateMachine $walkState
+     * @param WalkListItemCollector $walkListCollector
+     *
+     * @return int the new walker state
      */
-    public function calculateWalkList(AstNode $parent);
+    public function calculateWalkList(
+        AstNode $parent,
+        WalkListItemCollector $walkListCollector,
+        WalkerStateMachine $walkState
+    );
 }

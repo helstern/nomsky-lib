@@ -1,13 +1,13 @@
 <?php namespace Helstern\Nomsky\Grammar\Transformations\EliminateGroups;
 
 use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\NormalizeOperationFactory;
-use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\SequenceGroup\OperationFactory as SequenceGroupOperationFactory;
-use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\AlternationGroup\OperationFactory as AlternationGroupOperationFactory;
+use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\ConcatenationGroup\OperationFactory as ConcatenationGroupOperationFactory;
+use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\ChoiceGroup\OperationFactory as ChoiceGroupOperationFactory;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisitor;
 
@@ -120,30 +120,30 @@ class GroupsEliminator extends AbstractErrorTriggeringVisitor implements Hierarc
         }
     }
 
-    public function startVisitAlternation(Alternative $expression)
+    public function startVisitChoice(Choice $expression)
     {
-        $normalizeOperationFactory = new AlternationGroupOperationFactory();
+        $normalizeOperationFactory = new ChoiceGroupOperationFactory();
         $this->onBeforeStartVisitExpressionIterable($expression, $normalizeOperationFactory);
 
         return true;
     }
 
-    public function endVisitAlternation(Alternative $expression)
+    public function endVisitChoice(Choice $expression)
     {
         $this->onAfterEndVisitExpressionIterable($expression);
 
         return true;
     }
 
-    public function startVisitSequence(Sequence $expression)
+    public function startVisitConcatenation(Concatenation $expression)
     {
-        $normalizeOperationFactory = new SequenceGroupOperationFactory();
+        $normalizeOperationFactory = new ConcatenationGroupOperationFactory();
         $this->onBeforeStartVisitExpressionIterable($expression, $normalizeOperationFactory);
 
         return true;
     }
 
-    public function endVisitSequence(Sequence $expression)
+    public function endVisitConcatenation(Concatenation $expression)
     {
         $this->onAfterEndVisitExpressionIterable($expression);
 

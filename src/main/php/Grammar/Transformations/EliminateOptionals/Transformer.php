@@ -5,7 +5,7 @@ use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
-use Helstern\Nomsky\Grammar\Production\DefaultProduction;
+use Helstern\Nomsky\Grammar\Production\StandardProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
 
 class Transformer implements ProductionTransformer
@@ -39,7 +39,7 @@ class Transformer implements ProductionTransformer
         /** @var ExpressionIterable $visitRoot */
         $visitRoot = $visitor->getRoot();
 
-        $cleanedProduction = new DefaultProduction($initialProduction->getNonTerminal(), $visitRoot);
+        $cleanedProduction = new StandardProduction($initialProduction->getNonTerminal(), $visitRoot);
         $cleanedProductionsList = array($cleanedProduction);
         $cleanedProductionsList = array_merge($cleanedProductionsList, $visitor->getEpsilonAlternatives());
 

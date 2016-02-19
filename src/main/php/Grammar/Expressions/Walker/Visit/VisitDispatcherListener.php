@@ -1,26 +1,28 @@
 <?php namespace Helstern\Nomsky\Grammar\Expressions\Walker\Visit;
 
-use Helstern\Nomsky\Grammar\Expressions\Alternative;
+use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\OptionalItem;
-use Helstern\Nomsky\Grammar\Expressions\OptionalList;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Optional;
+use Helstern\Nomsky\Grammar\Expressions\Repetition;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 
 interface VisitDispatcherListener
 {
     /**
-     * @param Alternative $expression
-     * @return boolean
+     * @param Choice $expression
+     *
+*@return boolean
      */
-    public function beforeDispatchVisitAlternation(Alternative $expression);
+    public function beforeDispatchVisitAlternation(Choice $expression);
 
     /**
-     * @param Alternative $expression
+     * @param Choice $expression
      * @param VisitAction $dispatchVisitResult
-     * @return boolean
+     *
+*@return boolean
      */
-    public function afterDispatchVisitAlternation(Alternative $expression, VisitAction $dispatchVisitResult = null);
+    public function afterDispatchVisitAlternation(Choice $expression, VisitAction $dispatchVisitResult = null);
 
     /**
      * @param Expression $expression
@@ -49,42 +51,48 @@ interface VisitDispatcherListener
     public function afterDispatchVisitGroup(Group $expression, VisitAction $dispatchVisitResult = null);
 
     /**
-     * @param OptionalItem $expression
+     * @param Optional $expression
      * @param VisitAction $dispatchVisitResult
-     * @return boolean
+     *
+*@return boolean
      */
-    public function beforeDispatchVisitOption(OptionalItem $expression, VisitAction $dispatchVisitResult = null);
+    public function beforeDispatchVisitOption(Optional $expression, VisitAction $dispatchVisitResult = null);
 
     /**
-     * @param OptionalItem $expression
+     * @param Optional $expression
      * @param VisitAction $dispatchVisitResult
-     * @return boolean
+     *
+*@return boolean
      */
-    public function afterDispatchVisitOption(OptionalItem $expression, VisitAction $dispatchVisitResult = null);
+    public function afterDispatchVisitOption(Optional $expression, VisitAction $dispatchVisitResult = null);
 
     /**
-     * @param Sequence $expression
-     * @return VisitAction|null
+     * @param Concatenation $expression
+     *
+*@return VisitAction|null
      */
-    public function beforeDispatchVisitSequence(Sequence $expression);
+    public function beforeDispatchVisitSequence(Concatenation $expression);
 
     /**
-     * @param Sequence $expression
+     * @param Concatenation $expression
      * @param VisitAction $dispatchVisitResult
-     * @return boolean
+     *
+*@return boolean
      */
-    public function afterDispatchVisitSequence(Sequence $expression, VisitAction $dispatchVisitResult = null);
+    public function afterDispatchVisitSequence(Concatenation $expression, VisitAction $dispatchVisitResult = null);
 
     /**
-     * @param OptionalList $expression
-     * @return VisitAction|null
+     * @param Repetition $expression
+     *
+*@return VisitAction|null
      */
-    public function beforeDispatchVisitRepetition(OptionalList $expression);
+    public function beforeDispatchVisitRepetition(Repetition $expression);
 
     /**
-     * @param OptionalList $expression
+     * @param Repetition $expression
      * @param VisitAction $dispatchVisitResult
-     * @return boolean
+     *
+*@return boolean
      */
-    public function afterDispatchVisitRepetition(OptionalList $expression, VisitAction $dispatchVisitResult = null);
+    public function afterDispatchVisitRepetition(Repetition $expression, VisitAction $dispatchVisitResult = null);
 }

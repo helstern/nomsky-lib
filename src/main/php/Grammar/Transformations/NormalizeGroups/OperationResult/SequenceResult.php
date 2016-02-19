@@ -2,9 +2,9 @@
 
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Group;
-use Helstern\Nomsky\Grammar\Expressions\Sequence;
+use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 
-use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\SequenceGroup\Operand;
+use Helstern\Nomsky\Grammar\Transformations\NormalizeGroups\ConcatenationGroup\Operand;
 
 class SequenceResult implements ResultInterface
 {
@@ -29,11 +29,11 @@ class SequenceResult implements ResultInterface
     }
 
     /**
-     * @return Sequence
+     * @return Concatenation
      */
     public function toExpression()
     {
-        return new Sequence(reset($this->sequenceItems), array_slice($this->sequenceItems, 1));
+        return new Concatenation(reset($this->sequenceItems), array_slice($this->sequenceItems, 1));
     }
 
     /**
