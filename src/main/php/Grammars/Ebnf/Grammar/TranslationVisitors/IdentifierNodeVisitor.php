@@ -33,10 +33,27 @@ class IdentifierNodeVisitor
     /**
      * @param IdentifierNode $astNode
      * @return bool
+     * @throws \DomainException
      */
     public function visitIdentifierNode(IdentifierNode $astNode)
     {
-        return true;
+        $name = $astNode->getIdentifierName();
+
+        $uppercase = strtoupper($name);
+        if ($uppercase == $name) {
+            $expression = new ExpressionSymbol(Symbol::TYPE_TERMINAL, $name);
+            $this->visitContext->pushExpression($expression);
+            return true;
+        }
+
+        $lowercase = strtolower($name);
+        if ($lowercase == $name) {
+            $expression = new ExpressionSymbol(Symbol::TYPE_NON_TERMINAL, $name);
+            $this->visitContext->pushExpression($expression);
+            return true;
+        }
+
+        throw new \DomainException('unknown type of identifier name');
     }
 
     /**
@@ -45,8 +62,6 @@ class IdentifierNodeVisitor
      */
     public function postVisitIdentifierNode(IdentifierNode $astNode)
     {
-        $name = $astNode->getIdentifierName();
-        $expression = new ExpressionSymbol(Symbol::TYPE_TERMINAL, $name);
-        $this->visitContext->pushExpression($expression);
+        return true;
     }
 }

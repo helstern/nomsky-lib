@@ -18,12 +18,18 @@ class LiteralNode extends AbstractEbnfNode implements AstNode
         $this->string = $rawString;
     }
 
+    public function getRawLiteral()
+    {
+        return $this->string;
+    }
+
     /**
      * @return string
      */
     public function getLiteral()
     {
-        return $this->string;
+        $delimiter = $this->string[0];
+        return trim($this->string, $delimiter);
     }
 
     public function getTextPosition()

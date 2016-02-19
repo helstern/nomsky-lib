@@ -61,6 +61,7 @@ class AstTranslatorContext
             throw new \Exception('marker not found');
         }
 
+        $list = array_reverse($list);
         return $list;
     }
 

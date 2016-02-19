@@ -26,7 +26,7 @@ class StackBasedAstWalker implements AstWalker
      * @param AstNode $astNode
      * @return bool
      * @throws \RuntimeException
-     */
+         */
     public function walk(AstNode $astNode)
     {
         /** @var WalkAction[] $stackOfExpressions */

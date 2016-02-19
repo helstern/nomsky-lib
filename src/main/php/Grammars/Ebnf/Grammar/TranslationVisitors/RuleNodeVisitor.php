@@ -53,11 +53,11 @@ class RuleNodeVisitor
      */
     public function postVisitRuleNode(RuleNode $astNode)
     {
-        $symbol = $this->visitContext->popLeftHandSymbol($this);
         $expressions = $this->visitContext->popExpressions($this);
-        array_pop($expressions);
-
-        $production = new StandardProduction($symbol, array_pop($expressions));
+        $symbol = $this->visitContext->popLeftHandSymbol($this);
+        //remove the lhs we just popped from the visit context
+        array_shift($expressions);
+        $production = new StandardProduction($symbol, array_shift($expressions));
 
         $this->visitContext->collectProduction($production);
         return true;
