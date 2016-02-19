@@ -52,8 +52,9 @@ if test -n "${PHPUNIT_ARGS_CONF}"; then
     PHPUNIT_ARGS="${PHPUNIT_ARGS_CONF} ${PHPUNIT_ARGS}"
 fi
 
+PHP='php'
 if test -n "${ARG_XDEBUG}"; then
-    PHPUNIT_ARGS="-d xdebug.remote_enable=1 -d xdebug.remote_connect_back=1 ${PHPUNIT_ARGS}"
+    PHP="${PHP} -d xdebug.remote_enable=1 -d xdebug.remote_connect_back=1"
 fi
 
-${PHPUNIT} ${PHPUNIT_ARGS}
+${PHP} ${PHPUNIT} ${PHPUNIT_ARGS}
