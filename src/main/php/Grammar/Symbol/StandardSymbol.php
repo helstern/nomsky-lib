@@ -1,12 +1,32 @@
 <?php namespace Helstern\Nomsky\Grammar\Symbol;
 
-class GenericSymbol implements Symbol
+class StandardSymbol implements Symbol
 {
     /** @var int  */
-    protected $type;
+    private $type;
 
     /** @var string */
-    protected $characters;
+    private $characters;
+
+    /**
+     * @param string $representation
+     *
+     * @return StandardSymbol
+     */
+    public static function nonTerminal($representation)
+    {
+        return new self(Symbol::TYPE_NON_TERMINAL, $representation);
+    }
+
+    /**
+     * @param string $representation
+     *
+     * @return StandardSymbol
+     */
+    public static function terminal($representation)
+    {
+        return new self(Symbol::TYPE_TERMINAL, $representation);
+    }
 
     /**
      * @param int $type

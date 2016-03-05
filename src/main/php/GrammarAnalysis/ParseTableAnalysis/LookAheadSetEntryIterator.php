@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\GrammarAnalysis\Sets;
+<?php namespace Helstern\Nomsky\GrammarAnalysis\ParseTableAnalysis;
 
 use Helstern\Nomsky\Grammar\Production\Production;
 use Helstern\Nomsky\Grammar\Symbol\SymbolSet;

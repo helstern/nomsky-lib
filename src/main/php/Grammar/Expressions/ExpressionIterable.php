@@ -2,7 +2,7 @@
 
 //TODO extending Expression is a hack, needs investigation
 
-interface ExpressionIterable extends \IteratorAggregate, \Countable, Expression
+interface ExpressionIterable extends \IteratorAggregate, \Countable
 {
     /**
      * @return  \Iterator|Expression[]

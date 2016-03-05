@@ -6,14 +6,14 @@ class Concatenation implements Expression, ExpressionIterable
     protected $expressions;
 
     /**
-     * @param Expression $startSymbol
-     * @param array|Expression[] $otherAlternatives
+     * @param Expression $head
+     * @param array|Expression[] $tail
      */
-    public function __construct(Expression $startSymbol, array $otherAlternatives = null)
+    public function __construct(Expression $head, array $tail = null)
     {
-        $this->expressions = array($startSymbol);
-        if (is_null($otherAlternatives) == false) {
-            $this->expressions = array_merge($this->expressions, $otherAlternatives);
+        $this->expressions = array($head);
+        if (is_null($tail) == false) {
+            $this->expressions = array_merge($this->expressions, $tail);
         }
     }
 

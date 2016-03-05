@@ -1,6 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\Production;
 
-use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
+use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
 use Helstern\Nomsky\Grammar\Expressions\Walker\Visit\NoDispatchDispatcher;
 
@@ -19,14 +19,14 @@ class StandardProduction implements Production
     /** @var Symbol */
     protected $nonTerminal;
 
-    /** @var ExpressionIterable  */
+    /** @var Expression */
     protected $expression;
 
     /**
      * @param Symbol $nonTerminal
-     * @param ExpressionIterable $expression
+     * @param Expression $expression
      */
-    public function __construct(Symbol $nonTerminal, ExpressionIterable $expression)
+    public function __construct(Symbol $nonTerminal, Expression $expression)
     {
         $this->nonTerminal = $nonTerminal;
         $this->expression = $expression;

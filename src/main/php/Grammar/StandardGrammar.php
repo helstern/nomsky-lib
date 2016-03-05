@@ -38,7 +38,7 @@ class StandardGrammar implements Grammar
     public function getStartSymbol()
     {
         $firstProduction = $this->productions[0];
-        $startSymbol = $firstProduction->getFirstSymbol();
+        $startSymbol = $firstProduction->getNonTerminal();
 
         return $startSymbol;
     }

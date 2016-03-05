@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\GrammarAnalysis\Sets;
+<?php namespace Helstern\Nomsky\GrammarAnalysis\ParseTableAnalysis;
 
 use Helstern\Nomsky\Grammar\Production\HashKey\HashKeyFactory;
 use Helstern\Nomsky\Grammar\Production\Production;
@@ -7,10 +7,10 @@ use Helstern\Nomsky\Grammar\Symbol\SymbolSet;
 class LookAheadSets
 {
     /** @var array|SymbolSet[] */
-    protected $sets = array();
+    private $sets = array();
 
     /** @var HashKeyFactory */
-    protected $productionHashKeyFactory;
+    private $productionHashKeyFactory;
 
     /**
      * @param HashKeyFactory $hashKeyFactory
@@ -20,6 +20,12 @@ class LookAheadSets
         $this->productionHashKeyFactory = $hashKeyFactory;
     }
 
+    /**
+     * @param \Helstern\Nomsky\Grammar\Production\Production $production
+     * @param \Helstern\Nomsky\Grammar\Symbol\SymbolSet $predictSet
+     *
+     * @return bool
+     */
     public function add(Production $production, SymbolSet $predictSet)
     {
         $hashKey = $this->productionHashKeyFactory->hash($production);

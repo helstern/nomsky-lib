@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\GrammarAnalysis\Sets;
+<?php namespace Helstern\Nomsky\GrammarAnalysis\ParseSets;
 
 use Helstern\Nomsky\Grammar\Symbol\ArraySet;
 use Helstern\Nomsky\Grammar\Symbol\EpsilonSymbol;
@@ -6,13 +6,13 @@ use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
 use Helstern\Nomsky\Grammar\Symbol\SymbolSet;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 
-class PredictiveParsingSets
+class ParseSets
 {
     /** @var array|ArraySet[] */
-    protected $terminalSets;
+    private $terminalSets;
 
     /** @var array|Symbol[] */
-    protected $nonTerminals;
+    private $nonTerminals;
 
     /**
      * @param array|Symbol[] $nonTerminals
@@ -54,11 +54,16 @@ class PredictiveParsingSets
 
     /**
      * @param Symbol $nonTerminal
+     *
      * @return \ArrayIterator|Symbol[]
+     * @throws \Exception
      */
-    protected function getTerminalSetIterator(Symbol $nonTerminal)
+    private function getTerminalSetIterator(Symbol $nonTerminal)
     {
         $terminalSet = $this->getTerminalSet($nonTerminal);
+        if (is_null($terminalSet)) {
+            throw new \Exception('no terminal set found for symbol ' . $nonTerminal->toString());
+        }
         return $terminalSet->getIterator();
     }
 
@@ -91,11 +96,16 @@ class PredictiveParsingSets
 
     /**
      * @param Symbol $nonTerminal
+     *
      * @return bool
+     * @throws \Exception
      */
     public function addEpsilon(Symbol $nonTerminal)
     {
         $terminalSet = $this->getTerminalSet($nonTerminal);
+        if (is_null($terminalSet)) {
+            throw new \Exception('no terminal set found for symbol ' . $nonTerminal->toString() );
+        }
         return $terminalSet->add(EpsilonSymbol::singletonInstance());
     }
 

@@ -6,7 +6,7 @@ use Helstern\Nomsky\Grammar\Production\Production;
 class Converter
 {
     /** @var array | ProductionTransformer[] */
-    protected $transformers;
+    private $transformers;
 
     public function __construct(array $transformers)
     {
@@ -30,7 +30,7 @@ class Converter
 
                 $processed      = array_reverse($processed);
                 $tmpList        = array_merge($processed, $tmpList);
-            } while(!is_null(key($intermediaryProductionsList)));
+            } while (!is_null(key($intermediaryProductionsList)));
             $intermediaryProductionsList = array_splice($tmpList, 0);
         }
 
