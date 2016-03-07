@@ -1,92 +1,84 @@
 <?php namespace Helstern\Nomsky\GrammarAnalysis\Algorithms;
 
-use Helstern\Nomsky\Grammar\Expressions\Concatenation;
-use Helstern\Nomsky\Grammar\Expressions\Expression;
-use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
-use Helstern\Nomsky\Grammar\Production\StandardProduction;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolTypeEquals;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
+use Helstern\Nomsky\Grammar\Symbol\SymbolSet;
+use Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets;
 
 /**
  * Calculates the follow set of non-terminals in an  expression
  */
 class FollowSetCalculator
 {
+    /** @var  FirstSetCalculator */
+    private $firstSetCalculator;
+
+    public function __construct(FirstSetCalculator $firstSetCalculator)
+    {
+        $this->firstSetCalculator = $firstSetCalculator;
+    }
+
     /**
-     * For each non terminal in $expression get the rest of symbols following it
+     * Lists all occurrences B of a non terminal in the right hand side of a production A -> aBc
      *
-     * @param Concatenation $expression
+     * @param \ArrayObject $existing
+     * @param Symbol $lhs
+     * @param array|Symbol[] $rhs
      *
-     * @return array
+     * @return int the number of added occurrences
      */
-    public function processConcatenation(Concatenation $expression)
+    public function addNonTerminalOccurrences(\ArrayObject $existing, $lhs, array $rhs)
     {
         $isNonTerminal = SymbolTypeEquals::newInstanceMatchingNonTerminals();
-        $listOfExpressions = $expression->toArray();
 
-        $listOfProductions = [];
+        $added = 0;
+        $preceding = [];
         do {
-            $symbolOrExpression = array_shift($listOfExpressions);
-            if ($symbolOrExpression instanceof Symbol && $isNonTerminal->matchSymbol($symbolOrExpression)) {
-                $production = $this->createProduction($symbolOrExpression, $listOfExpressions);
-                $listOfProductions[] = $production;
+            $symbol = array_shift($rhs);
+            if ($isNonTerminal->matchSymbol($symbol)) {
+                $occurrence = new SymbolOccurrence($symbol, $preceding, $rhs, $lhs);
+                $existing->append($occurrence);
+                $added++;
+            } else {
+                $preceding[] = $symbol;
             }
-        } while (count($listOfExpressions));
+        } while (count($rhs));
 
-        return $listOfProductions;
+        return $added;
     }
 
     /**
-     * Returns a one element array
+     * @param \Helstern\Nomsky\Grammar\Symbol\SymbolSet $set
+     * @param SymbolOccurrence $occurrence
+     * @param \Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets $followSets
+     * @param \Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets $firstSets
      *
-     * @param Expression $expression
-     *
-     * @return array
+     * @return bool
      */
-    public function processExpressionAsList(Expression $expression)
-    {
-        $production = $this->processExpression($expression);
-        if (!is_null($production)) {
-            return [$production];
+    public function processOccurrence(
+        SymbolSet $set,
+        SymbolOccurrence $occurrence,
+        ParseSets $followSets,
+        ParseSets $firstSets
+    ) {
+        $symbol = $occurrence->getSymbol();
+        $isTerminal = SymbolTypeEquals::newInstanceMatchingTerminals();
+        if ($isTerminal->matchSymbol($symbol)) {
+            return false;
         }
 
-        return [];
-    }
-
-    /**
-     *
-     * @param Expression $expression
-     *
-     * @return StandardProduction|null
-     */
-    public function processExpression(Expression $expression)
-    {
-        $isNonTerminal = SymbolTypeEquals::newInstanceMatchingNonTerminals();
-        if ($expression instanceof Symbol && $isNonTerminal->matchSymbol($expression)) {
-            $production = new StandardProduction($expression, ExpressionSymbol::createAdapterForEpsilon());
-            return $production;
-        }
-        return null;
-    }
-
-    /**
-     * @param \Helstern\Nomsky\Grammar\Symbol\Symbol $lhs
-     * @param array $rhs
-     *
-     * @return StandardProduction
-     */
-    private function createProduction(Symbol $lhs, array $rhs)
-    {
-        $remaining = count($rhs);
-
-        if (0 == $remaining) {
-            $production = new StandardProduction($lhs, ExpressionSymbol::createAdapterForEpsilon());
-        } elseif (1 == $remaining) {
-            $production = new StandardProduction($lhs, $rhs[0]);
-        } else {
-            $production = new StandardProduction($lhs, new Concatenation($rhs[0], array_slice($rhs, 1)));
+        //last symbol
+        $following = $occurrence->getFollowing();
+        if (empty($following)) {
+            return false;
         }
 
-        return $production;
+        $epsilonAdded = $this->firstSetCalculator->processSymbolList($set, $following, $firstSets);
+        if ($epsilonAdded) {
+            $lhs = $occurrence->getProductionNonTerminal();
+            $otherSet  = $followSets->getTerminalSet($lhs);
+            $set->addAll($otherSet);
+        }
+        return true;
     }
 }

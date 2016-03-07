@@ -1,9 +1,8 @@
-<?php namespace Helstern\Nomsky\GrammarAnalysis\ParseSets;
+<?php namespace Helstern\Nomsky\GrammarAnalysis\Algorithms;
 
-use Helstern\Nomsky\Grammar\Production\Production;
 use Helstern\Nomsky\Grammar\Symbol\SymbolSet;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
-use Helstern\Nomsky\GrammarAnalysis\Predicates\SymbolIsEpsilon;
+use Helstern\Nomsky\GrammarAnalysis\Production\NormalizedProduction;
 
 
 /**
@@ -12,32 +11,17 @@ use Helstern\Nomsky\GrammarAnalysis\Predicates\SymbolIsEpsilon;
  *
  * The empty set is important because the non-terminals that can derive epsilon may disappear during a parse
  */
-class EmptySetFiller
+class EmptySetCalculator
 {
     /**
      * @param SymbolSet $set
-     * @param array|Production[] $list
-     */
-    public function addProductionList(SymbolSet $set, array $list)
-    {
-        do {
-            $changes = false;
-            foreach ($list as $production) {
-                $changes |= $this->addProduction($set, $production);
-            }
-        } while ($changes);
-
-    }
-
-    /**
-     * @param SymbolSet $set
-     * @param Production $production
+     * @param NormalizedProduction $production
      *
      * @return bool
      */
-    public function addProduction(SymbolSet $set, Production $production)
+    public function processProduction(SymbolSet $set, NormalizedProduction $production)
     {
-        $nonTerminal = $production->getNonTerminal();
+        $nonTerminal = $production->getLeftHandSide();
         if ($set->contains($nonTerminal)) {
             return false;
         }
@@ -58,11 +42,11 @@ class EmptySetFiller
     }
 
     /**
-     * @param Production $production
+     * @param NormalizedProduction $production
      *
      * @return bool
      */
-    private function directlyGeneratesEpsilon(Production $production)
+    private function directlyGeneratesEpsilon(NormalizedProduction $production)
     {
         //directly generates epsilon
         $answer = $production->count() == 1;
@@ -73,14 +57,14 @@ class EmptySetFiller
     }
 
     /**
-     * @param Production $production
+     * @param NormalizedProduction $production
      * @param SymbolSet $alreadyAdded
      *
      * @return bool
      */
-    private function indirectlyGeneratesEpsilon(Production $production, SymbolSet $alreadyAdded)
+    private function indirectlyGeneratesEpsilon(NormalizedProduction $production, SymbolSet $alreadyAdded)
     {
-        $rhsItems = $production->getSymbols();
+        $rhsItems = $production->getRightHandSide();
         /** @var Symbol $item */
         $item     = reset($rhsItems);
         $answer = $alreadyAdded->contains($item);

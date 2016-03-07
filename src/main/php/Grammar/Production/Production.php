@@ -17,12 +17,6 @@ interface Production extends \Countable
     public function getNonTerminal();
 
     /**
-     * @param $nonTerminal
-     * @return boolean
-     */
-    public function startsWith($nonTerminal);
-
-    /**
      * @param \Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate $predicate
      * @param int $max
      * @return int

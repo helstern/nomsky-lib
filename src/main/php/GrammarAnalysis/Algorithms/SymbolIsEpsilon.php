@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\GrammarAnalysis\Predicates;
+<?php namespace Helstern\Nomsky\GrammarAnalysis\Algorithms;
 
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammar\Symbol\EpsilonSymbol;

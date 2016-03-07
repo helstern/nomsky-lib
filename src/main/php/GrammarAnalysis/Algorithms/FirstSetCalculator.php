@@ -1,15 +1,13 @@
 <?php namespace Helstern\Nomsky\GrammarAnalysis\Algorithms;
 
-use Helstern\Nomsky\Grammar\Expressions\Concatenation;
-use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Symbol\EpsilonSymbol;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\MatchCountingInterceptor;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\Inverter;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolTypeEquals;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammar\Symbol\SymbolSet;
-use Helstern\Nomsky\GrammarAnalysis\Predicates\SymbolIsEpsilon;
 use Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets;
+use Helstern\Nomsky\GrammarAnalysis\Production\NormalizedProduction;
 
 /**
  * Calculates the first set of an expression
@@ -17,7 +15,7 @@ use Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets;
 class FirstSetCalculator
 {
     /**
-     * @var \Helstern\Nomsky\GrammarAnalysis\Predicates\SymbolIsEpsilon
+     * @var \Helstern\Nomsky\GrammarAnalysis\Algorithms\SymbolIsEpsilon
      */
     private $symbolIsEpsilon;
 
@@ -28,14 +26,52 @@ class FirstSetCalculator
 
     /**
      * @param \Helstern\Nomsky\Grammar\Symbol\SymbolSet $set
-     * @param \Helstern\Nomsky\Grammar\Expressions\Concatenation $expression
+     * @param \Helstern\Nomsky\Grammar\Symbol\Symbol $symbol
+     * @param \Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets $firstSets
+     *
+     * @return boolean if the epsilon symbol was added to $set
+     */
+    public function processSymbol(SymbolSet $set, Symbol $symbol, ParseSets $firstSets)
+    {
+        $symbolIsEpsilon = SymbolIsEpsilon::singletonInstance();
+        if ($symbolIsEpsilon->matchSymbol($symbol)) {
+            $set->add(new EpsilonSymbol());
+            return true;
+        }
+
+        $symbolsIsNonTerminal = SymbolTypeEquals::newInstanceMatchingNonTerminals();
+        if ($symbolsIsNonTerminal->matchSymbol($symbol)) {
+            $epsilonCounter = new MatchCountingInterceptor($symbolIsEpsilon);
+            $otherSet = $firstSets->filterTerminalSet($symbol, $this->createAcceptTerminalPredicate($epsilonCounter));
+            $set->addAll($otherSet);
+
+            if ($epsilonCounter->getMatchCount() > 0) {
+                $set->add(new EpsilonSymbol());
+                return true;
+            }
+
+            return false;
+        }
+
+        $set->add($symbol);
+        return false;
+    }
+
+    /**
+     * @param \Helstern\Nomsky\Grammar\Symbol\SymbolSet $set
+     * @param array|NormalizedProduction[] $list
      * @param \Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets $firstSets
      *
      * @return bool if the epsilon symbol was added to $set
      */
-    public function processConcatenation(SymbolSet $set, Concatenation $expression, ParseSets $firstSets)
+    public function processSymbolList(SymbolSet $set, array $list, ParseSets $firstSets)
     {
-        $list = $expression->toArray();
+        if (1 == count($list)) {
+            /** @var Symbol $symbol */
+            $symbol = $list[0];
+            return $this->processSymbol($set, $symbol, $firstSets);
+        }
+
         $symbolIsEpsilon = SymbolIsEpsilon::singletonInstance();
         $symbolsIsNonTerminal = SymbolTypeEquals::newInstanceMatchingNonTerminals();
 
@@ -43,8 +79,10 @@ class FirstSetCalculator
         $lastSet = null;
         $epsilonCounter = new MatchCountingInterceptor($symbolIsEpsilon);
 
+        //we assume there is no epsilon symbol in the list
+
         $lastSymbol = reset($list);
-        if ($lastSymbol instanceof Symbol && $symbolsIsNonTerminal->matchSymbol($lastSymbol)) {
+        if ($symbolsIsNonTerminal->matchSymbol($lastSymbol)) {
             $lastSet = $firstSets->filterTerminalSet(
                 $lastSymbol,
                 $this->createAcceptTerminalPredicate($epsilonCounter)
@@ -56,7 +94,7 @@ class FirstSetCalculator
 
         for (
             next($list);
-            !is_null(key($list)) && $lastSymbol instanceof Symbol && $symbolsIsNonTerminal->matchSymbol($lastSymbol) && $epsilonCounter->getMatchCount() > 0;
+            !is_null(key($list)) && $symbolsIsNonTerminal->matchSymbol($lastSymbol) && $epsilonCounter->getMatchCount() > 0;
             next($list)
         ) {
             $lastSymbol = current($list);
@@ -72,48 +110,11 @@ class FirstSetCalculator
 
         if (
             is_null(key($list))
-            && $symbolsIsNonTerminal->matchSymbol($lastSymbol) && $epsilonCounter->getMatchCount() > 0
+            && $symbolsIsNonTerminal->matchSymbol($lastSymbol)
+            && $epsilonCounter->getMatchCount() > 0
         ) {
             $set->add(new EpsilonSymbol());
             return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param \Helstern\Nomsky\Grammar\Symbol\SymbolSet $set
-     * @param \Helstern\Nomsky\Grammar\Expressions\Expression $expression
-     * @param \Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets $firstSets
-     *
-     * @return boolean if the epsilon symbol was added to $set
-     */
-    public function processExpression(SymbolSet $set, Expression $expression, ParseSets $firstSets)
-    {
-        $symbolIsEpsilon = SymbolIsEpsilon::singletonInstance();
-        $symbolsIsNonTerminal = SymbolTypeEquals::newInstanceMatchingNonTerminals();
-
-        if ($expression instanceof Symbol && $symbolIsEpsilon->matchSymbol($expression)) {
-            $set->add(new EpsilonSymbol());
-            return true;
-        }
-
-        if ($expression instanceof Symbol && $symbolsIsNonTerminal->matchSymbol($expression)) {
-            $epsilonCounter = new MatchCountingInterceptor($symbolIsEpsilon);
-            $otherSet = $firstSets->filterTerminalSet($expression, $this->createAcceptTerminalPredicate($epsilonCounter));
-            $set->addAll($otherSet);
-
-            if ($epsilonCounter->getMatchCount() > 0) {
-                $set->add(new EpsilonSymbol());
-                return true;
-            }
-
-            return false;
-        }
-
-        if ($expression instanceof Symbol) {
-            $set->add($expression);
-            return false;
         }
 
         return false;

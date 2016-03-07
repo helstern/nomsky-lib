@@ -4,10 +4,9 @@ use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
 use Helstern\Nomsky\Grammar\Expressions\Walker\Visit\NoDispatchDispatcher;
 
-use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\CountAllStateMachine;
-use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\CountMaxStateMachine;
-use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\FindFirstStateMachine;
-use Helstern\Nomsky\Grammar\Production\ExpressionWalkState\FindMaxStateMachine;
+use Helstern\Nomsky\Grammar\Production\Expression\CountMaxStateMachine;
+use Helstern\Nomsky\Grammar\Production\Expression\FindFirstStateMachine;
+use Helstern\Nomsky\Grammar\Production\Expression\FindMaxStateMachine;
 
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
@@ -42,14 +41,9 @@ class StandardProduction implements Production
         return $this->expression;
     }
 
-    public function startsWith($nonTerminal)
-    {
-        // TODO: Implement startsWith() method.
-    }
-
     public function count()
     {
-        $count = $this->countAll(AnySymbolPredicate::singletonInstance());
+        $count = $this->countMax(AnySymbolPredicate::singletonInstance(), PHP_INT_MAX);
         return $count;
     }
 
@@ -67,15 +61,10 @@ class StandardProduction implements Production
 
     public function countAll(SymbolPredicate $predicate)
     {
-        $findFirstStateMachine  = new CountAllStateMachine($predicate);
-        $walker                 = new DepthFirstStackBasedWalker($findFirstStateMachine);
-
-        $expression             = $this->getExpression();
-        $walker->walk($expression, NoDispatchDispatcher::singletonInstance());
-
-        $count = $findFirstStateMachine->getCount();
+        $count = $this->countMax($predicate, PHP_INT_MAX);
         return $count;
     }
+
 
     public function findMax(SymbolPredicate $predicate, $max)
     {

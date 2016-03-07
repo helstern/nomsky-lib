@@ -1,8 +1,8 @@
-<?php namespace Helstern\Nomsky\Grammar\Production\ExpressionWalkState;
+<?php namespace Helstern\Nomsky\Grammar\Production\Expression;
 
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Walker\WalkState\WalkStateMachine;
-use Helstern\Nomsky\Grammar\Production\SymbolPredicate\ExpressionAdapter as PredicateExpressionAdapter;
+use Helstern\Nomsky\Grammar\Production\Expression\SymbolPredicateAdapter as PredicateExpressionAdapter;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
 
 class CountMaxStateMachine implements WalkStateMachine

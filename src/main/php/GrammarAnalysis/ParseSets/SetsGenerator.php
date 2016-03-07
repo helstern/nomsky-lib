@@ -1,94 +1,160 @@
 <?php namespace Helstern\Nomsky\GrammarAnalysis\ParseSets;
 
-use Helstern\Nomsky\Grammar\Grammar;
+use Helstern\Nomsky\Grammar\Symbol\ArraySet;
+use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammar\Symbol\SymbolSet;
+use Helstern\Nomsky\GrammarAnalysis\Algorithms\FirstSetCalculator;
+use Helstern\Nomsky\GrammarAnalysis\Algorithms\FollowSetCalculator;
+use Helstern\Nomsky\GrammarAnalysis\Algorithms\EmptySetCalculator;
+use Helstern\Nomsky\GrammarAnalysis\Algorithms\SymbolOccurrence;
+use Helstern\Nomsky\GrammarAnalysis\Production\NormalizedProduction;
 
 class SetsGenerator
 {
     /**
-     * @var EmptySetFiller
+     * @var FirstSetCalculator
      */
-    private $emptySetGenerator;
+    private $firstSetCalculator;
 
     /**
-     * @var FirstSetFiller
+     * @var FollowSetCalculator
      */
-    private $firstSetGenerator;
+    private $followSetCalculator;
 
     /**
-     * @var FollowSetFiller
+     * @var EmptySetCalculator
      */
-    private $followSetGenerator;
+    private $emptySetCalculator;
 
     /**
-     * @param EmptySetFiller $emptySetGenerator
-     * @param FirstSetFiller $firstSetGenerator
-     * @param FollowSetFiller $followSetGenerator
+     * @param EmptySetCalculator $emptySetGenerator
+     * @param FirstSetCalculator $firstSetCalculator
+     * @param FollowSetCalculator $followSetCalculator
      */
     public function __construct(
-        EmptySetFiller $emptySetGenerator,
-        FirstSetFiller $firstSetGenerator,
-        FollowSetFiller $followSetGenerator
+        EmptySetCalculator $emptySetGenerator,
+        FirstSetCalculator $firstSetCalculator,
+        FollowSetCalculator $followSetCalculator
     ){
-        $this->emptySetGenerator = $emptySetGenerator;
-        $this->firstSetGenerator = $firstSetGenerator;
-        $this->followSetGenerator = $followSetGenerator;
+        $this->emptySetCalculator = $emptySetGenerator;
+        $this->firstSetCalculator = $firstSetCalculator;
+        $this->followSetCalculator = $followSetCalculator;
     }
 
     /**
-     * @param Grammar $g
+     * @param array|NormalizedProduction[] $productions
      * @param SymbolSet $emptySet
-     *
-     * @return SetsGenerator
+
+     * @return \Helstern\Nomsky\GrammarAnalysis\ParseSets\SetsGenerator
      */
-    public function generateEmptySet(Grammar $g, SymbolSet $emptySet)
+    public function generateEmptySet(array $productions, SymbolSet $emptySet)
     {
-        $productions = $g->getProductions();
-        $this->emptySetGenerator->addProductionList($emptySet, $productions);
+        do {
+            $changes = false;
+            foreach ($productions as $production) {
+                $changes |= $this->emptySetCalculator->processProduction($emptySet, $production);
+            }
+        } while ($changes);
+
         return $this;
     }
 
     /**
-     * @param Grammar $g
+     * @param array|NormalizedProduction[] $productions
      * @param ParseSets $firstSets
      * @param SymbolSet $emptySet
      *
      * @return SetsGenerator
      */
     public function generateFirstSets(
-        Grammar $g,
+        array $productions,
         ParseSets $firstSets,
         SymbolSet $emptySet
     ) {
-        //add epsilon to the first sets of the non terminals which generate epsilon
-        $nonTerminals = $g->getNonTerminals();
-        $this->firstSetGenerator->addEpsilonNonTerminals($firstSets, $emptySet, $nonTerminals);
 
-        //process all the productions which do not generate epsilon directly
-        $productions = $g->getProductions();
-        $this->firstSetGenerator->addProductionList($firstSets, $productions);
+        //add epsilon to the first sets of the non terminals which generate epsilon
+        foreach ($productions as $production) {
+            $lhs = $production->getLeftHandSide();
+            if ($emptySet->contains($lhs)) {
+                $firstSets->addEpsilon($lhs);
+            }
+        }
+
+        //initialize the obvious first sets of productions which start with a terminal
+        foreach ($productions as $production) {
+            $symbol = $production->getFirstSymbol();
+            if ($symbol->getType() == Symbol::TYPE_TERMINAL) {
+                $firstSets->addTerminal($production->getLeftHandSide(), $symbol);
+            }
+        }
+
+        //initialize first sets for productions which contain several non-terminals
+        do {
+            $changes = false;
+            foreach ($productions as $production) {
+
+                $updateSet = new ArraySet();
+                $rhs = $production->getRightHandSide();
+                $this->firstSetCalculator->processSymbolList($updateSet, $rhs, $firstSets);
+
+                $nonTerminal = $production->getLeftHandSide();
+                $changes |= $firstSets->addAllTerminals($nonTerminal, $updateSet);
+
+            }
+        } while ($changes);
+
         return $this;
     }
 
     /**
-     * @param Grammar $g
+     * @param array|NormalizedProduction[] $productions
+     * @param Symbol $startSymbol
      * @param ParseSets $followSets
      * @param ParseSets $firstSets
      *
-     * @return SetsGenerator
+     * @return \Helstern\Nomsky\GrammarAnalysis\ParseSets\SetsGenerator
      */
     public function generateFollowSets(
-        Grammar $g,
+        array $productions,
+        Symbol $startSymbol,
         ParseSets $followSets,
         ParseSets $firstSets
     ) {
-        $startSymbol = $g->getStartSymbol();
-        $this->followSetGenerator->addEpsilon($followSets, $startSymbol);
+        $followSets->addEpsilon($startSymbol);
 
-        $productions = $g->getProductions();
-        $this->followSetGenerator->addProductionList($followSets, $firstSets, $productions);
+        $occurrences = new \ArrayObject();
+        foreach ($productions as $production) {
+            $lhs = $production->getLeftHandSide();
+            $rhs = $production->getRightHandSide();
+            $this->followSetCalculator->addNonTerminalOccurrences($occurrences, $lhs, $rhs);
+        }
+
+        do {
+            $changes = false;
+            /** @var SymbolOccurrence $occurrence */
+            foreach ($occurrences as $occurrence) {
+                $set = new ArraySet();
+                if ($this->followSetCalculator->processOccurrence($set, $occurrence, $followSets, $firstSets)) {
+                    $lhs = $occurrence->getProductionNonTerminal();
+                    $changes |= $followSets->addAllTerminals($lhs, $set);
+                }
+            }
+        } while ($changes);
 
         return $this;
+    }
+
+    /**
+     * @param array|NormalizedProduction[] $productions
+     * @param \Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets $followSets
+     * @param \Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets $firstSets
+     */
+    public function generateLookAheadSets(
+        array $productions,
+        ParseSets $followSets,
+        ParseSets $firstSets
+    ) {
+
     }
 
 }

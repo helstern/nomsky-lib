@@ -1,4 +1,4 @@
-<?php namespace Helstern\Nomsky\Grammar\Production\SymbolPredicate;
+<?php namespace Helstern\Nomsky\Grammar\Production\Expression;
 
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
@@ -10,7 +10,7 @@ use Helstern\Nomsky\Grammar\Symbol\Symbol;
  * Class ExpressionAdapter
  * @package Helstern\Nomsky\Grammar\Rule\SymbolPredicate
  */
-class ExpressionAdapter implements SymbolPredicate
+class SymbolPredicateAdapter implements SymbolPredicate
 {
     /** @var SymbolPredicate */
     protected $symbolPredicate;

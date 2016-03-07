@@ -3,7 +3,7 @@
 class Concatenation implements Expression, ExpressionIterable
 {
     /** @var Expression[] */
-    protected $expressions;
+    private $expressions;
 
     /**
      * @param Expression $head
