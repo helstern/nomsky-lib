@@ -42,7 +42,8 @@ class FirstSetCalculator
         $symbolsIsNonTerminal = SymbolTypeEquals::newInstanceMatchingNonTerminals();
         if ($symbolsIsNonTerminal->matchSymbol($symbol)) {
             $epsilonCounter = new MatchCountingInterceptor($symbolIsEpsilon);
-            $otherSet = $firstSets->filterTerminalSet($symbol, $this->createAcceptTerminalPredicate($epsilonCounter));
+            $acceptPredicate = Inverter::newInstance($epsilonCounter);
+            $otherSet = $firstSets->filterTerminalSet($symbol, $acceptPredicate);
             $set->addAll($otherSet);
 
             if ($epsilonCounter->getMatchCount() > 0) {
@@ -66,6 +67,11 @@ class FirstSetCalculator
      */
     public function processSymbolList(SymbolSet $set, array $list, ParseSets $firstSets)
     {
+        if (0 == count($list)) {
+            $set->add(new EpsilonSymbol());
+            return true;
+        }
+
         if (1 == count($list)) {
             /** @var Symbol $symbol */
             $symbol = $list[0];
@@ -83,10 +89,8 @@ class FirstSetCalculator
 
         $lastSymbol = reset($list);
         if ($symbolsIsNonTerminal->matchSymbol($lastSymbol)) {
-            $lastSet = $firstSets->filterTerminalSet(
-                $lastSymbol,
-                $this->createAcceptTerminalPredicate($epsilonCounter)
-            );
+            $acceptPredicate = Inverter::newInstance($epsilonCounter);
+            $lastSet = $firstSets->filterTerminalSet($lastSymbol, $acceptPredicate);
             $set->addAll($lastSet);
         } else {
             $set->add($lastSymbol);
@@ -100,10 +104,8 @@ class FirstSetCalculator
             $lastSymbol = current($list);
 
             $epsilonCounter = new MatchCountingInterceptor($symbolIsEpsilon);
-            $lastSet = $firstSets->filterTerminalSet(
-                $lastSymbol,
-                $this->createAcceptTerminalPredicate($epsilonCounter)
-            );
+            $acceptPredicate = Inverter::newInstance($epsilonCounter);
+            $lastSet = $firstSets->filterTerminalSet($lastSymbol, $acceptPredicate);
 
             $set->addAll($lastSet);
         }
@@ -118,15 +120,5 @@ class FirstSetCalculator
         }
 
         return false;
-    }
-
-    /**
-     * @param \Helstern\Nomsky\Grammar\Symbol\Predicate\MatchCountingInterceptor $epsilonMatchCountPredicate
-     *
-     * @return \Helstern\Nomsky\Grammar\Symbol\Predicate\Inverter
-     */
-    private function createAcceptTerminalPredicate(MatchCountingInterceptor $epsilonMatchCountPredicate)
-    {
-        return Inverter::newInstance($epsilonMatchCountPredicate);
     }
 }

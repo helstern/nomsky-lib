@@ -18,4 +18,15 @@ class SetsFactory
 
         return $sets;
     }
+
+    /**
+     * @return \Helstern\Nomsky\GrammarAnalysis\ParseSets\LookAheadSets
+     */
+    public function createEmptyLookAheadSets()
+    {
+        $hashFactory = new SimpleHashKeyFactory();
+        $sets = new LookAheadSets($hashFactory);
+
+        return $sets;
+    }
 }

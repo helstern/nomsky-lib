@@ -1,8 +1,7 @@
-<?php namespace Helstern\Nomsky\GrammarAnalysis\ParseTableAnalysis;
+<?php namespace Helstern\Nomsky\GrammarAnalysis\ParseSets;
 
-use Helstern\Nomsky\Grammar\Production\HashKey\HashKeyFactory;
-use Helstern\Nomsky\Grammar\Production\Production;
 use Helstern\Nomsky\Grammar\Symbol\SymbolSet;
+use Helstern\Nomsky\GrammarAnalysis\Production\NormalizedProduction;
 
 class LookAheadSets
 {
@@ -21,33 +20,35 @@ class LookAheadSets
     }
 
     /**
-     * @param \Helstern\Nomsky\Grammar\Production\Production $production
-     * @param \Helstern\Nomsky\Grammar\Symbol\SymbolSet $predictSet
+     * Adds a lookahead set for a production
+     *
+     * @param \Helstern\Nomsky\GrammarAnalysis\Production\NormalizedProduction $key
+     * @param \Helstern\Nomsky\Grammar\Symbol\SymbolSet $value
      *
      * @return bool
      */
-    public function add(Production $production, SymbolSet $predictSet)
+    public function add(NormalizedProduction $key, SymbolSet $value)
     {
-        $hashKey = $this->productionHashKeyFactory->hash($production);
-        if (array_key_exists($hashKey->toString(), $this->sets)) {
+        $hashKey = $this->productionHashKeyFactory->hash($key);
+        if (array_key_exists($hashKey, $this->sets)) {
             return false;
         }
 
-        $this->sets[$hashKey->toString()] = new LookAheadSetEntry($production, $predictSet);
+        $this->sets[$hashKey] = new LookAheadSetEntry($key, $value);
         return true;
     }
 
     /**
-     * @param Production $production
+     * @param NormalizedProduction $production
      * @return SymbolSet|null
      */
-    public function getSet(Production $production)
+    public function getSet(NormalizedProduction $production)
     {
         $hashKey = $this->productionHashKeyFactory->hash($production);
-        if (array_key_exists($hashKey->toString(), $this->sets)) {
+        if (array_key_exists($hashKey, $this->sets)) {
             /** @var LookAheadSetEntry $entry */
-            $entry = $this->sets[$hashKey->toString()];
-            return $entry->getSymbolSet();
+            $entry = $this->sets[$hashKey];
+            return $entry->getValue();
         }
 
         return null;
@@ -60,7 +61,7 @@ class LookAheadSets
     {
         return array_map(
             function (LookAheadSetEntry $entry) {
-                return $entry->getSymbolSet();
+                return $entry->getValue();
             },
             $this->sets
         );

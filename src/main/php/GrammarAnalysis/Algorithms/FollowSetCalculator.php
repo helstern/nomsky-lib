@@ -1,5 +1,6 @@
 <?php namespace Helstern\Nomsky\GrammarAnalysis\Algorithms;
 
+use Helstern\Nomsky\Grammar\Symbol\EpsilonSymbol;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolTypeEquals;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammar\Symbol\SymbolSet;
@@ -67,14 +68,10 @@ class FollowSetCalculator
             return false;
         }
 
-        //last symbol
         $following = $occurrence->getFollowing();
-        if (empty($following)) {
-            return false;
-        }
-
         $epsilonAdded = $this->firstSetCalculator->processSymbolList($set, $following, $firstSets);
         if ($epsilonAdded) {
+            $set->remove(new EpsilonSymbol());
             $lhs = $occurrence->getProductionNonTerminal();
             $otherSet  = $followSets->getTerminalSet($lhs);
             $set->addAll($otherSet);

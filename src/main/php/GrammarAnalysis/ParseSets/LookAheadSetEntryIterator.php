@@ -1,7 +1,7 @@
-<?php namespace Helstern\Nomsky\GrammarAnalysis\ParseTableAnalysis;
+<?php namespace Helstern\Nomsky\GrammarAnalysis\ParseSets;
 
-use Helstern\Nomsky\Grammar\Production\Production;
 use Helstern\Nomsky\Grammar\Symbol\SymbolSet;
+use Helstern\Nomsky\GrammarAnalysis\Production\NormalizedProduction;
 
 class LookAheadSetEntryIterator implements \Iterator
 {
@@ -24,7 +24,7 @@ class LookAheadSetEntryIterator implements \Iterator
         if ($this->innerIterator->valid()) {
             /** @var LookAheadSetEntry $entry */
             $entry = $this->innerIterator->current();
-            return $entry->getSymbolSet();
+            return $entry->getValue();
         }
 
         return null;
@@ -36,14 +36,14 @@ class LookAheadSetEntryIterator implements \Iterator
     }
 
     /**
-     * @return Production|null
+     * @return NormalizedProduction|null
      */
     public function key()
     {
         if ($this->innerIterator->valid()) {
             /** @var LookAheadSetEntry $entry */
             $entry = $this->innerIterator->current();
-            return $entry->getProduction();
+            return $entry->getKey();
         }
 
         return null;

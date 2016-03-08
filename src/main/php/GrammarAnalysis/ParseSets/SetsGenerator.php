@@ -6,6 +6,7 @@ use Helstern\Nomsky\Grammar\Symbol\SymbolSet;
 use Helstern\Nomsky\GrammarAnalysis\Algorithms\FirstSetCalculator;
 use Helstern\Nomsky\GrammarAnalysis\Algorithms\FollowSetCalculator;
 use Helstern\Nomsky\GrammarAnalysis\Algorithms\EmptySetCalculator;
+use Helstern\Nomsky\GrammarAnalysis\Algorithms\PredictSetCalculator;
 use Helstern\Nomsky\GrammarAnalysis\Algorithms\SymbolOccurrence;
 use Helstern\Nomsky\GrammarAnalysis\Production\NormalizedProduction;
 
@@ -27,18 +28,26 @@ class SetsGenerator
     private $emptySetCalculator;
 
     /**
+     * @var PredictSetCalculator
+     */
+    private $predictSetCalculator;
+
+    /**
      * @param EmptySetCalculator $emptySetGenerator
      * @param FirstSetCalculator $firstSetCalculator
      * @param FollowSetCalculator $followSetCalculator
+     * @param PredictSetCalculator $predictSetCalculator
      */
     public function __construct(
         EmptySetCalculator $emptySetGenerator,
         FirstSetCalculator $firstSetCalculator,
-        FollowSetCalculator $followSetCalculator
+        FollowSetCalculator $followSetCalculator,
+        PredictSetCalculator $predictSetCalculator
     ){
         $this->emptySetCalculator = $emptySetGenerator;
         $this->firstSetCalculator = $firstSetCalculator;
         $this->followSetCalculator = $followSetCalculator;
+        $this->predictSetCalculator = $predictSetCalculator;
     }
 
     /**
@@ -146,15 +155,25 @@ class SetsGenerator
 
     /**
      * @param array|NormalizedProduction[] $productions
+     * @param LookAheadSets $lookAheadSets
      * @param \Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets $followSets
      * @param \Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets $firstSets
+     *
+     * @return \Helstern\Nomsky\GrammarAnalysis\ParseSets\SetsGenerator
      */
     public function generateLookAheadSets(
         array $productions,
+        LookAheadSets $lookAheadSets,
         ParseSets $followSets,
         ParseSets $firstSets
     ) {
+        foreach ($productions as $production) {
+            $predictSet = new ArraySet();
+            $this->predictSetCalculator->processProduction($predictSet, $production, $firstSets, $followSets);
+            $lookAheadSets->add($production, $predictSet);
+        }
 
+        return $this;
     }
 
 }
