@@ -18,7 +18,7 @@ class ExpressionGroupUtils
      */
     public function createSequenceFromSymbols(array $symbols)
     {
-        $sequence = $this->expressionTestUtils->createSequenceFromSymbols($symbols);
+        $sequence = $this->expressionTestUtils->createConcatenationFromSymbols($symbols);
         return new Group($sequence);
     }
 
@@ -28,7 +28,7 @@ class ExpressionGroupUtils
      */
     public function createAlternationFromSymbols(array $symbols)
     {
-        $sequence = $this->expressionTestUtils->createAlternationFromSymbols($symbols);
+        $sequence = $this->expressionTestUtils->createChoiceFromSymbols($symbols);
         return new Group($sequence);
 
     }
@@ -39,7 +39,7 @@ class ExpressionGroupUtils
      */
     public function createSequenceFromListOfStringSymbols(array $listOfStringSymbols)
     {
-        $sequence = $this->expressionTestUtils->createSequenceFromListOfStringSymbols($listOfStringSymbols);
+        $sequence = $this->expressionTestUtils->createConcatenationFromListOfStringSymbols($listOfStringSymbols);
         return new Group($sequence);
     }
 
@@ -49,7 +49,7 @@ class ExpressionGroupUtils
      */
     public function createAlternationFromListOfStringSymbols(array $listOfStringSymbols)
     {
-        $sequence = $this->expressionTestUtils->createAlternationFromListOfStringSymbols($listOfStringSymbols);
+        $sequence = $this->expressionTestUtils->createChoiceFromListOfStringSymbols($listOfStringSymbols);
         return new Group($sequence);
     }
 

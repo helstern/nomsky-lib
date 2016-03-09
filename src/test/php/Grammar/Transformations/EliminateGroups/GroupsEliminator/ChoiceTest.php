@@ -1,8 +1,8 @@
 <?php namespace Helstern\Nomsky\Grammar\Transformations\EliminateGroups\GroupsEliminator;
 
+use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Transformations\EliminateGroups\GroupsEliminator;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
-use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
@@ -14,7 +14,7 @@ use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 
 use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
 
-class AlternationTest extends \PHPUnit_Framework_TestCase
+class ChoiceTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ExpressionUtils */
     protected $expressionTestUtils;
@@ -33,7 +33,8 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param Expression $e
-     * @return ExpressionIterable|null
+     *
+    * @return Expression|null
      */
     public function getDepthFirstWalkResult(Expression $e)
     {
@@ -66,7 +67,7 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
         $alternation    = new Choice(array_pop($listOfSymbols), array_reverse($listOfSymbols));
 
         $actualExpressionWithoutGroups = $this->getDepthFirstWalkResult($alternation);
-        $expectedExpressionWithoutGroups = $exprTestUtils->createAlternationFromListOfStringSymbols(
+        $expectedExpressionWithoutGroups = $exprTestUtils->createChoiceFromListOfStringSymbols(
             array('a', 'b', 'c', '1', '2', '3')
         );
 
@@ -76,6 +77,7 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
             'there should have been some expressions'
         );
 
+        /** @var ExpressionIterable $actualExpressionWithoutGroups */
         $actualListOfSymbols = $actualExpressionWithoutGroups->toArray();
         $expectedListOfSymbols = $expectedExpressionWithoutGroups->toArray();
 
@@ -104,7 +106,7 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
         $alternation = new Choice(array_shift($listOfSymbols), $listOfSymbols);
 
         $actualExpressionWithoutGroups = $this->getDepthFirstWalkResult($alternation);
-        $expectedExpressionWithoutGroups = $exprTestUtils->createAlternationFromListOfStringSymbols(
+        $expectedExpressionWithoutGroups = $exprTestUtils->createChoiceFromListOfStringSymbols(
             array('a', 'b', 'c', '1', '2', '3')
         );
 
@@ -114,6 +116,7 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
             'there should have been some expressions'
         );
 
+        /** @var ExpressionIterable $actualExpressionWithoutGroups */
         $actualListOfSymbols = $actualExpressionWithoutGroups->toArray();
         $expectedListOfSymbols = $expectedExpressionWithoutGroups->toArray();
 
@@ -142,7 +145,7 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
         $alternation = new Choice(array_shift($listOfSymbols), $listOfSymbols);
 
         $actualExpressionWithoutGroups = $this->getDepthFirstWalkResult($alternation);
-        $expectedExpressionWithoutGroups = $exprTestUtils->createAlternationFromListOfStringSymbols(
+        $expectedExpressionWithoutGroups = $exprTestUtils->createChoiceFromListOfStringSymbols(
             array('a', 'b', 'c', '1', '2', '3')
         );
 
@@ -152,6 +155,7 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
             'there should have been some expressions'
         );
 
+        /** @var ExpressionIterable $actualExpressionWithoutGroups */
         $actualListOfSymbols = $actualExpressionWithoutGroups->toArray();
         $expectedListOfSymbols = $expectedExpressionWithoutGroups->toArray();
 
@@ -189,7 +193,7 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
         $alternation = new Choice(array_shift($listOfSymbols), $listOfSymbols);
 
         $actualExpressionWithoutGroups = $this->getDepthFirstWalkResult($alternation);
-        $expectedExpressionWithoutGroups = $exprTestUtils->createAlternationFromListOfStringSymbols(
+        $expectedExpressionWithoutGroups = $exprTestUtils->createChoiceFromListOfStringSymbols(
             array('a', 'b', 'c', 'x', 'y', 'z', '1', '2', '3')
         );
 
@@ -199,6 +203,7 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
             'there should have been some expressions'
         );
 
+        /** @var ExpressionIterable $actualExpressionWithoutGroups */
         $actualListOfSymbols = $actualExpressionWithoutGroups->toArray();
         $expectedListOfSymbols = $expectedExpressionWithoutGroups->toArray();
 
@@ -222,17 +227,17 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
         //add group
         $listOfSymbols[] = $exprTestUtils->getGroupUtils()->createAlternationFromSymbols(
             array(
-                $exprTestUtils->createSequenceFromListOfStringSymbols(array('1', '2')),
+                $exprTestUtils->createConcatenationFromListOfStringSymbols(array('1', '2')),
                 $exprTestUtils->createTerminal('3')
             )
         );
-        $alternation = $exprTestUtils->createAlternationFromSymbols($listOfSymbols);
+        $alternation = $exprTestUtils->createChoiceFromSymbols($listOfSymbols);
 
         $actualExpressionWithoutGroups = $this->getDepthFirstWalkResult($alternation);
-        $expectedExpressionWithoutGroups = $exprTestUtils->createAlternationFromListOfStringSymbols(
+        $expectedExpressionWithoutGroups = $exprTestUtils->createChoiceFromListOfStringSymbols(
             array(
                 'a', 'b', 'c',
-                $exprTestUtils->createSequenceFromListOfStringSymbols(array('1', '2')),
+                $exprTestUtils->createConcatenationFromListOfStringSymbols(array('1', '2')),
                 '3'
             )
         );
@@ -243,6 +248,7 @@ class AlternationTest extends \PHPUnit_Framework_TestCase
             'there should have been some expressions'
         );
 
+        /** @var ExpressionIterable $actualExpressionWithoutGroups */
         $actualListOfSymbols = $actualExpressionWithoutGroups->toArray();
         $expectedListOfSymbols = $expectedExpressionWithoutGroups->toArray();
 
