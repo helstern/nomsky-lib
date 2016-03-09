@@ -1,6 +1,4 @@
-<?php namespace Helstern\Nomsky\GrammarAnalysis\ParseSets;
-
-use Helstern\Nomsky\GrammarAnalysis\Production\NormalizedProduction;
+<?php namespace Helstern\Nomsky\GrammarAnalysis\Production;
 
 interface HashKeyFactory
 {

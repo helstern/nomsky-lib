@@ -133,9 +133,9 @@ class SetsGenerator
 
         $occurrences = new \ArrayObject();
         foreach ($productions as $production) {
-            $lhs = $production->getLeftHandSide();
+            $symbol = $production->getLeftHandSide();
             $rhs = $production->getRightHandSide();
-            $this->followSetCalculator->addNonTerminalOccurrences($occurrences, $lhs, $rhs);
+            $this->followSetCalculator->addNonTerminalOccurrences($occurrences, $symbol, $rhs);
         }
 
         do {
@@ -144,12 +144,11 @@ class SetsGenerator
             foreach ($occurrences as $occurrence) {
                 $set = new ArraySet();
                 if ($this->followSetCalculator->processOccurrence($set, $occurrence, $followSets, $firstSets)) {
-                    $lhs = $occurrence->getProductionNonTerminal();
-                    $changes |= $followSets->addAllTerminals($lhs, $set);
+                    $symbol = $occurrence->getSymbol();
+                    $changes |= $followSets->addAllTerminals($symbol, $set);
                 }
             }
         } while ($changes);
-
         return $this;
     }
 
@@ -169,7 +168,7 @@ class SetsGenerator
     ) {
         foreach ($productions as $production) {
             $predictSet = new ArraySet();
-            $this->predictSetCalculator->processProduction($predictSet, $production, $firstSets, $followSets);
+            $this->predictSetCalculator->processProduction($predictSet, $production, $followSets, $firstSets);
             $lookAheadSets->add($production, $predictSet);
         }
 

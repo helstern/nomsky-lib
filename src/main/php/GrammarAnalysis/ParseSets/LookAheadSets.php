@@ -1,6 +1,7 @@
 <?php namespace Helstern\Nomsky\GrammarAnalysis\ParseSets;
 
 use Helstern\Nomsky\Grammar\Symbol\SymbolSet;
+use Helstern\Nomsky\GrammarAnalysis\Production\HashKeyFactory;
 use Helstern\Nomsky\GrammarAnalysis\Production\NormalizedProduction;
 
 class LookAheadSets

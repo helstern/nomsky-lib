@@ -72,6 +72,7 @@ class FollowSetCalculator
         $epsilonAdded = $this->firstSetCalculator->processSymbolList($set, $following, $firstSets);
         if ($epsilonAdded) {
             $set->remove(new EpsilonSymbol());
+
             $lhs = $occurrence->getProductionNonTerminal();
             $otherSet  = $followSets->getTerminalSet($lhs);
             $set->addAll($otherSet);

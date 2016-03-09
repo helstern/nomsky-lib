@@ -1,7 +1,11 @@
-<?php namespace Helstern\Nomsky\GrammarAnalysis\ParseTableAnalysis;
+<?php namespace Helstern\Nomsky\GrammarAnalysis\ParseTable;
 
 use Helstern\Nomsky\Grammar\Production;
 use Helstern\Nomsky\Grammar\Symbol\ArraySet;
+use Helstern\Nomsky\Grammar\Symbol\Symbol;
+use Helstern\Nomsky\GrammarAnalysis\ParseSets\LookAheadSets;
+use Helstern\Nomsky\GrammarAnalysis\Production\NormalizedProduction;
+use Helstern\Nomsky\GrammarAnalysis\Production\SimpleHashKeyFactory;
 
 class LLParseTableBuilder
 {
@@ -21,13 +25,13 @@ class LLParseTableBuilder
     private $lookAheadSets;
 
     /**
-     * @var Production\HashKey\SimpleHashKeyFactory
+     * @var SimpleHashKeyFactory
      */
     private $productionHashAlgorithm;
 
     public function __construct()
     {
-        $this->productionHashAlgorithm = new Production\HashKey\SimpleHashKeyFactory();
+        $this->productionHashAlgorithm = new SimpleHashKeyFactory();
     }
 
     /**
@@ -62,33 +66,35 @@ class LLParseTableBuilder
         return $this;
     }
 
+    /**
+     * @param \Helstern\Nomsky\GrammarAnalysis\ParseSets\LookAheadSets $sets
+     *
+     * @return LLParseTableBuilder
+     */
     public function addLookAheadSets(LookAheadSets $sets)
     {
         $this->lookAheadSets = $sets;
         return $this;
     }
 
+    /**
+     * @return \Helstern\Nomsky\GrammarAnalysis\ParseTable\LLParseTable
+     */
     public function build()
     {
-        $parseTable = new LLParseTable($this->nonTerminals, $this->terminals);
+        $parseTable = new LLParseTable($this->nonTerminals, $this->terminals, $this->productionHashAlgorithm);
 
-        /** @var Production\Production $production */
+        /** @var NormalizedProduction $production */
         foreach ($this->lookAheadSets->getEntrySetIterator() as $production => $terminalSet) {
-            $productionSetEntry = $this->createProductionSetEntry($production);
-            $parseTable->addAllEntries($productionSetEntry, $terminalSet);
+            $lhs = $production->getLeftHandSide();
+            /** @var Symbol $terminal */
+            foreach ($terminalSet as $terminal) {
+                $parseTable->add($lhs, $terminal, $production);
+            }
         }
 
         return $parseTable;
     }
 
-    /**
-     * @param Production\Production $production
-     * @return Production\Set\ProductionSetEntry
-     */
-    private function createProductionSetEntry(Production\Production $production)
-    {
-        $hashKey = $this->productionHashAlgorithm->hash($production);
-        return new Production\Set\ProductionSetEntry($hashKey, $production);
-    }
 }
 

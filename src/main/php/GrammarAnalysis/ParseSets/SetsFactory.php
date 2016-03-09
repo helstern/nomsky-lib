@@ -1,6 +1,7 @@
 <?php namespace Helstern\Nomsky\GrammarAnalysis\ParseSets;
 
 use Helstern\Nomsky\Grammar\Grammar;
+use Helstern\Nomsky\GrammarAnalysis\Production\SimpleHashKeyFactory;
 
 class SetsFactory
 {

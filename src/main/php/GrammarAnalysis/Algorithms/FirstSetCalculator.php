@@ -25,25 +25,27 @@ class FirstSetCalculator
     }
 
     /**
+     * Calculates the first set of the symbol $source and adds it's elements to $set
+     *
      * @param \Helstern\Nomsky\Grammar\Symbol\SymbolSet $set
-     * @param \Helstern\Nomsky\Grammar\Symbol\Symbol $symbol
+     * @param \Helstern\Nomsky\Grammar\Symbol\Symbol $source
      * @param \Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets $firstSets
      *
      * @return boolean if the epsilon symbol was added to $set
      */
-    public function processSymbol(SymbolSet $set, Symbol $symbol, ParseSets $firstSets)
+    public function processSymbol(SymbolSet $set, Symbol $source, ParseSets $firstSets)
     {
         $symbolIsEpsilon = SymbolIsEpsilon::singletonInstance();
-        if ($symbolIsEpsilon->matchSymbol($symbol)) {
+        if ($symbolIsEpsilon->matchSymbol($source)) {
             $set->add(new EpsilonSymbol());
             return true;
         }
 
         $symbolsIsNonTerminal = SymbolTypeEquals::newInstanceMatchingNonTerminals();
-        if ($symbolsIsNonTerminal->matchSymbol($symbol)) {
+        if ($symbolsIsNonTerminal->matchSymbol($source)) {
             $epsilonCounter = new MatchCountingInterceptor($symbolIsEpsilon);
             $acceptPredicate = Inverter::newInstance($epsilonCounter);
-            $otherSet = $firstSets->filterTerminalSet($symbol, $acceptPredicate);
+            $otherSet = $firstSets->filterTerminalSet($source, $acceptPredicate);
             $set->addAll($otherSet);
 
             if ($epsilonCounter->getMatchCount() > 0) {
@@ -54,11 +56,13 @@ class FirstSetCalculator
             return false;
         }
 
-        $set->add($symbol);
+        $set->add($source);
         return false;
     }
 
     /**
+     * Calculates the first set of $list and adds it's elements to $set
+     *
      * @param \Helstern\Nomsky\Grammar\Symbol\SymbolSet $set
      * @param array|NormalizedProduction[] $list
      * @param \Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets $firstSets
