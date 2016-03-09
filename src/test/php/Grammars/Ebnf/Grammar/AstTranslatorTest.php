@@ -9,7 +9,7 @@ use Helstern\Nomsky\Grammar\Expressions\Repetition;
 use Helstern\Nomsky\Grammar\Production\Production;
 use Helstern\Nomsky\Grammar\Production\StandardProduction;
 use Helstern\Nomsky\Grammar\StandardGrammar;
-use Helstern\Nomsky\Grammar\Symbol\GenericSymbol;
+use Helstern\Nomsky\Grammar\Symbol\StandardSymbol;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammars\Ebnf\IsoEbnf\LexerFactory as IsoEbnfLexerFactory;
 use Helstern\Nomsky\Grammars\Ebnf\IsoEbnf\Parser as IsoEbnfParser;
@@ -26,7 +26,7 @@ class AstTranslatorTest extends TestCase
     {
         $productions = [];
         $productions[] = new  StandardProduction(
-            new GenericSymbol(Symbol::TYPE_NON_TERMINAL, 'program'),
+            new StandardSymbol(Symbol::TYPE_NON_TERMINAL, 'program'),
             new Concatenation(
                 new ExpressionSymbol(Symbol::TYPE_NON_TERMINAL, 'sentence'),
                 [
@@ -35,7 +35,7 @@ class AstTranslatorTest extends TestCase
             )
         );
         $productions[] = new  StandardProduction(
-            new GenericSymbol(Symbol::TYPE_NON_TERMINAL, 'sentence'),
+            new StandardSymbol(Symbol::TYPE_NON_TERMINAL, 'sentence'),
             new Choice(
                 new Concatenation(
                     new ExpressionSymbol(Symbol::TYPE_TERMINAL, 'FORWARD'),
@@ -72,7 +72,7 @@ class AstTranslatorTest extends TestCase
             )
         );
         $productions[] = new  StandardProduction(
-            new GenericSymbol(Symbol::TYPE_NON_TERMINAL, 'integer'),
+            new StandardSymbol(Symbol::TYPE_NON_TERMINAL, 'integer'),
             new Choice(
                 new ExpressionSymbol(Symbol::TYPE_TERMINAL, 'ZERO')
                 ,[

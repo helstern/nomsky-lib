@@ -11,10 +11,10 @@ use Helstern\Nomsky\Grammar\Symbol\Symbol;
 class ExpressionSymbol implements Expression, Symbol
 {
     /** @var int */
-    protected $type;
+    private $type;
 
     /** @var string */
-    protected $symbol;
+    private $symbol;
 
     /**
      * @return ExpressionSymbol

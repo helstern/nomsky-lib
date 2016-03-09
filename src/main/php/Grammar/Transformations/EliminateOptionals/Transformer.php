@@ -1,8 +1,6 @@
 <?php namespace Helstern\Nomsky\Grammar\Transformations\EliminateOptionals;
 
 use Helstern\Nomsky\Grammar\Converter\ProductionTransformer;
-use Helstern\Nomsky\Grammar\Expressions\Expression;
-use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
 use Helstern\Nomsky\Grammar\Production\StandardProduction;
@@ -26,7 +24,6 @@ class Transformer implements ProductionTransformer
      */
     public function transform(Production $initialProduction)
     {
-        /** @var Expression $expression */
         $expression = $initialProduction->getExpression();
 
         $visitor                    = new OptionalsEliminator($this->nonTerminalNamingStrategy);
@@ -35,8 +32,6 @@ class Transformer implements ProductionTransformer
         $walker                     = new DepthFirstStackBasedWalker();
         $walker->walk($expression, $hierarchicVisitDispatcher);
 
-        //TODO this cast is a hack, needs investigation
-        /** @var ExpressionIterable $visitRoot */
         $visitRoot = $visitor->getRoot();
 
         $cleanedProduction = new StandardProduction($initialProduction->getNonTerminal(), $visitRoot);

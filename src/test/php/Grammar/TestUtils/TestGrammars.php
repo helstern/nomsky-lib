@@ -44,7 +44,7 @@ class TestGrammars
             new Optional($expressionUtils->createTerminal('!')),
             $expressionUtils->createNonTerminal('Boolean'),
             new Repetition(
-                $expressionUtils->createSequenceFromSymbols(
+                $expressionUtils->createConcatenationFromSymbols(
                     array(
                         $expressionUtils->createNonTerminal('BooleanOperator'),
                         $expressionUtils->createNonTerminal('Boolean'),
@@ -59,7 +59,7 @@ class TestGrammars
         $expressionItems = array(
             $expressionUtils->createNonTerminal('BooleanConstant'),
             $expressionUtils->createNonTerminal('Expression'),
-            $expressionUtils->createSequenceFromSymbols(
+            $expressionUtils->createConcatenationFromSymbols(
                  array(
                      $expressionUtils->createTerminal('('),
                      $expressionUtils->createNonTerminal('Expression'),

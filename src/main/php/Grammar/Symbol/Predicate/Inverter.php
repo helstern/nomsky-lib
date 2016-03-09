@@ -2,14 +2,15 @@
 
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 
-class PredicateInverter implements SymbolPredicate
+class Inverter implements SymbolPredicate
 {
     /** @var SymbolPredicate */
     protected $predicate;
 
     /**
      * @param SymbolPredicate $predicate
-     * @return PredicateInverter
+     *
+*@return Inverter
      */
     static public function newInstance(SymbolPredicate $predicate)
     {

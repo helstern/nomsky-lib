@@ -58,7 +58,7 @@ class EbnfToBnfTest extends TestCase
             new Optional($expressionUtils->createTerminal('!')),
             $expressionUtils->createNonTerminal('Boolean'),
             new Repetition(
-                $expressionUtils->createSequenceFromSymbols(
+                $expressionUtils->createConcatenationFromSymbols(
                     array(
                         $expressionUtils->createNonTerminal('BooleanOperator'),
                         $expressionUtils->createNonTerminal('Boolean'),
@@ -82,7 +82,7 @@ class EbnfToBnfTest extends TestCase
         $expectedBnfProductions = [
             new StandardProduction(
                 $expressionUtils->createNonTerminal('Expression'),
-                $expressionUtils->createSequenceFromSymbols(
+                $expressionUtils->createConcatenationFromSymbols(
                     [
                         $expressionUtils->createNonTerminal($generatedNames[0]),
                         $expressionUtils->createNonTerminal('Boolean'),
@@ -92,20 +92,19 @@ class EbnfToBnfTest extends TestCase
             ),
             new StandardProduction(
                 $expressionUtils->createNonTerminal($generatedNames[0]),
-                $expressionUtils->createSequenceFromListOfStringSymbols(array(''))
+                $expressionUtils->createTerminal('')
             ),
             new StandardProduction(
                 $expressionUtils->createNonTerminal($generatedNames[0]),
-                $expressionUtils->createSequenceFromListOfStringSymbols(array('!'))
-
+                $expressionUtils->createTerminal('!')
             ),
             new StandardProduction(
                 $expressionUtils->createNonTerminal($generatedNames[1]),
-                $expressionUtils->createSequenceFromListOfStringSymbols(array(''))
+                $expressionUtils->createTerminal('')
             ),
             new StandardProduction(
                 $expressionUtils->createNonTerminal($generatedNames[1]),
-                $expressionUtils->createSequenceFromSymbols(
+                $expressionUtils->createConcatenationFromSymbols(
                     array(
                         $expressionUtils->createNonTerminal('BooleanOperator'),
                         $expressionUtils->createNonTerminal('Boolean'),

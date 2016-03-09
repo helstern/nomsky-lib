@@ -2,7 +2,6 @@
 
 use Helstern\Nomsky\Grammar\Transformations\EliminateOptionals\IncrementalNamingStrategy;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
-use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
@@ -28,9 +27,9 @@ class ExpressionUtils
     /**
      * @param array $symbols
      *
-*@return Concatenation
+     * @return Concatenation
      */
-    public function createSequenceFromSymbols(array $symbols)
+    public function createConcatenationFromSymbols(array $symbols)
     {
         return new Concatenation(array_shift($symbols), $symbols);
     }
@@ -38,9 +37,9 @@ class ExpressionUtils
     /**
      * @param array $symbols
      *
-*@return Choice
+    * @return Choice
      */
-    public function createAlternationFromSymbols(array $symbols)
+    public function createChoiceFromSymbols(array $symbols)
     {
         return new Choice(array_shift($symbols), $symbols);
     }
@@ -48,9 +47,9 @@ class ExpressionUtils
     /**
      * @param array $listOfStringSymbols
      *
-*@return Concatenation
+     * @return Concatenation
      */
-    public function createSequenceFromListOfStringSymbols(array $listOfStringSymbols)
+    public function createConcatenationFromListOfStringSymbols(array $listOfStringSymbols)
     {
         $listOfSymbols = $this->createListOfExpressions($listOfStringSymbols);
         $alternation = new Concatenation(array_shift($listOfSymbols), $listOfSymbols);
@@ -61,9 +60,9 @@ class ExpressionUtils
     /**
      * @param array $listOfStringSymbols
      *
-*@return Choice
+     * @return Choice
      */
-    public function createAlternationFromListOfStringSymbols(array $listOfStringSymbols)
+    public function createChoiceFromListOfStringSymbols(array $listOfStringSymbols)
     {
         $listOfSymbols = $this->createListOfExpressions($listOfStringSymbols);
         $alternation = new Choice(array_shift($listOfSymbols), $listOfSymbols);
@@ -114,19 +113,19 @@ class ExpressionUtils
     }
 
     /**
-     * @param \Helstern\Nomsky\Grammar\Expressions\ExpressionIterable $expression
-     * @internal param array|\Helstern\Nomsky\Grammar\Expressions\SymbolAdapter[] $listOfSymbols
+     * @param \Helstern\Nomsky\Grammar\Expressions\Expression $expression
+     *
      * @return string|null
      */
-    public function serializeExpressionIterable(ExpressionIterable $expression)
+    public function serializeExpressionIterable(Expression $expression)
     {
         $listOfSerializedObjects = array();
         /** @var $symbolObject ExpressionSymbol */
         foreach($expression as $symbolObject) {
             if ($symbolObject instanceof ExpressionSymbol) {
                 $listOfSerializedObjects[] = $symbolObject->toString();
-            } elseif($symbolObject instanceof ExpressionIterable) {
-                /** @var $symbolObject ExpressionIterable */
+            } elseif($symbolObject instanceof Expression) {
+                /** @var $symbolObject Expression */
                 $listOfSerializedObjects[] = $this->serializeExpressionIterable($symbolObject);
             } else {
                 return null;
