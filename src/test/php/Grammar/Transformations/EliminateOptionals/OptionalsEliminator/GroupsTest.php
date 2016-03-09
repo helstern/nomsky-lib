@@ -1,10 +1,10 @@
 <?php namespace Helstern\Nomsky\Grammar\Converter\OptionalsEliminator;
 
+use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Transformations\EliminateOptionals\NonTerminalNamingStrategy;
 use Helstern\Nomsky\Grammar\Transformations\EliminateOptionals\OptionalsEliminator;
 use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
-use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Optional;
 use Helstern\Nomsky\Grammar\Expressions\Repetition;
 use Helstern\Nomsky\Grammar\Expressions\Concatenation;
@@ -33,7 +33,8 @@ class GroupsTest extends \PHPUnit_Framework_TestCase
     /**
      * @param Expression $e
      * @param NonTerminalNamingStrategy $namingStrategy
-     * @return ExpressionIterable|null
+     *
+*@return Expression|null
      */
     public function getDepthFirstWalkResult(Expression $e, NonTerminalNamingStrategy $namingStrategy)
     {
@@ -67,6 +68,7 @@ class GroupsTest extends \PHPUnit_Framework_TestCase
         $initialExpression = new Concatenation(array_shift($initialList), $initialList);
 
         $namingStrategy = $exprTestUtils->createNonTerminalNamingStrategy();
+        /** @var ExpressionIterable $actualExpression */
         $actualExpression = $this->getDepthFirstWalkResult($initialExpression, $namingStrategy);
 
         $this->assertInstanceOf(

@@ -16,7 +16,7 @@ interface Grammar
     public function getStartSymbol();
 
     /**
-     * @return Production[]
+     * @return Production[]|array
      */
     public function getProductions();
 

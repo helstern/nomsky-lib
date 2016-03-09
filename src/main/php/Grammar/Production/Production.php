@@ -1,13 +1,13 @@
 <?php namespace Helstern\Nomsky\Grammar\Production;
 
-use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
+use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
 
 interface Production extends \Countable
 {
     /**
-     * @return ExpressionIterable
+     * @return Expression
      */
     public function getExpression();
 
@@ -15,12 +15,6 @@ interface Production extends \Countable
      * @return Symbol
      */
     public function getNonTerminal();
-
-    /**
-     * @param $nonTerminal
-     * @return boolean
-     */
-    public function startsWith($nonTerminal);
 
     /**
      * @param \Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate $predicate

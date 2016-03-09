@@ -2,7 +2,7 @@
 
 
 use Helstern\Nomsky\Grammar\Production\StandardProduction;
-use Helstern\Nomsky\Grammar\Symbol\GenericSymbol;
+use Helstern\Nomsky\Grammar\Symbol\StandardSymbol;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 use Helstern\Nomsky\Grammars\Ebnf\Ast\RuleNode;
 use Helstern\Nomsky\Grammars\Ebnf\Grammar\AstTranslatorContext;
@@ -40,7 +40,7 @@ class RuleNodeVisitor
     {
         $identifierNode = $astNode->getIdentifierNode();
         $name = $identifierNode->getIdentifierName();
-        $symbol = new GenericSymbol(Symbol::TYPE_NON_TERMINAL, $name);
+        $symbol = new StandardSymbol(Symbol::TYPE_NON_TERMINAL, $name);
 
         $this->visitContext->pushLeftHandSymbol($symbol, $this);
 

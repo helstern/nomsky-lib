@@ -4,7 +4,7 @@ use Helstern\Nomsky\Grammar\Symbol\Predicate\SymbolPredicate;
 
 class ArraySet implements SymbolSet
 {
-    protected $terminals = array();
+    private $terminals = array();
 
     public function count()
     {
@@ -26,11 +26,12 @@ class ArraySet implements SymbolSet
 
     public function add(Symbol $terminal)
     {
-        if (array_key_exists($terminal->toString(), $this->terminals)) {
+        $key = $terminal->toString();
+        if (array_key_exists($key, $this->terminals)) {
             return false;
         }
 
-        $this->terminals[$terminal->toString()] = $this->terminals;
+        $this->terminals[$key] = $terminal;
         return true;
     }
 

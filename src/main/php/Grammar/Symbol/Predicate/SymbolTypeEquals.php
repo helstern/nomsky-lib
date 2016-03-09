@@ -12,7 +12,7 @@ class SymbolTypeEquals implements SymbolPredicate
      */
     static public function newInstanceMatchingNonTerminals()
     {
-        $instance = self::newInstance(Symbol::TYPE_TERMINAL);
+        $instance = self::newInstance(Symbol::TYPE_NON_TERMINAL);
         return $instance;
     }
 

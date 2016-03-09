@@ -11,7 +11,7 @@ use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisitor;
 use Helstern\Nomsky\Grammar\Production\StandardProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
-use Helstern\Nomsky\Grammar\Symbol\GenericSymbol;
+use Helstern\Nomsky\Grammar\Symbol\StandardSymbol;
 use Helstern\Nomsky\Grammar\Symbol\Symbol;
 
 class OptionalsEliminator implements HierarchyVisitor
@@ -57,14 +57,14 @@ class OptionalsEliminator implements HierarchyVisitor
     }
 
     /**
-     * @return GenericSymbol
+     * @return StandardSymbol
      */
     protected function createNewNonTerminal()
     {
         $this->nrOfNewNonTerminals++;
         $nonTerminalName = $this->nonTerminalNamingStrategy->getName();
 
-        $newNonTerminal = new GenericSymbol(Symbol::TYPE_NON_TERMINAL, $nonTerminalName);
+        $newNonTerminal = new StandardSymbol(Symbol::TYPE_NON_TERMINAL, $nonTerminalName);
         return $newNonTerminal;
     }
 

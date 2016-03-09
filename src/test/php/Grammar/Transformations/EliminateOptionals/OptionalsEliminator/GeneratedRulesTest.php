@@ -5,7 +5,6 @@ use Helstern\Nomsky\Grammar\Transformations\EliminateOptionals\OptionalsEliminat
 use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
 use Helstern\Nomsky\Grammar\Expressions\Choice;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
-use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
 use Helstern\Nomsky\Grammar\Expressions\Optional;
 use Helstern\Nomsky\Grammar\Expressions\Repetition;
 use Helstern\Nomsky\Grammar\Expressions\Concatenation;
@@ -35,7 +34,8 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
     /**
      * @param Expression $e
      * @param \Helstern\Nomsky\Grammar\Transformations\EliminateOptionals\OptionalsEliminator $visitor
-     * @return ExpressionIterable|null
+     *
+     * @return Expression|null
      */
     public function walkAndVisitExpression(Expression $e, OptionalsEliminator $visitor)
     {
@@ -89,7 +89,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $namingStrategy = $exprTestUtils->createNonTerminalNamingStrategy();
         $expectedItems = array(
             $exprTestUtils->createTerminal(''), //epsilon
-            $exprTestUtils->createSequenceFromListOfStringSymbols(
+            $exprTestUtils->createConcatenationFromListOfStringSymbols(
                 array(
                     $exprTestUtils->createTerminal('c'),
                     $exprTestUtils->createNonTerminal($namingStrategy->getName())
@@ -101,7 +101,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $assertFailMsgTpl = 'Expected the following sequence: %s';
         $assertFailMsg = sprintf(
             $assertFailMsgTpl,
-            $exprTestUtils->serializeExpressionIterable($exprTestUtils->createAlternationFromSymbols($actualItems))
+            $exprTestUtils->serializeExpressionIterable($exprTestUtils->createChoiceFromSymbols($actualItems))
         );
         $this->assertEquals($expectedItems, $actualItems, $assertFailMsg);
     }
@@ -153,7 +153,7 @@ class GeneratedRulesTest extends \PHPUnit_Framework_TestCase
         $assertFailMsgTpl = 'Expected the following sequence: %s';
         $assertFailMsg = sprintf(
             $assertFailMsgTpl,
-            $exprTestUtils->serializeExpressionIterable($exprTestUtils->createAlternationFromSymbols($actualItems))
+            $exprTestUtils->serializeExpressionIterable($exprTestUtils->createChoiceFromSymbols($actualItems))
         );
         $this->assertEquals($expectedItems, $actualItems, $assertFailMsg);
     }

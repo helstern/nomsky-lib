@@ -2,9 +2,6 @@
 
 use Helstern\Nomsky\Grammar\Converter\ProductionTransformer;
 use Helstern\Nomsky\Grammar\Expressions\Choice;
-use Helstern\Nomsky\Grammar\Expressions\Expression;
-use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
-use Helstern\Nomsky\Grammar\Expressions\Concatenation;
 use Helstern\Nomsky\Grammar\Production\StandardProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
 
@@ -23,26 +20,11 @@ class EliminateChoice implements ProductionTransformer
 
             $expressions = iterator_to_array($expression->getIterator());
             foreach($expressions as $expression) {
-                $expressionIterable = $this->convertToExpressionIterable($expression);
-                $productions[] = new StandardProduction($production->getNonTerminal(), $expressionIterable);
+                $productions[] = new StandardProduction($production->getNonTerminal(), $expression);
             }
             return $productions;
         }
 
         return array($production);
-    }
-
-    /**
-     * @param Expression $e
-     *
-*@return ExpressionIterable|Concatenation
-     */
-    protected function convertToExpressionIterable(Expression $e)
-    {
-        if ($e instanceof ExpressionIterable) {
-            return $e;
-        }
-
-        return new Concatenation($e);
     }
 }
