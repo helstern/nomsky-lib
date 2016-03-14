@@ -39,21 +39,24 @@ class OptionalsEliminator implements HierarchyVisitor
         $this->nonTerminalNamingStrategy = $nonTerminalNamingStrategy;
     }
 
-    protected function setAsRootOrAddToStackOfChildren(Expression $e)
+    private function setAsRootOrAddSibling(Expression $e)
     {
         if (empty($this->stackOfChildren)) {
             $this->root = $e;
         } else {
-            $this->addToStackOfChildren($e);
+            $this->addSibling($e);
         }
     }
 
-    protected function addToStackOfChildren(Expression $e)
+    /**
+     * @param Expression $e
+     */
+    private function addSibling(Expression $e)
     {
-        /** @var Expression[]|array $parentChildren */
-        $parentChildren = array_pop($this->stackOfChildren);
-        array_push($parentChildren, $e);
-        array_push($this->stackOfChildren, $parentChildren);
+        /** @var Expression[]|array $siblings */
+        $siblings = array_pop($this->stackOfChildren);
+        array_push($siblings, $e);
+        array_push($this->stackOfChildren, $siblings);
     }
 
     /**
@@ -87,7 +90,7 @@ class OptionalsEliminator implements HierarchyVisitor
     /**
      * @param Choice $expression
      *
-    * @return boolean
+     * @return boolean
      */
     public function startVisitChoice(Choice $expression)
     {
@@ -109,7 +112,7 @@ class OptionalsEliminator implements HierarchyVisitor
         $firstChild = array_shift($children);
         $alternation = new Choice($firstChild, $children);
 
-        $this->setAsRootOrAddToStackOfChildren($alternation);
+        $this->setAsRootOrAddSibling($alternation);
 
         return true;
     }
@@ -139,7 +142,7 @@ class OptionalsEliminator implements HierarchyVisitor
         $firstChild = array_shift($children);
         $sequence = new Concatenation($firstChild, $children);
 
-        $this->setAsRootOrAddToStackOfChildren($sequence);
+        $this->setAsRootOrAddSibling($sequence);
 
         return true;
     }
@@ -166,7 +169,7 @@ class OptionalsEliminator implements HierarchyVisitor
         $expression = array_pop($children);
 
         $group = new Group($expression);
-        $this->setAsRootOrAddToStackOfChildren($group);
+        $this->setAsRootOrAddSibling($group);
 
         return true;
     }
@@ -174,7 +177,7 @@ class OptionalsEliminator implements HierarchyVisitor
     /**
      * @param Repetition $expression
      *
-    * @return boolean
+     * @return boolean
      */
     public function startVisitRepetition(Repetition $expression)
     {
@@ -196,7 +199,7 @@ class OptionalsEliminator implements HierarchyVisitor
 
         $nonTerminalSymbol = $this->createNewNonTerminal();
         $expression = ExpressionSymbol::createAdapterForSymbol($nonTerminalSymbol);
-        $this->setAsRootOrAddToStackOfChildren($expression);
+        $this->setAsRootOrAddSibling($expression);
 
         $this->addEpsilonAlternativeForList($nonTerminalSymbol, $repeatedExpression);
     }
@@ -265,7 +268,7 @@ class OptionalsEliminator implements HierarchyVisitor
 
         $newNonTerminal = $this->createNewNonTerminal();
         $expression = ExpressionSymbol::createAdapterForSymbol($newNonTerminal);
-        $this->setAsRootOrAddToStackOfChildren($expression);
+        $this->setAsRootOrAddSibling($expression);
 
         $this->addEpsilonAlternativeForItem($newNonTerminal, $optionalExpression);
     }
@@ -298,9 +301,10 @@ class OptionalsEliminator implements HierarchyVisitor
      */
     public function visitExpression(Expression $expression)
     {
-        /** @var Expression[]|array $parentChildren */
-        $parentChildren = array_pop($this->stackOfChildren);
-        array_push($parentChildren, $expression);
-        array_push($this->stackOfChildren, $parentChildren);
+        if (empty($this->root) && empty($this->stackOfChildren)) {
+            $this->root = $expression;
+        } elseif (!empty($this->stackOfChildren)) {
+            $this->addSibling($expression);
+        }
     }
 }

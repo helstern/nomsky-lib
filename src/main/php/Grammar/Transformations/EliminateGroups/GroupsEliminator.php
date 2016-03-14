@@ -165,6 +165,11 @@ class GroupsEliminator extends AbstractErrorTriggeringVisitor implements Hierarc
 
     public function visitExpression(Expression $expression)
     {
+        if (empty ($this->stackOfChildren)) {
+            $this->root = $expression;
+            return true;
+        }
+
         /** @var array $lastListOfSymbols */
         $lastListOfSymbols = array_pop($this->stackOfChildren);
         $lastListOfSymbols[] = $expression;
