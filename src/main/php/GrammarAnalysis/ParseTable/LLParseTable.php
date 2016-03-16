@@ -83,7 +83,7 @@ class LLParseTable
 
     public function add(Symbol $nonTerminal, Symbol $terminal, NormalizedProduction $production)
     {
-        $this->assertKnownSymbols($nonTerminal, $terminal, new \RuntimeException('Uknown symbols'));
+        $this->assertKnownSymbols($nonTerminal, $terminal);
         $entryHash = $this->getEntryHash($nonTerminal, $terminal);
 
         if (array_key_exists($entryHash, $this->uniqueEntries)) {
@@ -101,17 +101,18 @@ class LLParseTable
     /**
      * @param Symbol $nonTerminal
      * @param Symbol $terminal
-     * @param \Exception $e
      * @throws \Exception
      * @return null
      */
-    private function assertKnownSymbols(Symbol $nonTerminal, Symbol $terminal, \Exception $e)
+    private function assertKnownSymbols(Symbol $nonTerminal, Symbol $terminal)
     {
         if ($this->nonTerminals->contains($nonTerminal) && $this->terminals->contains($terminal)) {
             return null;
         }
 
-        throw $e;
+        $assertionMessage = 'Uknown symbols: non-terminal %s and terminal %s';
+        $assertionMessage = sprintf($assertionMessage, $nonTerminal->toString(), $terminal->toString());
+        throw new \RuntimeException($assertionMessage);
     }
 
 }
