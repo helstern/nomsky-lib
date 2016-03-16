@@ -73,8 +73,8 @@ class Visitor extends AbstractErrorTriggeringVisitor implements Expressions\Visi
 
     public function startVisitConcatenation(Expressions\Concatenation $expression)
     {
-        $this->stackOfChildren->push([]);
         $this->stackOfParents->push($expression);
+        $this->stackOfChildren->push([]);
         return true;
     }
 
@@ -125,25 +125,17 @@ class Visitor extends AbstractErrorTriggeringVisitor implements Expressions\Visi
         $this->stackOfParents->pop();
         $children = $this->stackOfChildren->pop();
         $expression = array_pop($children);
-        /** @var GroupedExpressionEliminator $eliminator */
-        $eliminator = $this->stackOfEliminators->pop();
 
         //group is the root of the tree
         if (0 == $this->stackOfChildren->count()) {
-            $this->root = $expression;
+            $this->root = new Expressions\Group($expression);
             return true;
         }
 
         // add the group to the list of siblings
-        $newGroup = new Expressions\Group($expression);
         $siblings = $this->stackOfChildren->pop();
-        $siblings[] = $newGroup;
+        $siblings[] = new Expressions\Group($expression);
         $this->stackOfChildren->push($siblings);
-
-        // add the group elimination strategy to the list of eliminators
-        $groupEliminators = $this->stackOfGroups->pop();
-        $groupEliminators[] = $eliminator;
-        $this->stackOfGroups->push($groupEliminators);
 
         return true;
     }
