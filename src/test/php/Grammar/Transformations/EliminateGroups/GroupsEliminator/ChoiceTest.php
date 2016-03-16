@@ -13,6 +13,7 @@ use Helstern\Nomsky\Grammar\Expressions\Group;
 use Helstern\Nomsky\Grammar\Expressions\ExpressionSymbol;
 
 use Helstern\Nomsky\Grammar\TestUtils\ExpressionUtils;
+use Helstern\Nomsky\Grammar\Transformations\EliminateGroups\Visitor;
 
 class ChoiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,7 +39,7 @@ class ChoiceTest extends \PHPUnit_Framework_TestCase
      */
     public function getDepthFirstWalkResult(Expression $e)
     {
-        $visitor                    = new GroupsEliminator();
+        $visitor                    = new Visitor();
         $hierarchicVisitDispatcher  = new CompleteVisitDispatcher($visitor);
 
         $walker = new DepthFirstStackBasedWalker();

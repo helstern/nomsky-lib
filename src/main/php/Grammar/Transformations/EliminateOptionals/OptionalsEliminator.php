@@ -17,19 +17,19 @@ use Helstern\Nomsky\Grammar\Symbol\Symbol;
 class OptionalsEliminator implements HierarchyVisitor
 {
     /** @var NonTerminalNamingStrategy */
-    protected $nonTerminalNamingStrategy;
+    private $nonTerminalNamingStrategy;
 
     /** @var int */
-    protected $nrOfNewNonTerminals = 0;
+    private $nrOfNewNonTerminals = 0;
 
     /** @var array Expression[] */
-    protected $epsilonAlternatives = array();
+    private $epsilonAlternatives = array();
 
     /** @var Expression[] */
-    protected $stackOfChildren;
+    private $stackOfChildren;
 
     /** @var Expression */
-    protected $root;
+    private $root;
 
     /**
      * @param NonTerminalNamingStrategy $nonTerminalNamingStrategy
