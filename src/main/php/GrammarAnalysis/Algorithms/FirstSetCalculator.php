@@ -63,23 +63,23 @@ class FirstSetCalculator
     /**
      * Calculates the first set of $list and adds it's elements to $set
      *
-     * @param \Helstern\Nomsky\Grammar\Symbol\SymbolSet $set
+     * @param \Helstern\Nomsky\Grammar\Symbol\SymbolSet $newFirstSet
      * @param array|NormalizedProduction[] $list
      * @param \Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets $firstSets
      *
      * @return bool if the epsilon symbol was added to $set
      */
-    public function processSymbolList(SymbolSet $set, array $list, ParseSets $firstSets)
+    public function processSymbolList(SymbolSet $newFirstSet, array $list, ParseSets $firstSets)
     {
         if (0 == count($list)) {
-            $set->add(new EpsilonSymbol());
+            $newFirstSet->add(new EpsilonSymbol());
             return true;
         }
 
         if (1 == count($list)) {
             /** @var Symbol $symbol */
             $symbol = $list[0];
-            return $this->processSymbol($set, $symbol, $firstSets);
+            return $this->processSymbol($newFirstSet, $symbol, $firstSets);
         }
 
         $symbolIsEpsilon = SymbolIsEpsilon::singletonInstance();
@@ -95,9 +95,9 @@ class FirstSetCalculator
         //add the first non-terminal and continue past this one later on
         if ($symbolsIsNonTerminal->matchSymbol($previousSymbol)) {
             $lastSet = $firstSets->filterTerminalSet($previousSymbol, $acceptor);
-            $set->addAll($lastSet);
+            $newFirstSet->addAll($lastSet);
         } else {
-            $set->add($previousSymbol);
+            $newFirstSet->add($previousSymbol);
         }
 
         //as long as the previous symbol was a non-terminal, process the next symbol
@@ -110,9 +110,9 @@ class FirstSetCalculator
 
             if ($symbolsIsNonTerminal->matchSymbol($previousSymbol)) {
                 $lastSet = $firstSets->filterTerminalSet($previousSymbol, $acceptor);
-                $set->addAll($lastSet);
+                $newFirstSet->addAll($lastSet);
             } else {
-                $set->add($previousSymbol);
+                $newFirstSet->add($previousSymbol);
             }
         }
 
@@ -121,7 +121,7 @@ class FirstSetCalculator
             && $symbolsIsNonTerminal->matchSymbol($previousSymbol)
             && $epsilonCounter->getMatchCount() > 0
         ) {
-            $set->add(new EpsilonSymbol());
+            $newFirstSet->add(new EpsilonSymbol());
             return true;
         }
 
