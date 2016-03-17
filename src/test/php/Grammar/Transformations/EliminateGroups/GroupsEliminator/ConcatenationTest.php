@@ -1,7 +1,8 @@
 <?php namespace Helstern\Nomsky\Grammar\Converter\GroupsEliminator;
 
 use Helstern\Nomsky\Grammar\Expressions\ExpressionIterable;
-use Helstern\Nomsky\Grammar\Transformations\EliminateGroups\GroupsEliminator;
+use Helstern\Nomsky\Grammar\Transformations\EliminateGroups;
+use Helstern\Nomsky\Grammar\Transformations\EliminateNesting;
 use Helstern\Nomsky\Grammar\Expressions\Expression;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
@@ -29,17 +30,28 @@ class ConcatenationTest extends \PHPUnit_Framework_TestCase
     /**
      * @param Expression $e
      *
-*@return Expression|null
+     * @return Expression|null
      */
     public function getDepthFirstWalkResult(Expression $e)
     {
-        $visitor                    = new GroupsEliminator();
-        $hierarchicVisitDispatcher  = new CompleteVisitDispatcher($visitor);
 
-        $walker = new DepthFirstStackBasedWalker();
-        $walker->walk($e, $hierarchicVisitDispatcher);
+        $visitors = [
+            new EliminateGroups\Visitor()
+            , new EliminateNesting\Visitor()
+        ];
 
-        $walkResult = $visitor->getRoot();
+        $walkResult = $e;
+        foreach ($visitors as $visitor) {
+            $hierarchicVisitDispatcher  = new CompleteVisitDispatcher($visitor);
+
+            $walker = new DepthFirstStackBasedWalker();
+            $walker->walk($walkResult, $hierarchicVisitDispatcher);
+
+            if ($visitor instanceof EliminateGroups\Visitor  | $visitor instanceof EliminateNesting\Visitor) {
+                $walkResult = $visitor->getRoot();
+            }
+        }
+
         return $walkResult;
     }
 
