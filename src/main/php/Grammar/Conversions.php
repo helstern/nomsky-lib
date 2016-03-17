@@ -2,9 +2,7 @@
 
 use Helstern\Nomsky\Grammar\Converter\Converter;
 use Helstern\Nomsky\Grammar\Converter\ProductionTransformer;
-use Helstern\Nomsky\Grammar\Transformations\EliminateOptionals;
-use Helstern\Nomsky\Grammar\Transformations\EliminateGroups;
-use Helstern\Nomsky\Grammar\Transformations\EliminateChoice;
+use Helstern\Nomsky\Grammar\Transformations;
 
 use Helstern\Nomsky\Grammar\Production\Production;
 
@@ -16,9 +14,10 @@ class Conversions
     public function createEbnfToBnfTransformationsList()
     {
         return [
-            new EliminateOptionals\Transformer(new EliminateOptionals\IncrementalNamingStrategy()),
-            new EliminateGroups\Transformer(),
-            new EliminateChoice()
+            new Transformations\EliminateOptionals\Transformer(new Transformations\EliminateOptionals\IncrementalNamingStrategy()),
+            new Transformations\EliminateGroups\Transformer(),
+            new Transformations\EliminateNesting\Transformer(),
+            new Transformations\EliminateChoice()
         ];
     }
 

@@ -1,11 +1,14 @@
-<?php namespace Helstern\Nomsky\Grammar\Transformations\EliminateGroups;
+<?php namespace Helstern\Nomsky\Grammar\Transformations\EliminateNesting;
 
 use Helstern\Nomsky\Grammar\Converter\ProductionTransformer;
 use Helstern\Nomsky\Grammar\Expressions\Visitor\HierarchyVisit\CompleteVisitDispatcher;
 use Helstern\Nomsky\Grammar\Expressions\Walker\DepthFirstStackBasedWalker;
-use Helstern\Nomsky\Grammar\Production\StandardProduction;
 use Helstern\Nomsky\Grammar\Production\Production;
+use Helstern\Nomsky\Grammar\Production\StandardProduction;
 
+/**
+ * Removes all nestings of the form Concatenation-Concatenation or Choice-Choice
+ */
 class Transformer implements ProductionTransformer
 {
     /**
