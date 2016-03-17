@@ -63,23 +63,23 @@ class FirstSetCalculator
     /**
      * Calculates the first set of $list and adds it's elements to $set
      *
-     * @param \Helstern\Nomsky\Grammar\Symbol\SymbolSet $set
+     * @param \Helstern\Nomsky\Grammar\Symbol\SymbolSet $newFirstSet
      * @param array|NormalizedProduction[] $list
      * @param \Helstern\Nomsky\GrammarAnalysis\ParseSets\ParseSets $firstSets
      *
      * @return bool if the epsilon symbol was added to $set
      */
-    public function processSymbolList(SymbolSet $set, array $list, ParseSets $firstSets)
+    public function processSymbolList(SymbolSet $newFirstSet, array $list, ParseSets $firstSets)
     {
         if (0 == count($list)) {
-            $set->add(new EpsilonSymbol());
+            $newFirstSet->add(new EpsilonSymbol());
             return true;
         }
 
         if (1 == count($list)) {
             /** @var Symbol $symbol */
             $symbol = $list[0];
-            return $this->processSymbol($set, $symbol, $firstSets);
+            return $this->processSymbol($newFirstSet, $symbol, $firstSets);
         }
 
         $symbolIsEpsilon = SymbolIsEpsilon::singletonInstance();
@@ -88,38 +88,40 @@ class FirstSetCalculator
         /** @var SymbolSet $lastSet */
         $lastSet = null;
         $epsilonCounter = new MatchCountingInterceptor($symbolIsEpsilon);
+        $acceptor = Inverter::newInstance($epsilonCounter);
 
-        //we assume there is no epsilon symbol in the list
-
-        $lastSymbol = reset($list);
-        if ($symbolsIsNonTerminal->matchSymbol($lastSymbol)) {
-            $acceptPredicate = Inverter::newInstance($epsilonCounter);
-            $lastSet = $firstSets->filterTerminalSet($lastSymbol, $acceptPredicate);
-            $set->addAll($lastSet);
+        //we assume there is no epsilon symbol in the $list list
+        $previousSymbol = reset($list);
+        //add the first non-terminal and continue past this one later on
+        if ($symbolsIsNonTerminal->matchSymbol($previousSymbol)) {
+            $lastSet = $firstSets->filterTerminalSet($previousSymbol, $acceptor);
+            $newFirstSet->addAll($lastSet);
         } else {
-            $set->add($lastSymbol);
+            $newFirstSet->add($previousSymbol);
         }
 
+        //as long as the previous symbol was a non-terminal, process the next symbol
         for (
             next($list);
-            !is_null(key($list)) && $symbolsIsNonTerminal->matchSymbol($lastSymbol) && $epsilonCounter->getMatchCount() > 0;
+            !is_null(key($list)) && $symbolsIsNonTerminal->matchSymbol($previousSymbol) && $epsilonCounter->getMatchCount() > 0;
             next($list)
         ) {
-            $lastSymbol = current($list);
+            $previousSymbol = current($list);
 
-            $epsilonCounter = new MatchCountingInterceptor($symbolIsEpsilon);
-            $acceptPredicate = Inverter::newInstance($epsilonCounter);
-            $lastSet = $firstSets->filterTerminalSet($lastSymbol, $acceptPredicate);
-
-            $set->addAll($lastSet);
+            if ($symbolsIsNonTerminal->matchSymbol($previousSymbol)) {
+                $lastSet = $firstSets->filterTerminalSet($previousSymbol, $acceptor);
+                $newFirstSet->addAll($lastSet);
+            } else {
+                $newFirstSet->add($previousSymbol);
+            }
         }
 
         if (
             is_null(key($list))
-            && $symbolsIsNonTerminal->matchSymbol($lastSymbol)
+            && $symbolsIsNonTerminal->matchSymbol($previousSymbol)
             && $epsilonCounter->getMatchCount() > 0
         ) {
-            $set->add(new EpsilonSymbol());
+            $newFirstSet->add(new EpsilonSymbol());
             return true;
         }
 

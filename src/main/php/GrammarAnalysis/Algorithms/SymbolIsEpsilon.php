@@ -24,6 +24,14 @@ class SymbolIsEpsilon implements SymbolPredicate
 
     public function matchSymbol(Symbol $symbol)
     {
-        return ($symbol instanceof EpsilonSymbol);
+        if ($symbol instanceof EpsilonSymbol) {
+            return true;
+        }
+
+        if (EpsilonSymbol::singletonInstance()->getType() == $symbol->getType()) {
+            return EpsilonSymbol::singletonInstance()->toString() == $symbol->toString();
+        }
+
+        return false;
     }
 }
