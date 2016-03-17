@@ -15,7 +15,7 @@ class LLParseTable
     private $terminals;
 
     /** @var array|ParseTableEntry[] $entry */
-    private $uniqueEntries;
+    private $uniqueEntries = [];
 
     /** @var HashKeyFactory */
     private $productionHash;
@@ -106,13 +106,24 @@ class LLParseTable
      */
     private function assertKnownSymbols(Symbol $nonTerminal, Symbol $terminal)
     {
-        if ($this->nonTerminals->contains($nonTerminal) && $this->terminals->contains($terminal)) {
-            return null;
+        $knownNonTerminal = $this->nonTerminals->contains($nonTerminal);
+        $knownTerminal = $this->terminals->contains($terminal);
+
+        if ($knownNonTerminal && $knownTerminal) {
+            return true;
         }
 
-        $assertionMessage = 'Uknown symbols: non-terminal %s and terminal %s';
-        $assertionMessage = sprintf($assertionMessage, $nonTerminal->toString(), $terminal->toString());
+        if (! $knownNonTerminal && ! $knownTerminal) {
+            $assertionMessage = 'Uknown symbols: non-terminal %s and terminal %s';
+            $assertionMessage = sprintf($assertionMessage, $nonTerminal->toString(), $terminal->toString());
+        } else if ($knownTerminal) {
+            $assertionMessage = 'Uknown non-terminal: %s';
+            $assertionMessage = sprintf($assertionMessage, $nonTerminal->toString());
+        }  else {
+            $assertionMessage = 'Uknown terminal: %s';
+            $assertionMessage = sprintf($assertionMessage, $terminal->toString());
+        }
+
         throw new \RuntimeException($assertionMessage);
     }
-
 }
