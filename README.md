@@ -9,5 +9,5 @@ to see what it does, run this command from the project root:
     php composer/composer.phar install --working-dir=composer
     src/cli/phpunit.sh --group milestone
 
-[![Build Status](https://travis-ci.org/helstern/nomsky.svg?branch=develop)](https://travis-ci.org/helstern/nomsky)
-[![Dependency Status](https://www.versioneye.com/user/projects/550a2de24996ebdd35000095/badge.svg?style=flat)](https://www.versioneye.com/user/projects/550a2de24996ebdd35000095)
+[![Build Status](https://travis-ci.org/helstern/nomsky-lib.svg?branch=master)](https://travis-ci.org/helstern/nomsky-lib)
+[![Dependency Status](https://www.versioneye.com/user/projects/56eb39874e714c0034fed8b6/badge.svg?style=flat)](https://www.versioneye.com/user/projects/56eb39874e714c0034fed8b6)
