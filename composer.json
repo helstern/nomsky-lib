@@ -1,5 +1,5 @@
 {
-    "name": "helstern/nomsky"
+    "name": "helstern/nomsky-lib"
     , "description": "cs grammar tools"
     , "minimum-stability": "stable"
     , "license": "proprietary"
