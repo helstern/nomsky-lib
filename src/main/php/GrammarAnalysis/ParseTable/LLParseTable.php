@@ -6,7 +6,7 @@ use Helstern\Nomsky\GrammarAnalysis\Production\ArraySet;
 use Helstern\Nomsky\GrammarAnalysis\Production\HashKeyFactory;
 use Helstern\Nomsky\GrammarAnalysis\Production\NormalizedProduction;
 
-class LLParseTable
+class LLParseTable implements \IteratorAggregate
 {
     /** @var SymbolSet|Symbol[] */
     private $nonTerminals;
@@ -30,6 +30,17 @@ class LLParseTable
         $this->nonTerminals = $nonTerminalsList;
         $this->terminals    = $terminalsList;
         $this->productionHash = $productionHash;
+    }
+
+    /**
+     * @return ParseTableEntryIterator
+     */
+    public function getIterator()
+    {
+        $innerIterator = new \ArrayIterator($this->uniqueEntries);
+        $iterator = new ParseTableEntryIterator($innerIterator);
+
+        return $iterator;
     }
 
     /**
@@ -77,8 +88,8 @@ class LLParseTable
      */
     private function getEntryHash(Symbol $nonTerminal, Symbol $terminal)
     {
-        $entryHash = $nonTerminal->toString() . ' ' . $terminal->toString();
-        return $entryHash;
+        $key = new ParseTableKey($nonTerminal, $terminal);
+        return $key->toHash();
     }
 
     public function add(Symbol $nonTerminal, Symbol $terminal, NormalizedProduction $production)
