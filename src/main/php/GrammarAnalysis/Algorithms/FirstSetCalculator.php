@@ -108,6 +108,9 @@ class FirstSetCalculator
         ) {
             $previousSymbol = current($list);
 
+            $epsilonCounter = new MatchCountingInterceptor($symbolIsEpsilon);
+            $acceptor = Inverter::newInstance($epsilonCounter);
+
             if ($symbolsIsNonTerminal->matchSymbol($previousSymbol)) {
                 $lastSet = $firstSets->filterTerminalSet($previousSymbol, $acceptor);
                 $newFirstSet->addAll($lastSet);
